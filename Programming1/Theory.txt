@@ -1,0 +1,7 @@
+- Create a project - Window Application Wizard - precompile header
+- Build --> Execute (2 steps)
+- include with <> code from other people
+- Inicializing a variable with {} put a default value
+- Add breakpoint --> With right click on the left. F10 -> Forward one line.
+	F11 -> Enter function when debugging
+- Before upload --> Clean Solution --> Close Visual Studio

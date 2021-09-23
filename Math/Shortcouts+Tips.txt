@@ -1,0 +1,8 @@
+- ALT + Number -> Potencia
+- ALT + Letter -> Alpha, Beta etc
+- / -> Fracciones
+- ALT + O -> degrees symbol
+- Use Simplify comand for simplify arithmetics 
+- With x and y operations always explicity indicate the * and the + between them
+- To resolve equations you just have to put the equation and then click on the 
+	x= symbol.

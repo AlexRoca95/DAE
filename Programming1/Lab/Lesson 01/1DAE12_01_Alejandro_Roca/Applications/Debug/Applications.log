@@ -1,0 +1,8 @@
+﻿  pch.cpp
+  Applications.cpp
+C:\Estudios\Howest\DAE\Programming1\Lesson 01\1DAE12_01_Alejandro_Roca\Applications\Applications.cpp(15,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Estudios\Howest\DAE\Programming1\Lesson 01\1DAE12_01_Alejandro_Roca\Applications\Applications.cpp(27,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Estudios\Howest\DAE\Programming1\Lesson 01\1DAE12_01_Alejandro_Roca\Applications\Applications.cpp(35,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Estudios\Howest\DAE\Programming1\Lesson 01\1DAE12_01_Alejandro_Roca\Applications\Applications.cpp(46,21): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Estudios\Howest\DAE\Programming1\Lesson 01\1DAE12_01_Alejandro_Roca\Applications\Applications.cpp(59,18): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  Applications.vcxproj -> C:\Estudios\Howest\DAE\Programming1\Lesson 01\1DAE12_01_Alejandro_Roca\Applications\Debug\Applications.exe
