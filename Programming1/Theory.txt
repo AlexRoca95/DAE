@@ -5,3 +5,16 @@
 - Add breakpoint --> With right click on the left. F10 -> Forward one line.
 	F11 -> Enter function when debugging
 - Before upload --> Clean Solution --> Close Visual Studio
+- if you want to delete a file from visual studio project press SUPR and the delete
+- Namespaces --> Is a way to put everything into a category, so when you 
+	need to use something inside this namespace you have to write utils::
+	as prefix.
+	If you want to use this namespace in other file, you need to declare
+	the namespace in the header
+
+- OpenGL Window --> x axis (from left to right)
+	            y axis (from down to up)
+		    Always indicate X,Y coordinates
+	 	    Start point left down corner of the screen
+
+one third two third

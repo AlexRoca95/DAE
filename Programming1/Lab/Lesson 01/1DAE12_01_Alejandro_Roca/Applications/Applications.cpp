@@ -1,11 +1,31 @@
-// Applications.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+// Alejandro, Roca Vande Sype - 1DAE12
 
 #include "pch.h"
 #include <iostream>
 
+
+double pi = 3.141592;
+
 int main()
 {   
+    // RGBA Colors
+    double r{}, g{}, b{}, a{};
+    std::cout << "RGBA in [0, 255]? ";
+    std::cin >> r >> g >> b >> a;
+
+    r = r/ 255.f;
+    g = g / 255.f;
+    b = b / 255.f;
+    a = a / 255.f;
+
+    std::cout << "RGBA in [0.0f, 1.0f]:" << std::endl;
+    
+    std::cout << r << std::endl;
+    std::cout << g << std::endl;
+    std::cout << b << std::endl;
+    std::cout << a << std::endl;
+    std::cout << std::endl;
+
     // KM
     float km{};
     int meters{}, cm{};
@@ -16,17 +36,18 @@ int main()
     cm = meters * 100;
 
     std::cout << meters << " meters" << ", " << cm << "cm" << std::endl;
+    std::cout << std::endl;
     
 
     // Angle in Radians
-    float radians{}, degrees{};
+    double radians{}, degrees{};
     
     std::cout << "Angle in radians? ";
     std::cin >> radians;
 
     degrees = radians * 57.2958;
     std::cout << degrees << " degrees" << std::endl;
-
+    std::cout << std::endl;
 
     // Angle in Degrees
     std::cout << "Angle in degrees? ";
@@ -35,6 +56,7 @@ int main()
     radians = degrees * 0.0174533;
 
     std::cout << radians << " radians" << std::endl;
+    std::cout << std::endl;
 
     // Seconds for complete one round
     int seconds{};
@@ -46,6 +68,7 @@ int main()
     degrees = angle / seconds;
 
     std::cout << degrees << " degrees/second" << std::endl;
+    std::cout << std::endl;
 
     // Speed (km/h)
     double speed{}, minutes{}, km2{};
@@ -59,7 +82,7 @@ int main()
     meters = km2 * 1000;
 
     std::cout << meters << " meters" << std::endl;
-
+    std::cout << std::endl;
 
     // Free fall accelariting
     double seconds2{}, vel{};
@@ -69,38 +92,48 @@ int main()
     vel = seconds2 * 9.8;
 
     std::cout << "Velocity " << vel << " meters/second" << std::endl;
-
+    std::cout << std::endl;
 
     // radius of circle
-
-
-
-
-
+    double radius{}, circumference{}, area{};
     
+    std::cout << "Radius of the circle? ";
+    std::cin >> radius;
 
+    area = pi * radius * radius;
+    circumference = 2 * pi * radius;
 
+    std::cout << "Circumference: " <<  circumference << std::endl;
+    std::cout << "Area: " << area << std::endl;
+    std::cout << std::endl;
 
+    //Width and height of rectangle
+    double width{}, height{};
+    
+    std::cout << "Width and height? ";
+    std::cin >> width >> height;
 
+    area = width * height;
+    circumference = 2 * (width + height);
 
+    std::cout << "Circumference: " << circumference << std::endl;
+    std::cout << "Area: " << area << std::endl;
+    std::cout << std::endl;
 
+   // Base and height of triangle
+    double base{};
 
+    std::cout << "Base and height? ";
+    std::cin >> base >> height;
 
+    area = (base * height);
+    area = area / 2;
 
-
+    std::cout << "Area: " << area << std::endl;
+    std::cout << std::endl;
 
 
 
 
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
