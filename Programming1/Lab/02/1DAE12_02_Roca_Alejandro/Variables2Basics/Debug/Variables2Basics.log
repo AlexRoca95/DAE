@@ -1,0 +1,9 @@
+﻿  pch.cpp
+  Variables2Basics.cpp
+C:\Estudios\Howest\DAE\DAE\Programming1\Lab\02\1DAE12_02_Roca_Alejandro\Variables2Basics\Variables2Basics.cpp(81,24): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Estudios\Howest\DAE\DAE\Programming1\Lab\02\1DAE12_02_Roca_Alejandro\Variables2Basics\Variables2Basics.cpp(81,40): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Estudios\Howest\DAE\DAE\Programming1\Lab\02\1DAE12_02_Roca_Alejandro\Variables2Basics\Variables2Basics.cpp(81,56): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Estudios\Howest\DAE\DAE\Programming1\Lab\02\1DAE12_02_Roca_Alejandro\Variables2Basics\Variables2Basics.cpp(88,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Estudios\Howest\DAE\DAE\Programming1\Lab\02\1DAE12_02_Roca_Alejandro\Variables2Basics\Variables2Basics.cpp(89,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Estudios\Howest\DAE\DAE\Programming1\Lab\02\1DAE12_02_Roca_Alejandro\Variables2Basics\Variables2Basics.cpp(90,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  Variables2Basics.vcxproj -> C:\Estudios\Howest\DAE\DAE\Programming1\Lab\02\1DAE12_02_Roca_Alejandro\Variables2Basics\Debug\Variables2Basics.exe

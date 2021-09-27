@@ -41,7 +41,7 @@ int main()
         << fNumber2 << ", " << dNumber2 << " )" << std::endl;
 
     // 4.2.1 and 4.2.2
-    int result1 = iNumber2 + 12;
+    int result1 = 9 / 2 + 2;
     float result2 = fNumber2 - 4.2f;
     char result3 = letter2 + 'D';
     int result4 = result1 + letter2;

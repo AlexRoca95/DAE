@@ -1,0 +1,5 @@
+﻿  pch.cpp
+  Applications.cpp
+C:\Estudios\Howest\DAE\DAE\Programming1\Lab\Lesson 01\1DAE12_01_Alejandro_Roca\Applications\Applications.cpp(35,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Estudios\Howest\DAE\DAE\Programming1\Lab\Lesson 01\1DAE12_01_Alejandro_Roca\Applications\Applications.cpp(82,18): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  Applications.vcxproj -> C:\Estudios\Howest\DAE\DAE\Programming1\Lab\Lesson 01\1DAE12_01_Alejandro_Roca\Applications\x64\Debug\Applications.exe
