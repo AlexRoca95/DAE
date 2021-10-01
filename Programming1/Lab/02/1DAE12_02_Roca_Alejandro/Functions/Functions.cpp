@@ -19,7 +19,7 @@ int main( )
 	std::cout << "Name of my high school: Torrevieja " << std::endl;
 	std::cout << "In the last year I had 0 hours math a week" << std::endl << std::endl;
 
-	TestOneParFunctions();			// Call function
+	TestOneParFunctions();			// Call function 
 	TestTwoParFunctions();
 
 	// Wait
