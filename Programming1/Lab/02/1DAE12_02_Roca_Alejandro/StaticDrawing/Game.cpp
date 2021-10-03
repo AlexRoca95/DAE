@@ -113,32 +113,32 @@ void DrawHouse()
 void DrawFlag()
 {
 	//Variables for rectangles
-	float rect1X{}, rect1Y{}, rect2X{}, rect2Y{}, rect3X{}, rect3Y{};	// Positions
+	float rect1X{}, rect2X{}, rect3X{};									//X Positions
+	float rectY;														// Y position (same for all)
 	float rectW{}, rectH{};												// Sizes
 
+	// Same values for all rectangles
 	rectW = g_WindowWidth / 10;
 	rectH = g_WindowHeight / 3;
+	rectY = g_WindowHeight / 3;			
 
 	// Black rectangle
 	utils::SetColor(0.f, 0.f, 0.f);			// Black Color
 
 	rect1X = 10.f;							// X
-	rect1Y = g_WindowHeight / 3;			// Y
-	utils::FillRect(rect1X, rect1Y, rectW, rectH);
+	utils::FillRect(rect1X, rectY, rectW, rectH);
 
 	// Yellow Rectangle
 	utils::SetColor(1.f, 1.f, 0.f);			// Yellow Color
 
 	rect2X = rect1X + rectW;				// X
-	rect2Y = rect1Y;						// Y
-	utils::FillRect(rect2X, rect2Y, rectW, rectH);
+	utils::FillRect(rect2X, rectY, rectW, rectH);
 
 	// Red Rectangle
 	utils::SetColor(1.f, 0.f, 0.f);			// Red Color
 
 	rect3X = rect2X + rectW;				// X
-	rect3Y = rect1Y;						// Y
-	utils::FillRect(rect3X, rect3Y, rectW, rectH);
+	utils::FillRect(rect3X, rectY, rectW, rectH);
 }
 
 void DrawCheckerPattern()

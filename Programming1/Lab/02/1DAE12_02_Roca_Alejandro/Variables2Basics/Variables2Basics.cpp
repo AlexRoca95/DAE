@@ -68,17 +68,18 @@ void Typecasting()
 
     // Random letter from [a, z]
     std::srand(int(time(nullptr)));
+
     char randomChar{};
     int randomInt{};
 
-    randomInt = rand() % 26;        // 26 letters
+    randomInt = rand() % 26;        // 26 letters for the alphabet
     randomChar = 'a' + randomInt;   // Add randomNumber to letter so we get randomLetter 
    
     std::cout << "Random letter " << randomChar << ", ASCII value " << int(randomChar) << std::endl;
 
 
     // Round values
-    float value1{ 5.44 }, value2{ 5.45 }, value3{ 5.51 };
+    float value1{ 5.44f }, value2{ 5.45f }, value3{ 5.51f };
     int value4{}, value5{}, value6{}, rounded1{}, rounded2{}, rounded3{};
 
     value4 = int(value1);
@@ -89,6 +90,7 @@ void Typecasting()
     rounded2 = round(value2);
     rounded3 = round(value3);
     
+    // Differences is that with int you truncate the number and with rounded you round it
     std::cout << value1 << ", rounded " << rounded1 << ", int cast: " << value4 << std::endl;
     std::cout << value2 << ", rounded " << rounded2 << ", int cast: " << value5 << std::endl;
     std::cout << value3 << ", rounded " << rounded3 << ", int cast: " << value6 << std::endl;
@@ -125,6 +127,25 @@ void UsingStrings()
 
 
     //Concatenation of strings
+    std::string first{}, second{}, both{};
 
+    std::cout << "First Word? ";
+    std::cin >> first;
+    std::cout << "Second Word? ";
+    std::cin >> second;
+
+    both = first + second;
+
+    std::cout << both << std::endl;
+
+
+    // Converting strings to numbers
+    std::string string1{ 3 }, string2{  };
+    int number1{};
+    float number2{};
+    
+
+    std::cout << "One string contains " << number1 << std::endl;
+    std::cout << "Other string contains " << number2 << std::endl;
 
 }

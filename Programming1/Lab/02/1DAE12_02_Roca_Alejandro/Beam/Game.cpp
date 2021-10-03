@@ -1,49 +1,19 @@
 #include "pch.h"
 #include "Game.h"
-#include <iostream>
 
 //Basic game functions
 #pragma region gameFunctions											
 void Start()
 {
 	// initialize game resources here
-	std::srand(int(time(nullptr))); // Initialize random number generator (only once!)
- }
+}
 
 void Draw()
 {
-	ClearBackground();
+	ClearBackground(0.f, 0.f, 0.f);
 
-	
-	// Random colors
-	int r{}, g{}, b{};
-
-	r = rand() % (1 - 0 + 1) + 0;  // 0 - 1
-	g = rand() % (1 - 0 + 1) + 0;
-	b = rand() % (1 - 0 + 1) + 0;
-	utils::SetColor(float(r), float(g), float(b));		// Put random color
-
-	// Random Pos X
-	int width{}, height{}, distanceX{}, posX{}, distanceY, posY;
-
-	width = rand() % ((int(g_WindowWidth) - 50) - 10 + 1) + 10;			// Random width [10 - 450]
-
-	distanceX = int(g_WindowWidth) - width - 10;	// Distance that rect has to be from border X
-	
-	posX = rand() % (distanceX - 10 + 1) + 10;	    // Position between [10 - distanceX (size rect + 10 pixels)]
-	
-
-	// Random Pos Y
-	height = rand() % ((int(g_WindowHeight)-50) - 10 + 1) + 10;			// Random height [10 - 250]
-
-	distanceY = int(g_WindowHeight) - height - 10;  // Distance that rect has to be from border Y
-
-	posY = rand() % (distanceY - 10 + 1) + 10;		// Position between [10 - distanceY (size rect + 10 pixels)]
-
-
-	// Draw rectangle with random values
-	utils::FillRect(float(posX), float(posY), float(width), float(height)); 
-
+	// Put your own draw statements here
+	drawSquares();
 
 }
 
@@ -127,5 +97,33 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 
 #pragma region ownDefinitions
 // Define your own functions here
+
+
+void drawSquares()
+{
+	float squareSize{ 200.f };		// Size of the squares
+	float border{ 10.f };			// Distance between border - window
+
+	
+	// Upper right square
+	utils::SetColor(0.13f,0.61f,0.13f);
+	utils::FillRect(g_WindowWidth / 2, g_WindowHeight / 2, squareSize, squareSize);
+
+	// Down left square
+	utils::FillRect(border, border, squareSize, squareSize);
+
+	// Drawing lines
+	utils::SetColor(1.f, 1.f, 1.f);
+	// Inner line betweew both squares
+	utils::DrawLine(border, border, g_WindowWidth-border, g_WindowHeight- border);
+
+	// Outer lines conecting both squares
+	utils::DrawLine(border, g_WindowHeight / 2, g_WindowWidth / 2, g_WindowHeight - border);
+	utils::DrawLine(g_WindowWidth / 2, border, g_WindowWidth - border, g_WindowHeight / 2);
+
+	// Lines that surround squares
+
+
+}
 
 #pragma endregion ownDefinitions
