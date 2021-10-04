@@ -12,13 +12,13 @@ void Start()
 
 void Draw()
 {
-	ClearBackground();
+	//ClearBackground();
 
 	
 	// Random colors
 	int r{}, g{}, b{};
 
-	r = rand() % (1 - 0 + 1) + 0;  // 0 - 1
+	r = rand() % 100 / 100.f;  // 0 - 1
 	g = rand() % (1 - 0 + 1) + 0;
 	b = rand() % (1 - 0 + 1) + 0;
 	utils::SetColor(float(r), float(g), float(b));		// Put random color
