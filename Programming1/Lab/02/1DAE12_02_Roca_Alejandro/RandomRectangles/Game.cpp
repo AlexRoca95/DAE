@@ -12,16 +12,16 @@ void Start()
 
 void Draw()
 {
-	//ClearBackground();
+	ClearBackground();
 
 	
 	// Random colors
-	int r{}, g{}, b{};
+	float r{}, g{}, b{};
 
-	r = rand() % 100 / 100.f;  // 0 - 1
-	g = rand() % (1 - 0 + 1) + 0;
-	b = rand() % (1 - 0 + 1) + 0;
-	utils::SetColor(float(r), float(g), float(b));		// Put random color
+	r = rand() % 100 / 100.f;  // 0 - 99 and then we divide by 100 so we get floats that goes from 0.f to 1.f
+	g = rand() % 100 / 100.f;
+	b = rand() % 100 / 100.f;
+	utils::SetColor(r, g, b);		// Put random color
 
 	// Random Pos X
 	int width{}, height{}, distanceX{}, posX{}, distanceY, posY;
