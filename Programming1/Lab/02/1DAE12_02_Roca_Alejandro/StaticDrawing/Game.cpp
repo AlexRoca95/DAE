@@ -125,7 +125,7 @@ void DrawFlag()
 	// Black rectangle
 	utils::SetColor(0.f, 0.f, 0.f);			// Black Color
 
-	rect1X = 10.f;							// X
+	rect1X = g_border;						// X
 	utils::FillRect(rect1X, rectY, rectW, rectH);
 
 	// Yellow Rectangle
@@ -146,12 +146,12 @@ void DrawCheckerPattern()
 	//Variables for squares
 	float squareX{}, square1Y{}, square2Y{}, square3Y{}; // Positions
 	float squareW{}, squareH{};							// Sizes
-	float initialX{ 10.f };									// Start X position for first colum of all rows
+	float initialX{ g_border };									// Start X position for first colum of all rows
 	squareW = 25;
 	squareH = 25;
 
 	// First Row
-		square1Y = 0.f;
+		square1Y = g_border;
 
 		// Black rectangle (0,0)
 		utils::SetColor(0.f, 0.f, 0.f);			// Black Color
@@ -172,7 +172,7 @@ void DrawCheckerPattern()
 		utils::FillRect(squareX, square1Y, squareW, squareH);
 
 	// Second Row
-		square2Y = squareH;
+		square2Y = square1Y + squareH;
 
 		// Rectangle (1,0)
 		utils::SetColor(1.f, 1.f, 1.f);			
@@ -193,7 +193,7 @@ void DrawCheckerPattern()
 		utils::FillRect(squareX, square2Y, squareW, squareH);
 	
 	// Third Row
-		square3Y = squareH * 2;
+		square3Y = square2Y + squareH;
 		// Rectangle (2,0)
 		utils::SetColor(0.f, 0.f, 0.f);
 
@@ -215,6 +215,144 @@ void DrawCheckerPattern()
 
 void DrawColorBand()
 {
+	// Variables
+	float rectY1{}, rectY2{};
+	float rectX1{}, rectX2{}, rectX3{}, rectX4{}, rectX5{}, rectX6{}, rectX7{}, rectX8{}, rectX9{};
+	float rectW{}, rectH{};
+
+	rectW = 25.f;
+	rectH = 60.f;
+	rectY1 = g_WindowHeight - rectH - g_border;
+
+	// NORMAL RECTANGLES
+	// 1º rectangle
+	rectX1 = g_WindowWidth / 2;
+	
+	utils::SetColor(0.f, 0.f, 0.f);
+	utils::FillRect(rectX1, rectY1, rectW, rectH);
+
+	// 2º rectangle
+	rectX2 = rectX1 + rectW;
+
+	utils::SetColor(1.f, 0.f, 0.f);
+	utils::FillRect(rectX2, rectY1, rectW, rectH);
+
+	// 3º rectangle
+	rectX3 = rectX2 + rectW;
+
+	utils::SetColor(0.31f, 1.f, 0.f);
+	utils::FillRect(rectX3, rectY1, rectW, rectH);
+
+	// 4º rectangle
+	rectX4 = rectX3 + rectW;
+
+	utils::SetColor(0.f, 0.f, 1.f);
+	utils::FillRect(rectX4, rectY1, rectW, rectH);
+
+	// 5º rectangle
+	rectX5 = rectX4 + rectW;
+
+	utils::SetColor(1.f, 0.f, 1.f);
+	utils::FillRect(rectX5, rectY1, rectW, rectH);
+
+	// 6º rectangle
+	rectX6 = rectX5 + rectW;
+
+	utils::SetColor(1.f, 1.f, 0.f);
+	utils::FillRect(rectX6, rectY1, rectW, rectH);
+
+	// 7º rectangle
+	rectX7 = rectX6 + rectW;
+
+	utils::SetColor(0.f, 1.f, 0.f);
+	utils::FillRect(rectX7, rectY1, rectW, rectH);
+
+	// 8º rectangle
+	rectX8 = rectX7 + rectW;
+
+	utils::SetColor(0.f, 1.f, 1.f);
+	utils::FillRect(rectX8, rectY1, rectW, rectH);
+
+	// 9º rectangle
+	rectX9 = rectX8 + rectW;
+
+	utils::SetColor(1.f, 1.f, 1.f);
+	utils::FillRect(rectX9, rectY1, rectW, rectH);
+
+	// DARK RECTANGLES
+	
+	rectY2 = rectY1 - rectH;				// Down the other rectangles
+	
+	// 1º  Dark rectangle 
+	rectX1 = g_WindowWidth / 2;
+
+	utils::SetColor(0.f, 0.f, 0.f, 0.6f);
+	utils::FillRect(rectX1, rectY2, rectW, rectH);
+
+	// 2º rectangle
+	rectX2 = rectX1 + rectW;
+
+	utils::SetColor(1.f, 0.f, 0.f, 0.6f);
+	utils::FillRect(rectX2, rectY2, rectW, rectH);
+
+	// 3º rectangle
+	rectX3 = rectX2 + rectW;
+
+	utils::SetColor(0.31f, 1.f, 0, 0.6f);
+	utils::FillRect(rectX3, rectY2, rectW, rectH);
+
+	// 4º rectangle
+	rectX4 = rectX3 + rectW;
+
+	utils::SetColor(0.f, 0.f, 1.f, 0.6f);
+	utils::FillRect(rectX4, rectY2, rectW, rectH);
+
+	// 5º rectangle
+	rectX5 = rectX4 + rectW;
+
+	utils::SetColor(1.f, 0.f, 1.f, 0.6f);
+	utils::FillRect(rectX5, rectY2, rectW, rectH);
+
+	// 6º rectangle
+	rectX6 = rectX5 + rectW;
+
+	utils::SetColor(1.f, 1.f, 0.f, 0.6f);
+	utils::FillRect(rectX6, rectY2, rectW, rectH);
+
+	// 7º rectangle
+	rectX7 = rectX6 + rectW;
+
+	utils::SetColor(0.f, 1.f, 0.f, 0.6f);
+	utils::FillRect(rectX7, rectY2, rectW, rectH);
+
+	// 8º rectangle
+	rectX8 = rectX7 + rectW;
+
+	utils::SetColor(0.f, 1.f, 1.f, 0.6f);
+	utils::FillRect(rectX8, rectY2, rectW, rectH);
+
+	// 9º rectangle
+	rectX9 = rectX8 + rectW;
+
+	utils::SetColor(1.f, 1.f, 1.f, 0.6f);
+	utils::FillRect(rectX9, rectY2, rectW, rectH);
+
+
+	// YELLOW BORDER
+	utils::SetColor(1.f, 1.f, 0.f);
+
+	// TOP yellow border
+	utils::DrawLine(rectX1, rectY1 + rectH, rectX9 + rectW, rectY1 + rectH, 2.f);
+
+	// BOTTOM yellow border
+	utils::DrawLine(rectX1, rectY2, rectX9 + rectW, rectY2, 2.f);
+
+	// LEFT yellow border
+	utils::DrawLine(rectX1, rectY2, rectX1, rectY1 + rectH, 2.f);
+
+	// RIGHT yellow border
+	utils::DrawLine(rectX9 + rectW, rectY2, rectX9 + rectW, rectY1 + rectH, 2.f);
+
 
 }
 
@@ -228,7 +366,7 @@ void DrawPentagram()
 	// y = r/radius) x sin(alpha) + offset.y
 
 
-	float radius{}, posX{}, posY{}, width{}, height{};
+	/*float radius{}, posX{}, posY{}, width{}, height{};
 
 
 	radius = 40.f;					// Radius of the circle
@@ -240,7 +378,7 @@ void DrawPentagram()
 
 	// First point (posX, radius)
 
-	utils::FillRect(posX, posY, width, height);
+	utils::FillRect(posX, posY, width, height);*/
 
 
 }
@@ -251,7 +389,7 @@ void DrawColumChart()
 	// % of people that plays videogames
 
 	float rect1X{}, rect2X{}, rect3X{}, rect4X{};			// X Positions
-	float rectY{ 0.f };										// Y Position for all rectangles
+	float rectY{ g_border };								// Y Position for all rectangles
 	float rectW{};
 	float maxValue{ 100.f };								// Max value for porcentages
 
@@ -297,7 +435,7 @@ void DrawColumChart()
 	rect4X = rect3X + rectW;
 	rect4H = maxValue * (older60 / 100);
 	utils::FillRect(rect4X, rectY, rectW, rect4H);
-
+	
 }
 
 #pragma endregion ownDefinitions

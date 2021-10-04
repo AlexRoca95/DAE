@@ -15,7 +15,7 @@ float g_WindowHeight{ 420 };
 // Declare your own global variables here
 
 // Declare your own functions here
-void drawSquares();
+void DrawSquares();
 
 #pragma endregion ownDeclarations
 

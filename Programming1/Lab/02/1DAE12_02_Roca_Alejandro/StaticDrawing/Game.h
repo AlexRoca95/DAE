@@ -14,6 +14,8 @@ float g_WindowHeight{ 300 };
 #pragma region ownDeclarations
 // Declare your own global variables here
 
+float g_border = 10.f;			// Border of the window
+
 // Declare your own functions here
 void DrawHouse();
 void DrawFlag();

@@ -83,9 +83,6 @@ void TestOneParFunctions()
 	std::cout << "Cos: " << value << std::endl;
 
 
-
-
-
 }
 
 
