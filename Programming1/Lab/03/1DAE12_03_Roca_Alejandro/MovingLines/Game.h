@@ -13,11 +13,15 @@ float g_WindowHeight{ 500 };
 
 #pragma region ownDeclarations
 // Declare your own global variables here
-float g_PosBars{ 0 };		// Variable that holds the Y pos of Horizontal bars and the X pos of vertical bars
+float g_PosLines{ 0 };		// Variable that holds the Y pos of Horizontal bars and the X pos of vertical bars
+
+float g_LinePosY{ g_WindowHeight - g_PosLines };
+float g_LinePosX{ g_WindowWidth - g_PosLines };
 
 
 // Declare your own functions here
-void DrawLines();
+void DrawWhiteLines();
+void DrawYellowLines();
 void UpdateLines();
 
 #pragma endregion ownDeclarations

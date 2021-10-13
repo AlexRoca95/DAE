@@ -15,7 +15,8 @@ void Draw()
 	ClearBackground(0.39f, 0.39f, 0.66f);
 
 	// Put your own draw statements here
-	DrawLines();
+	DrawWhiteLines();
+	DrawYellowLines();
 
 
 }
@@ -24,8 +25,6 @@ void Update(float elapsedSec)
 {
 	// process input, do physics 
 	UpdateLines();
-
-
 
 }
 
@@ -94,22 +93,37 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 #pragma region ownDefinitions
 // Define your own functions here
 
-void DrawLines()
+void DrawWhiteLines()
 {
 	// White color
 	utils::SetColor(1.f, 1.f, 1.f);
-	utils::DrawLine(0, g_WindowHeight - g_PosBars, g_WindowWidth, g_WindowHeight - g_PosBars);	// TOP BAR	
-	utils::DrawLine(0, g_PosBars, g_WindowWidth, g_PosBars);									 // BOTTOM BAR
-	utils::DrawLine(g_PosBars, 0, g_PosBars, g_WindowHeight);									// LEFT
-	utils::DrawLine(g_WindowWidth - g_PosBars, 0, g_WindowWidth - g_PosBars, g_WindowHeight);	// Right
+	utils::DrawLine(0, g_LinePosY, g_WindowWidth, g_LinePosY);	// TOP BAR	
+	utils::DrawLine(0, g_PosLines, g_WindowWidth, g_PosLines);	 // BOTTOM BAR
+	utils::DrawLine(g_PosLines, 0, g_PosLines, g_WindowHeight);	// LEFT
+	utils::DrawLine(g_LinePosX, 0, g_LinePosX, g_WindowHeight);	// Right
 
 }
 
-// Updates the Y of horizontal lines and the X of vertical lines using only the g_PosBars variable
+// Draw the yellow square that follow the white lines
+void DrawYellowLines()
+{
+	// Yellow color
+	utils::SetColor(1.f, 1.f, 0.f);
+	utils::DrawLine(g_LinePosX, g_WindowHeight, g_WindowWidth, g_PosLines); // Top - Right line
+	utils::DrawLine(g_LinePosX, g_WindowHeight, 0, g_LinePosY);				// Top - Left
+	utils::DrawLine(0, g_LinePosY, g_PosLines, 0);							// Left - Bottom
+	utils::DrawLine(g_PosLines, 0, g_WindowWidth, g_PosLines);				// Bottom - Right
+}
+
+// Updates the Y of horizontal lines and the X of vertical lines using only the g_PosLines variable
 void UpdateLines()
 {
-	g_PosBars++;		// Increment 1 pixel every frame
-	g_PosBars = float(int(g_PosBars) % int(g_WindowHeight)); // Reset when it reaches the WindowHeight
+	g_PosLines++;		// Increment 1 pixel every frame
+	g_PosLines = float(int(g_PosLines) % int(g_WindowHeight)); // Reset when it reaches the WindowHeight
+
+	// Update pos of other lines
+	g_LinePosY = g_WindowHeight - g_PosLines;
+	g_LinePosX= g_WindowWidth - g_PosLines;
 
 }
 
