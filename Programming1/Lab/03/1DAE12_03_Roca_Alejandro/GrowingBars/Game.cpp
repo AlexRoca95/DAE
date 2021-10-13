@@ -14,12 +14,10 @@ void Draw()
 {
 	ClearBackground(0.f, 0.f, 0.f);
 
+	// Draw Bars
 	DrawYellowBar();
 	DrawRedBar();
 	
-
-	
-
 }
 
 void Update(float elapsedSec)
@@ -31,16 +29,6 @@ void Update(float elapsedSec)
 	UpdateYellowBar();
 	UpdateRedBar();
 
-	// e.g. Check keyboard state
-	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-	//if ( pStates[SDL_SCANCODE_RIGHT] )
-	//{
-	//	std::cout << "Right arrow key is down\n";
-	//}
-	//if ( pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
-	//{
-	//	std::cout << "Left and up arrow keys are down\n";
-	//}
 }
 
 void End()
@@ -108,7 +96,7 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 #pragma region ownDefinitions
 // Define your own functions here
 
-// Function that draws the bars
+// Function that draws the Yellow Bar
 void DrawYellowBar()
 {
 	// Draw Yellowish bar
@@ -155,8 +143,9 @@ void DrawRedBar()
 void UpdateYellowBar()
 {
 	// Incrementing sizes of the bars
-	g_YellowBarWidth++;										// Width of yellowish bar grows 1 pixel every frame
+	g_YellowBarWidth = float(g_NrFrames);										// Width of yellowish bar grows 1 pixel every frame
 	g_YellowBarWidth = float(int(g_YellowBarWidth) % int(g_MaxWidth)); // Reset size if we reach maximum size
+	g_NrFrames = int(g_YellowBarWidth);										// We also reset the count of frame rate
 
 }
 

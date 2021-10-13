@@ -13,13 +13,13 @@ float g_WindowHeight{ 300 };
 
 #pragma region ownDeclarations
 // Declare your own global variables here
-int g_NrFrames{};									// Frame Count
+unsigned int g_NrFrames{};							// Frame Count
 const float g_Border{ 10.f };						// Window Border
 
 // Bar variables
-const float g_MaxWidth{ g_WindowWidth - g_Border };	// Bars Max Width Size
-const float g_BarHeight{ 50.f };					// Bars Max Height 
-const float g_YellowBarY{(g_WindowHeight / 3) * 2 };// Yello Bar Y pos
+const float g_MaxWidth{ g_WindowWidth - g_Border };		// Bars Max Width Size
+const float g_BarHeight{ 50.f };						// Bars Max Height 
+const float g_YellowBarY{(g_WindowHeight / 3) * 2 };	// Yello Bar Y pos
 const float g_RedBarY{ g_Border + 40 };					// Red Bar Y pos
 
 float g_YellowBarWidth{ 0.f };						// Yellow Bar Width					
@@ -27,7 +27,6 @@ float g_RedBarWidth{ 0.f };							// Red Bar Width
 
 
 // Declare your own functions here
-
 void DrawYellowBar();
 void DrawRedBar();
 
