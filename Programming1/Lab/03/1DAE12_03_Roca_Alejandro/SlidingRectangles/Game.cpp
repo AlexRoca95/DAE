@@ -5,17 +5,18 @@
 #pragma region gameFunctions											
 void Start()
 {
-	// initialize game resources here
-
 	// Initial X - Y values for squares
-	g_YellowX = g_WindowWidth - g_SquareSize;
-	
-	g_BlueX = g_WindowWidth - g_SquareSize;
-	g_BlueY = g_WindowHeight - g_SquareSize;
-
-	g_GreenY = g_WindowHeight - g_SquareSize;
-
-	// Red square initialized with 0 - 0 values
+		// Yellow Square
+		g_YellowX = g_WindowWidth - g_SquareSize;
+		g_InitialYellowX = g_YellowX;
+		// Blue Square
+		g_BlueX = g_WindowWidth - g_SquareSize;
+		g_BlueY = g_WindowHeight - g_SquareSize;
+		// Green Square
+		g_GreenY = g_WindowHeight - g_SquareSize;
+		g_InitialGreenY = g_GreenY;
+		// Red square 
+		// initialized with 0 - 0 values
 }
 
 void Draw()
@@ -111,6 +112,14 @@ void DrawYellowSquare()
 	utils::SetColor(0.88f, 0.92f, 0.38f, 0.8f);
 	utils::FillRect(g_YellowX, g_YellowY, g_SquareSize, g_SquareSize);
 
+	// Drawing surrounding lines
+	utils::SetColor(0.f, 0.f, 0.f);
+	utils::DrawLine(g_YellowX, g_YellowY, g_YellowX + g_SquareSize, g_YellowY);
+	utils::DrawLine(g_YellowX, g_YellowY, g_YellowX, g_YellowY + g_SquareSize);
+	utils::DrawLine(g_YellowX, g_YellowY + g_SquareSize, g_YellowX + g_SquareSize, g_YellowY + g_SquareSize);
+	utils::DrawLine(g_YellowX + g_SquareSize, g_YellowY, g_YellowX + g_SquareSize, g_YellowY + g_SquareSize);
+
+
 }
 
 void DrawBlueSquare()
@@ -118,6 +127,12 @@ void DrawBlueSquare()
 	utils::SetColor(0.30f, 0.34f, 0.97f, 0.8f);
 	utils::FillRect(g_BlueX, g_BlueY, g_SquareSize, g_SquareSize);
 
+	// Drawing surrounding lines
+	utils::SetColor(0.f, 0.f, 0.f);
+	utils::DrawLine(g_BlueX, g_BlueY, g_BlueX + g_SquareSize, g_BlueY);
+	utils::DrawLine(g_BlueX, g_BlueY, g_BlueX, g_BlueY + g_SquareSize);
+	utils::DrawLine(g_BlueX, g_BlueY + g_SquareSize, g_BlueX + g_SquareSize, g_BlueY + g_SquareSize);
+	utils::DrawLine(g_BlueX + g_SquareSize, g_BlueY, g_BlueX + g_SquareSize, g_BlueY + g_SquareSize);
 }
 
 void DrawGreenSquare()
@@ -125,7 +140,12 @@ void DrawGreenSquare()
 	utils::SetColor(0.30f, 0.93f, 0.38f, 0.8f);
 	utils::FillRect(g_GreenX, g_GreenY, g_SquareSize, g_SquareSize);
 
-
+	// Drawing surrounding lines
+	utils::SetColor(0.f, 0.f, 0.f);
+	utils::DrawLine(g_GreenX, g_GreenY, g_GreenX + g_SquareSize, g_GreenY);
+	utils::DrawLine(g_GreenX, g_GreenY, g_GreenX, g_GreenY + g_SquareSize);
+	utils::DrawLine(g_GreenX, g_GreenY + g_SquareSize, g_GreenX + g_SquareSize, g_GreenY + g_SquareSize);
+	utils::DrawLine(g_GreenX + g_SquareSize, g_GreenY, g_GreenX + g_SquareSize, g_GreenY + g_SquareSize);
 
 }
 
@@ -134,25 +154,55 @@ void DrawRedSquare()
 	utils::SetColor(0.88f, 0.34f, 0.38f, 0.8f);
 	utils::FillRect(g_RedX, g_RedY, g_SquareSize, g_SquareSize);
 
+	// Drawing surrounding lines
+	utils::SetColor(0.f, 0.f, 0.f);
+	utils::DrawLine(g_RedX, g_RedY, g_RedX + g_SquareSize, g_RedY);
+	utils::DrawLine(g_RedX, g_RedY, g_RedX, g_RedY + g_SquareSize);
+	utils::DrawLine(g_RedX, g_RedY + g_SquareSize, g_RedX + g_SquareSize, g_RedY + g_SquareSize);
+	utils::DrawLine(g_RedX + g_SquareSize, g_RedY, g_RedX + g_SquareSize, g_RedY + g_SquareSize);
+
 }
 
+// Move Red square Horintal: +1 pixel | Vertical: +1 pixel every frame
 void UpdateRedSquare()
 {
 
-}
+	g_RedX++;			
 
+	g_RedX = float(int(g_RedX) % int(g_WindowWidth)); // Reach max width? then reset to 0 again
+	g_RedY = g_RedX;			// Both pos move at the same speed and need the same values
+
+}
+// Move Yellow square Horintal: -1 pixel | Vertical: +1 pixel every frame
 void UpdateYellowSquare()
 {
 
+	g_YellowY++;
+	
+	g_YellowY = float(int(g_YellowY) % int(g_WindowHeight));   // Reach max height? then reset to 0 again
+	
+	g_YellowX = g_InitialYellowX - g_YellowY;			// Pos X will change as the same time as Y value
+	
 }
 
+// Move Green square Horintal: +1 pixel | Vertical: -1 pixel every frame
 void UpdateGreenSquare()
 {
+	/*
+	g_GreenX++;
+
+	g_GreenX = float(int(g_GreenX) % int(g_WindowWidth)); // Reach max width? then reset to 0 again
+	*/
+	g_GreenX = g_RedX;									// Both use same pos and same speed
+	g_GreenY = g_InitialGreenY - g_GreenX;				// Pos X will change as the same time as Y value
 
 }
-
+// Move Blue square Horintal: -1 pixel | Vertical: -1 pixel every frame
 void UpdateBlueSquare()
 {
+	// We use the values of the other rectangles because they use the same values and at the same speed
+	g_BlueX = g_YellowX;
+	g_BlueY = g_GreenY;
 
 }
 

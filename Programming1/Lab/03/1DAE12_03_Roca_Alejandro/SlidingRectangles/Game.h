@@ -15,9 +15,11 @@ float g_WindowHeight{ 500 };
 // Declare your own global variables here
 const unsigned int g_SquareSize{ 100 };			// Sizes of the squares
 
+
 // Yellow Square X - Y values
 float g_YellowX{ 0 };
 float g_YellowY{ 0 };
+float g_InitialYellowX{ 0 };	
 // Red Square X - Y values
 float g_RedX{ 0 };
 float g_RedY{ 0 };
@@ -27,6 +29,7 @@ float g_BlueY{ 0 };
 // Green Square X - Y values
 float g_GreenX{ 0 };
 float g_GreenY{ 0 };
+float g_InitialGreenY{ 0 };
 
 // Declare your own functions here
 
