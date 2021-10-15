@@ -6,3 +6,17 @@
 - With x and y operations always explicity indicate the * and the + between them
 - To resolve equations you just have to put the equation and then click on the 
 	x= symbol.
+
+- Use Comand "Solve" for solve operations like sin(30º) = a / 3. It will solve it
+for a unknow incognit.
+
+		Creating a triangle
+	- You can form a triangle using the polygon tool. You select the 3 vertex 
+	and then, if you want, you can change the names of the vertex and sides
+
+	- Now you can obtain alpha angle, for example, by clicking the correct
+	three points in the correct order. This is with the "angle" tool
+	
+	- If I want to check my results of a triangle values I can do it
+	in geogebra by creating the rectangle and putting the values and angles
+	that I know
