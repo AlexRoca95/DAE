@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Game.h"
+#include <iostream>
 
 
 //Basic game functions
@@ -38,6 +39,8 @@ void Update(float elapsedSec)
 	// process input, do physics 
 	++g_XPos;			// Updates rectangle X pos
 	g_XPos = float(int(g_XPos) % int(g_WindowWidth));
+
+	std::cout << g_XPos << std::endl;
 
 	++g_XGreenPos;
 
