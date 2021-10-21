@@ -39,19 +39,31 @@ void CheckOddOrEven()
 void RandomNumbers()
 {
 
-    std::srand(int (time(nullptr))); // Initialize random number generator
+    std::srand(int (time(nullptr))); // Initialize random number generator (only once)
 
     int randomValue{};
 
-    randomValue = rand() % 51;
-    std::cout << "Random value between [0, 50]: " << randomValue << std::endl;
+    // RANDOM --> (Till - From + 1) + From
+   randomValue = rand() % 51;
+   std::cout << "Random value between [0, 50]: " << randomValue << std::endl;
+   
+   randomValue = rand() % (80 - 10 + 1) + 10;  // (Till - From + 1) + From
+   std::cout << "Random value between [10, 80]: " << randomValue << std::endl;
+  
+  
+  randomValue = rand() % (20 + 20 + 1) -20;
+  std::cout << "Random value between [-20, 20]: " << randomValue << std::endl;
+  
+ 
+  randomValue = rand() % (2 + 2 + 1) - 2;
+  std::cout << "Random value between [-2, 2]: " << randomValue << std::endl;
 
-    randomValue = rand() % 80 + 10;
-    std::cout << "Random value between [10, 80]: " << randomValue << std::endl;
-
-    randomValue = rand() % 20;
-    std::cout << "Random value between [-20, 20]: " << randomValue << std::endl;
-    
+  float randomFloat{};
+ 
+  randomFloat = (float)rand() / (RAND_MAX)+1 + (rand() % 9);
+  std::cout << "Random value between [5.00, 10.00]: " << randomFloat << std::endl;
+  
+  
 
 }
 

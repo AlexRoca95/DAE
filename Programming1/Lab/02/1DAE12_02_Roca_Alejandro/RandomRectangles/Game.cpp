@@ -18,7 +18,7 @@ void Draw()
 	// Random colors
 	float r{}, g{}, b{};
 
-	r = rand() % 100 / 100.f;  // 0 - 99 and then we divide by 100 so we get floats that goes from 0.f to 1.f
+	r = rand() % 100 / 100.f;		// 0 - 99 and then we divide by 100 so we get floats that goes from 0.f to 1.f
 	g = rand() % 100 / 100.f;
 	b = rand() % 100 / 100.f;
 	utils::SetColor(r, g, b);		// Put random color
