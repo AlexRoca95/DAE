@@ -267,4 +267,12 @@ void DrawNewRect()
 	utils::FillRect(float(PosXRect2), float(g_PosY), float(width), float(g_HeightRect));
 
 }
+
+void DrawBouncingLine()
+{
+
+	utils::SetColor(0, 1, 0);
+	//utils::DrawLine();
+
+}
 #pragma endregion ownDefinitions

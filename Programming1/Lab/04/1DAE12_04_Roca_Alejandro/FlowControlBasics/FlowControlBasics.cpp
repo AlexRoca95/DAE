@@ -17,7 +17,7 @@ void UsePoint2f();
 
 int main()
 {
-	//PrintTruthTable();
+	PrintTruthTable();
 	//CompareTwoNumbers();
 	//CalculatePrice();
 	//ConvertDayNumber();

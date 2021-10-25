@@ -55,6 +55,8 @@ void MoveRect();
 void CheckMouseRect();
 void CheckMoveRect();
 
+void DrawBouncingLine();
+
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											
