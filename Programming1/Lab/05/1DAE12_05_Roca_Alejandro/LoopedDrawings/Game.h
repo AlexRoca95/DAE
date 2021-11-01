@@ -2,7 +2,7 @@
 using namespace utils;
 #pragma region gameInformation
 // Set your name and group in the title here
-std::string g_WindowTitle{ "DiceStats - Roca, Alejandro - 1DAE12" };
+std::string g_WindowTitle{ "Looping Drawings - Roca, Alejandro - 1DAE12" };
 
 // Change the window dimensions here
 float g_WindowWidth{ 500 };
@@ -13,21 +13,17 @@ float g_WindowHeight{ 500 };
 
 #pragma region ownDeclarations
 // Declare your own global variables here
-int g_HeightRect{};				// Height of the rectangles
-int g_SeparationRect{};			// Separation between the draw of the first set of rects
-int g_SeparationRect2Dice{};	// Separation between the draw of the second set of rects
-// One dice variables
-int g_Dice1_1{}, g_Dice1_2{}, g_Dice1_3{}, g_Dice1_4{}, g_Dice1_5{}, g_Dice1_6{};
 
-// 2 dice variables
-int g_Dice2_1{}, g_Dice2_2{}, g_Dice2_3{}, g_Dice2_4{}, g_Dice2_5{}, g_Dice2_6{}, g_Dice2_7{}, g_Dice2_8{};
-int g_Dice2_9{}, g_Dice2_10{}, g_Dice2_11{}, g_Dice2_12{};
+int g_MaxSpace{};			// Max space for draw the drawing loops
+int g_Border{};				// Space between drawings and border
+
 
 // Declare your own functions here
-void Draw1Dice();
-void Draw2Dice();
-void Roll1Dice();
-void Roll2Dice();
+
+void DrawConcentricSquares();
+void DrawStair();
+void DrawSpiral();
+void DrawSpinningLines();
 
 #pragma endregion ownDeclarations
 

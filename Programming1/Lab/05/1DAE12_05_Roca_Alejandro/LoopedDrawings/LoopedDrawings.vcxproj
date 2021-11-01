@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{d2773c9f-dc08-49ae-ba1c-04e1a463629f}</ProjectGuid>
-    <RootNamespace>DiceStats</RootNamespace>
+    <ProjectGuid>{1e705c64-51fa-42f7-9c1d-dedc15e4df3b}</ProjectGuid>
+    <RootNamespace>LoopedDrawings</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
