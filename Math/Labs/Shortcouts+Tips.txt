@@ -20,3 +20,5 @@ for a unknow incognit.
 	- If I want to check my results of a triangle values I can do it
 	in geogebra by creating the rectangle and putting the values and angles
 	that I know
+
+- arctan2 --> in radians
