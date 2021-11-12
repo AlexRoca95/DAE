@@ -59,8 +59,8 @@ void Draw()
 	Point2f translation{ 100, g_WindowHeight / 2};
 	float posX{ translation.x };
 	float posX2{ translation.x + 1};
-	float step{ g_Pi * 2 / 180 };
-	for (float angle{}; angle < g_Pi * 2; angle += step)
+	float step{ g_Pi / 180 };			// 1 degree each step
+	for (float angle{}; angle < g_Pi * 2; angle += step)  // Angle between 0 and 360 (Full angle)
 	{
 		float posY1{ sin(angle) * scale + translation.y };
 		float posY2{ sin(angle + step) * scale + translation.y };
@@ -78,7 +78,8 @@ void Draw()
 		utils::DrawLine(posX, posY1, posX2, posY2);
 	}
 
-	utils::FillRect(10, translation.y + sin(g_Angle) * 50, 50, 10);
+
+	utils::FillRect(10, translation.y + sin(g_Angle) * 50, 50, 10);  // We move rect along the Y axis
 }
 
 void Update(float elapsedSec)

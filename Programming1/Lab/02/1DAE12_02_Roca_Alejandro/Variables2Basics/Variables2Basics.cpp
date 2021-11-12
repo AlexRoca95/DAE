@@ -13,10 +13,10 @@ void UsingStrings();
 
 int main()
 {
-    CheckOddOrEven();
+    //CheckOddOrEven();
     RandomNumbers();
-    Typecasting();
-    UsingStrings();
+    //Typecasting();
+    //UsingStrings();
 
     return 0;
 
@@ -44,7 +44,7 @@ void RandomNumbers()
     int randomValue{};
 
     // RANDOM --> (Till - From + 1) + From
-   randomValue = rand() % 51;
+  /* randomValue = rand() % 51;
    std::cout << "Random value between [0, 50]: " << randomValue << std::endl;
    
    randomValue = rand() % (80 - 10 + 1) + 10;  // (Till - From + 1) + From
@@ -62,8 +62,47 @@ void RandomNumbers()
  
   randomFloat = (float)rand() / (RAND_MAX)+1 + (rand() % 9);
   std::cout << "Random value between [5.00, 10.00]: " << randomFloat << std::endl;
-  
-  
+  */
+
+    
+
+    for (int i = 0; i < 100; i++)
+    {
+        randomValue = rand() % 50;      // [0, 50]
+        //std::cout << "Random value between [0, 50]: " << randomValue << std::endl;
+    }
+    
+
+    for (int i = 0; i < 100; i++)
+    {
+        randomValue = (rand() % 70) + 10;      // [10, 80]
+       // std::cout << "Random value between [10, 80]: " << randomValue << std::endl;
+    }
+    for (int i = 0; i < 100; i++)
+    {   
+        // [-20, 20]
+        randomValue = (rand() % 21) - 20;      
+        randomValue += (rand() % 20) + 1;
+       //std::cout << "Random value between [-20, 20]: " << randomValue << std::endl;
+    }
+
+    for (int i = 0; i < 100; i++)
+    {
+        // [-2, 2]
+        randomValue = (rand() % 3) - 2;         //[-2, 0]
+        randomValue += (rand() % 2) + 1;        // [-2, 2] + [1, 2] = [-2, 2]
+       // std::cout << "Random value between [-2, 2]: " << randomValue << std::endl;
+    }
+
+    for (int i = 0; i < 100; i++)
+    {
+        // [5.00, 10.00]
+        float(randomValue) =(rand() % 51 + 50) / 10.f;         //[5.00, 10.00]
+
+       
+        
+        std::cout << "Random value between [5.00, 10.00]: " << randomValue << std::endl;
+    }
 
 }
 
@@ -157,7 +196,7 @@ void UsingStrings()
     float number2{};
     
 
-    std::cout << "One string contains " << number1 << std::endl;
-    std::cout << "Other string contains " << number2 << std::endl;
+    std::cout << "One string contains " << std::to_string(number1) << std::endl;
+    std::cout << "Other string contains " << std::to_string(number2) << std::endl;
 
 }
