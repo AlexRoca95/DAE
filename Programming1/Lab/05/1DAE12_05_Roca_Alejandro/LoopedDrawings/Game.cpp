@@ -108,7 +108,7 @@ void DrawConcentricSquares()
 
 	utils::SetColor(0.6f, 1.f, 0.8f);
 
-	int space = 0;		// Space between each concentric line
+	int space{ 0 };		// Space between each concentric line
 
 	for (int i = 0; i < 5; i++) // Draw five lines
 	{

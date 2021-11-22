@@ -179,10 +179,10 @@ void UpdateFreeFall(float elapsedSec)
 {
 	g_SquarePos.y += g_Vel * elapsedSec;
 
-	// Velocity accelarates
+	// Velocity accelarates frame rate independent
 	g_Vel += g_Gravity * elapsedSec;
 	
-	if (g_SquarePos.y <= 0)
+	if (g_SquarePos.y <= 0) // Out of limits? Reset
 	{
 		g_SquarePos.y = g_InitialY;
 		g_Fall = false;

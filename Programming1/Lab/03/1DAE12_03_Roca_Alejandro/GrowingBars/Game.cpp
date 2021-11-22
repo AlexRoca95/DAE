@@ -137,6 +137,7 @@ void DrawRedBar()
 
 	// Right
 	utils::DrawLine(g_MaxWidth, g_RedBarY, g_MaxWidth, (g_RedBarY) + g_BarHeight, 2.0f);
+	
 }
 
 // Updates the yellow Bar one pixel per frame

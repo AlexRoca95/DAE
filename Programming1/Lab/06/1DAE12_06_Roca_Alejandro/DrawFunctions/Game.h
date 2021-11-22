@@ -13,15 +13,21 @@ float g_WindowHeight{ 300 };
 
 #pragma region ownDeclarations
 // Declare your own global variables here
-
 float g_YPosGrad{};							// Position for rectangles in LinearGradient
 
+const float g_Radian60{ 1.0472f};		    // Value of 60 degrees in radians
+
 const float g_Border{ 10 };					// Window border size
+
+const float g_LengthTriangle{ 80.f };		// Length of the sides of the triangles
 // Declare your own functions here
 
-void DrawSquares(Point2f, float, int);			// Draw 3 concentric squares 
-void DrawEquilateralTriangle(Point2f, float, bool);
-void DrawLinearGradient(Point2f, float, float, Color4f, Color4f);
+void DrawSquares();		
+void DrawSquare(Point2f, float, int);
+void DrawEquilateralTriangles();
+void DrawEquilateralTriangle(Point2f, float, bool, Color4f);
+void DrawLinearGradients();
+void DrawLinearGradient(Rectf, Color4f, Color4f);
 
 #pragma endregion ownDeclarations
 
