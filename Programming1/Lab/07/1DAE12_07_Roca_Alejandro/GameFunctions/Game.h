@@ -21,6 +21,12 @@ bool g_InsideCircle{};
 Rectf g_Rect{};
 bool g_InsideRect{};
 
+Rectf g_MouseRect{};
+bool g_OverlappinRect{};
+
+Circlef g_MouseCircle{};
+bool g_OverlappinCircle{};
+
 // Declare your own functions here
 void DrawFilledCircle();
 void DrawCircleBorder();
@@ -29,6 +35,11 @@ void TestPointInCircle();
 void DrawRectangle();
 void TestPointInRect();
 void DrawRectBorder();
+
+void CheckColor(bool);
+void DrawRectMouse();
+void DrawCircleMouse();
+void TestOverlappingRect();
 
 #pragma endregion ownDeclarations
 

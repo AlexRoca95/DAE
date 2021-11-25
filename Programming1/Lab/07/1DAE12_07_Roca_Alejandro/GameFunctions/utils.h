@@ -75,6 +75,8 @@ namespace utils
 	float GetDistance(const Point2f& p1, const Point2f& p2);
 	bool IsPointInCircle(const Point2f& p1, const Circlef& circle);
 	bool IsPointInRect(const Point2f& p1, const Rectf& rectangle);
+	bool IsOverlapping(const Rectf& rect1, const Rectf& rect2);
+	bool IsOverlapping(const Circlef& circle1, const Circlef& circle2);
 
 #pragma endregion CollisionFunctionality
 

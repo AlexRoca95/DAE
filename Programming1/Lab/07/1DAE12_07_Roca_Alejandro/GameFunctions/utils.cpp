@@ -552,6 +552,7 @@ namespace utils
 		return inCircle;
 	}
 
+	// Check if the point is inside the rectangle
 	bool IsPointInRect(const Point2f& p1, const Rectf& rectangle)
 	{
 		bool inRect{};  // 0 --> False
@@ -561,11 +562,48 @@ namespace utils
 		{
 			if (p1.y >= rectangle.bottom && p1.y <= rectangle.bottom + rectangle.height)
 			{
+				// Point inside rect
 				inRect = true;
 			}
 		}
 		
 		return inRect;
+	}
+
+	bool IsOverlapping(const Rectf& rect1, const Rectf& rect2)
+	{
+		bool overlapping{ true }; 
+
+		// Top left coord of rect1
+		Point2f l1{ rect1.left, rect1.bottom + rect1.height}; 
+		// Right bottom cord of rect1
+		Point2f r1{ rect1.left + rect1.width, rect1.bottom };
+
+		// Rect 2 coord (top left and right bottom
+		Point2f l2{ rect2.left, rect2.bottom + rect2.height };
+		Point2f r2{ rect2.left + rect2.width, rect2.bottom };
+
+
+		// If one of these conditions are true --> Overlapping == false
+		
+		// If one rectangle is on left side of the other
+		if (l1.x > r2.x || l2.x > r1.x)
+			overlapping = false;
+		// If one rectangle is on above the other
+		if (r1.y > l2.y || r2.y > l1.y)
+			overlapping = false;
+
+
+		return overlapping;
+	}
+
+	bool IsOverlapping(const Circlef& circle1, const Circlef& circle2)
+	{
+		bool overlapping{ }; 
+
+		
+
+		return overlapping;
 	}
 
 

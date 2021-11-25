@@ -12,8 +12,8 @@ void Start()
 	g_Circle.center = GetRandomPos(g_Circle.radius, g_Circle.radius);
 
 	// Rectangle
-	g_Rect.width = 50.f;
-	g_Rect.height = 25.f;
+	g_Rect.width = 70.f;
+	g_Rect.height = 40.f;
 	Point2f pos = GetRandomPos(g_Rect.width, g_Rect.height);
 	g_Rect.left = pos.x;
 	g_Rect.bottom = pos.y;
@@ -33,6 +33,9 @@ void Draw()
 	DrawRectangle();
 	DrawRectBorder();
 
+	DrawRectMouse();
+	DrawCircleMouse();
+
 }
 
 void Update(float elapsedSec)
@@ -40,6 +43,7 @@ void Update(float elapsedSec)
 	// process input, do physics 
 	TestPointInCircle();
 	TestPointInRect();
+	TestOverlappingRect();
 	
 }
 
@@ -78,6 +82,18 @@ void OnMouseMotionEvent(const SDL_MouseMotionEvent& e)
 	// Get mouse position
 	g_MousePos.x = float(e.x);
 	g_MousePos.y = float(g_WindowHeight - e.y);
+
+	// Mouse at right bottom of rectangle
+	g_MouseRect.width = 50.f;
+	g_MouseRect.height = 25.f;
+	g_MouseRect.left = g_MousePos.x - g_MouseRect.width;
+	g_MouseRect.bottom = g_MousePos.y;
+
+	// Mouse at left of the circle
+	g_MouseCircle.radius = 30.f;
+	g_MouseCircle.center.x = g_MousePos.x + g_MouseCircle.radius;
+	g_MouseCircle.center.y = g_MousePos.y;
+
 
 }
 
@@ -177,5 +193,48 @@ void DrawRectBorder()
 void TestPointInRect()
 {
 	g_InsideRect = IsPointInRect(g_MousePos, g_Rect);
+}
+
+
+// Draw a semi trasnparent rectangle at the mouse pos
+void DrawRectMouse()
+{
+	CheckColor(g_OverlappinRect);
+	utils::FillRect(g_MouseRect.left, g_MouseRect.bottom, g_MouseRect.width, g_MouseRect.height);
+
+}
+
+// Draw a semi trasnparent rectangle at the mouse pos
+void DrawCircleMouse()
+{
+	
+	CheckColor(g_OverlappinCircle);
+	utils::FillEllipse(g_MouseCircle.center, g_MouseCircle.radius, g_MouseCircle.radius);
+
+}
+
+
+// Check if the bool is true or not. Change color according to this
+void CheckColor(bool overlapping)
+{
+	if (overlapping)
+	{
+		// Overlapping
+		utils::SetColor(1.0f, 0.f, 0.f, 0.5f); // Semi-transparent red
+	}
+	else
+	{
+		utils::SetColor(0.f, 1.f, 0.f, 0.5f); // Semi-Transparent green
+	}
+}
+
+void TestOverlappingRect()
+{
+	g_OverlappinRect = utils::IsOverlapping(g_MouseRect, g_Rect);
+}
+
+void TestOverlappingCircle()
+{
+	g_OverlappinCircle= utils::IsOverlapping(g_MouseCircle, g_Circle);
 }
 #pragma endregion ownDefinitions
