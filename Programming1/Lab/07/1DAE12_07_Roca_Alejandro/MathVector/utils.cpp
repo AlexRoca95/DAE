@@ -3,7 +3,9 @@
 //#include <cmath>
 #include <algorithm>
 #include <iostream>
+#include <string>  
 #include "utils.h"
+#include <math.h>
 
 namespace utils
 {
@@ -620,4 +622,161 @@ namespace utils
 
 
 #pragma endregion CollisionFunctionality
+
+#pragma region VectorFunctionality
+
+	// Draw a vector as a line between the start point and the vector parameter.
+	// Also draws a filled triangle at the end (30 degrees)
+	void DrawVector(const Vector2f& vector, const Point2f& startPoint)
+	{
+		Point2f endPoint{ startPoint.x + vector.x, startPoint.y + vector.y };
+
+		// Line from starting point to endingPoint
+		utils::DrawLine(startPoint, endPoint);
+
+		// Filled equilateral triangle (30 degrees).
+		// We have to get the angle between the vector and the horizontal x
+		// After ypu get the points of the triangle subtracting and adding that angle 
+
+					
+
+		//FillTriangle(p1, p2, p3);
+
+	}
+
+	// Return a string with the values of the vector
+	std::string ToString(const Vector2f& vector)
+	{
+		std::string stringV{};
+
+		stringV = "[" + std::to_string(vector.x) + ", " + std::to_string(vector.y) + "]";
+	
+		return stringV;
+	}
+
+	// Add two vectors and return the result vector
+	Vector2f Add(const Vector2f& v1, const Vector2f& v2)
+	{
+		Vector2f vectorSum{};
+
+		// Addition of the components of both vectors
+		vectorSum.x = v1.x + v2.x;
+		vectorSum.y = v1.y + v2.y;
+
+
+		//std::cout << vectorSum.x << std::endl;
+		//std::cout << vectorSum.y << std::endl;
+
+		return vectorSum;
+	}
+
+	// Subtract two vectors and return the result vector
+	Vector2f Subtract(const Vector2f& v1, const Vector2f& v2)
+	{
+		Vector2f vectorSub{};
+
+		vectorSub.x = v1.x - v2.x;
+		vectorSub.y = v1.y - v2.y;
+
+		return vectorSub;
+
+	}
+	// Calculates the dot product of two vectors
+	float DotProduct(const Vector2f& v1, const Vector2f& v2)
+	{
+		float vectorDot{};
+
+		// Multiply components of both vectors and add them. Result is a scalar
+		vectorDot = (v1.x * v2.x) + (v1.y * v2.y);
+		
+		return vectorDot;
+	}
+
+	// Calculates the cross product of two vectors with Z-component=0
+	float CrossProduct(const Vector2f& v1, const Vector2f& v2)
+	{
+		float lengthZ{};
+
+		// Cross product is for 3D vectors only, so the Z-Component is 0 here
+		// The result of the cross product for the X and Y components are going to be 0
+		// So we only calculate the component for the  Z-axis
+		lengthZ = (v1.x*v2.y) - (v1.y*v2.x);	/// Z-component
+
+		return lengthZ;
+	}
+
+	// Calculates the length of the vector using pithagoras
+	float Length(const Vector2f& v)
+	{
+		float length{};
+
+		// Pithagoras Theorem
+		length = sqrt((v.x * v.x) + (v.y * v.y));
+
+		return length;
+	}
+
+	// Returns a scaled vector by the result of multiplicate a scalar to the vector
+	Vector2f Scale(const Vector2f& v, float scalar)
+	{
+		Vector2f scaledV{};
+
+		// New scaled vector
+		scaledV.x = scalar * v.x;
+		scaledV.y = scalar * v.y;
+
+		return scaledV;
+	}
+	// Returns a normalized vector
+	Vector2f Normalize(const Vector2f& v)
+	{
+		Vector2f normalizedV{};
+		float length;
+
+		// Calculate length of the vector
+		length = Length(v);
+
+		// Divide the components by the length of the vector --> Normalized vector
+		normalizedV.x = v.x / length;
+		normalizedV.y = v.y / length;
+
+		return normalizedV;
+	}
+
+	// Calculates the angle between two given vectors using the atan2 function
+	float AngleBetween(const Vector2f& v1, const Vector2f& v2)
+	{
+		float angle{}, dot{}, cross{};
+
+		cross = CrossProduct(v1, v2);
+		dot = DotProduct(v1, v2);
+
+		// Inverse tangent of cross/dot gives the angle between
+		angle = atan2(cross, dot);
+
+		return angle;
+		
+	}
+
+	// Check if both vectors are equal(almost (same length and direction)
+	bool AreEqual(const Vector2f& v1, const Vector2f& v2)
+	{
+		bool equals{};
+
+		if (Length(v1) - Length(v2) <= 0.001f)
+		{
+			// Both vectors have the same length
+
+			//if()
+		}
+
+
+		return equals;
+	}
+	
+
+
+
+
+#pragma endregion VectorFunctionality
 }

@@ -2,7 +2,7 @@
 using namespace utils;
 #pragma region gameInformation
 // Set your name and group in the title here
-std::string g_WindowTitle{ "Game Functions - Roca, Alejandro - 1DAE12" };
+std::string g_WindowTitle{ "Math Vector - Roca, Alejandro - 1DAE12" };
 
 // Change the window dimensions here
 float g_WindowWidth{ 500 };
@@ -13,35 +13,19 @@ float g_WindowHeight{ 300 };
 
 #pragma region ownDeclarations
 // Declare your own global variables here
-
-Point2f g_MousePos{ };
-Circlef g_Circle{};
-bool g_InsideCircle{};
-
-Rectf g_Rect{};
-bool g_InsideRect{};
-
-Rectf g_MouseRect{};
-bool g_OverlappinRect{};
-
-Circlef g_MouseCircle{};
-bool g_OverlappinCircle{};
+Vector2f g_Vector{ g_WindowWidth / 2, g_WindowHeight / 2 };
 
 // Declare your own functions here
-void DrawFilledCircle();
-void DrawCircleBorder();
-Point2f GetRandomPos(float width, float height);
-void TestPointInCircle();
-void DrawRectangle();
-void TestPointInRect();
-void DrawRectBorder();
 
-void CheckColor(bool);
-void DrawRectMouse();
-void DrawCircleMouse();
-void TestOverlappingRect();
-void TestOverlappingCircle();
-
+void DrawVectors();
+void AddVectors();
+void TestSubVectors();
+void TestDotProduct();
+void TestCrossProduct();
+void TestLength();
+void TestScale();
+void TestNormalize();
+void TestAngleBetween();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

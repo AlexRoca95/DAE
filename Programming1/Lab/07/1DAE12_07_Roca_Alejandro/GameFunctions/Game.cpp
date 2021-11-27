@@ -44,6 +44,7 @@ void Update(float elapsedSec)
 	TestPointInCircle();
 	TestPointInRect();
 	TestOverlappingRect();
+	TestOverlappingCircle();
 	
 }
 
@@ -227,6 +228,7 @@ void CheckColor(bool overlapping)
 		utils::SetColor(0.f, 1.f, 0.f, 0.5f); // Semi-Transparent green
 	}
 }
+
 
 void TestOverlappingRect()
 {
