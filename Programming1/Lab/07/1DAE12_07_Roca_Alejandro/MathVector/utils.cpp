@@ -763,17 +763,20 @@ namespace utils
 	{
 		bool equals{};
 
-		if (Length(v1) - Length(v2) <= 0.001f)
+		if (abs(Length(v1) - Length(v2)) <= 0.001f)
 		{
 			// Both vectors have the same length
 
-			//if()
+			if (abs(v1.x - v2.x) <= 0.001f && abs(v1.y - v2.y) <= 0.001f)
+			{
+				// Both vectors also have the same direction
+				equals = true;
+			}
 		}
-
-
 		return equals;
 	}
 	
+
 
 
 

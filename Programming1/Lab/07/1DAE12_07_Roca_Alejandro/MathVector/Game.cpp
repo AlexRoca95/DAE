@@ -17,6 +17,7 @@ void Start()
 	TestScale();
 	TestNormalize();
 	TestAngleBetween();
+	TestAreEqual();
 }
 
 void Draw()
@@ -26,6 +27,7 @@ void Draw()
 	DrawVectors();
 	AddVectors();
 	TestSubVectors();
+	AnimationProjection();
 	// Put your own draw statements here
 
 }
@@ -44,6 +46,8 @@ void Update(float elapsedSec)
 	//{
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
+
+	UpdateVector(elapsedSec);
 }
 
 void End()
@@ -246,5 +250,85 @@ void TestAngleBetween()
 
 	std::cout << "Angle between [" << v1.x << ", " << v1.y << "] and [" << v2.x << ", " << v2.y << "] is " << angle <<std::endl;
 	std::cout << std::endl;
+}
+
+
+void TestAreEqual()
+{
+	Vector2f v1{ 10.f, 0.f }, v2{ 10.f, 0.f };
+	bool equal{};
+
+	equal = AreEqual(v1, v2);
+
+	std::cout << equal << std::endl;
+
+	v1.x = 10.f;
+	v1.y = 0.f;
+	v2.x = 20.f;
+	v2.y = 0.f;
+
+	equal = AreEqual(v1, v2);
+
+	std::cout << equal << std::endl;
+
+	v1.x = -10.f;
+	v1.y = 0.f;
+	v2.x = 10.f;
+	v2.y = 0.f;
+
+	equal = AreEqual(v1, v2);
+
+	std::cout << equal << std::endl;
+
+}
+
+
+// We do the projection of one vector into another
+void AnimationProjection()
+{
+	utils::SetColor(1.f, 1.f, 1.f); // White
+
+	// Draw a vector in the middle 
+	Point2f startPoint{ g_WindowWidth / 2, g_WindowHeight / 2 };
+
+	DrawVector(g_V1Animation, startPoint);
+
+	Vector2f v2Normalized{ 20.f, 10.f };
+
+	// Normalize the vector
+	v2Normalized = utils::Normalize(v2Normalized);
+
+	// Calculate the dot product between the normalized vector and the other
+	float dotVectors{};
+	dotVectors = DotProduct(g_V1Animation, v2Normalized);
+
+	// Multiply the normalized vector with the dotProduct
+	v2Normalized = Scale(v2Normalized, dotVectors);
+
+
+	utils::SetColor(1.0f, 0.f, 0.f);
+	DrawVector(v2Normalized, startPoint);
+
+}
+
+
+// Makes the vector rotate framerate independent
+void UpdateVector(float elapsedSec)
+{
+	g_Angle += (g_Step) * elapsedSec;  // 5 degrees each step
+	
+	// Rotate the vector frame rate independet
+	// Calculates the x and y position in the circle with cos and sin.
+	// Then we scale that position to the scale of the vector
+	g_V1Animation.x = cos(g_Angle) * g_Scale;	
+	g_V1Animation.y = sin(g_Angle) * g_Scale;
+
+
+	if (g_Angle >= g_FullAngle)
+	{
+		// Reset angle to 1 degree when we reach 360 degrees
+		g_Angle = g_Pi / 180;
+	}
+
 }
 #pragma endregion ownDefinitions
