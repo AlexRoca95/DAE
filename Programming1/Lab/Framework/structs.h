@@ -70,4 +70,11 @@ struct Ellipsef
 };
 
 
+struct Vector2f
+{
+	float x;
+	float y;
+};
+
+
 

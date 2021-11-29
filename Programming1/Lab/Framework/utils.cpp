@@ -3,7 +3,9 @@
 //#include <cmath>
 #include <algorithm>
 #include <iostream>
+#include <string>  
 #include "utils.h"
+#include <math.h>
 
 namespace utils
 {
@@ -493,6 +495,291 @@ namespace utils
 
 #pragma region CollisionFunctionality
 
+	// Calculates and returns the distance between two points using floats
+	float GetDistance(const float x1, const float y1, const float x2, const float y2)
+	{
+		float distance{};
+		float lengthX{};
+		float lengthY{};
+
+		// We apply pythagoras theorem  
+		lengthX = x2 - x1;
+		lengthX *= lengthX;
+
+		lengthY = y2 - y1;
+		lengthY *= lengthY;
+
+		// Square root of the adittion of the results
+		distance = sqrt(lengthX + lengthY);
+
+		return distance;
+
+	}
+	// Calculates and returns the distance between two points using Point2f struct
+	float GetDistance(const Point2f& p1, const Point2f& p2)
+	{
+		float distance{};
+		float lengthX{};
+		float lengthY{};
+
+		// We apply pythagoras theorem  
+		lengthX = p2.x - p1.x;
+		lengthX *= lengthX;
+		// Y value
+		lengthY = p2.y - p1.y;
+		lengthY *= lengthY;
+
+		// Square root of the adittion of the results
+		distance = sqrt(lengthX + lengthY);
+
+		//std::cout << distance << std::endl;
+
+		return distance;
+	}
+	// Check if the point is inside the radius of the circle
+	bool IsPointInCircle(const Point2f& p1, const Circlef& circle)
+	{
+		bool inCircle{};  // 0 --> False
+		float distance{};
+
+		// Calculate distance between point and center of circle
+		distance = GetDistance(p1, circle.center);
+
+		if (distance <= circle.radius)
+		{
+			// Point inside the circle
+			inCircle = true;
+		}
+
+		return inCircle;
+	}
+
+	// Check if the point is inside the rectangle
+	bool IsPointInRect(const Point2f& p1, const Rectf& rectangle)
+	{
+		bool inRect{};  // 0 --> False
+		
+
+		if (p1.x >= rectangle.left && p1.x <= rectangle.left + rectangle.width)
+		{
+			if (p1.y >= rectangle.bottom && p1.y <= rectangle.bottom + rectangle.height)
+			{
+				// Point inside rect
+				inRect = true;
+			}
+		}
+		
+		return inRect;
+	}
+
+	bool IsOverlapping(const Rectf& rect1, const Rectf& rect2)
+	{
+		bool overlapping{ true }; 
+
+		// Top left coord of rect1
+		Point2f l1{ rect1.left, rect1.bottom + rect1.height}; 
+		// Right bottom cord of rect1
+		Point2f r1{ rect1.left + rect1.width, rect1.bottom };
+
+		// Rect 2 coord (top left and right bottom
+		Point2f l2{ rect2.left, rect2.bottom + rect2.height };
+		Point2f r2{ rect2.left + rect2.width, rect2.bottom };
+
+
+		// If one of these conditions are true --> Overlapping == false
+		
+		// If one rectangle is on left side of the other
+		if (l1.x > r2.x || l2.x > r1.x)
+			overlapping = false;
+		// If one rectangle is on above the other
+		if (r1.y > l2.y || r2.y > l1.y)
+			overlapping = false;
+
+
+		return overlapping;
+	}
+
+	bool IsOverlapping(const Circlef& circle1, const Circlef& circle2)
+	{
+		bool overlapping{  }; 
+		float distance{}, sumRadi{}, subtRadi{};
+
+		// Distance between the centers of the cirlce
+		distance = utils::GetDistance(circle1.center, circle2.center);
+
+		sumRadi = circle1.radius + circle2.radius;		// Both radius added (two circles touch externally)
+		subtRadi = circle1.radius - circle2.radius;		// Both radius subtracted (two circles touch internally)
+
+		if (subtRadi < distance  && distance < sumRadi)
+		{
+			// Circles will intersect
+			overlapping = true;
+		}
+		
+
+		return overlapping;
+	}
+
 
 #pragma endregion CollisionFunctionality
+
+#pragma region VectorFunctionality
+
+	// Draw a vector as a line between the start point and the vector parameter.
+	// Also draws a filled triangle at the end (30 degrees)
+	void DrawVector(const Vector2f& vector, const Point2f& startPoint)
+	{
+		Point2f endPoint{ startPoint.x + vector.x, startPoint.y + vector.y };
+
+		// Line from starting point to endingPoint
+		utils::DrawLine(startPoint, endPoint);
+
+		// Filled equilateral triangle (30 degrees).
+		// We have to get the angle between the vector and the horizontal x
+		// After ypu get the points of the triangle subtracting and adding that angle 
+
+					
+
+		//FillTriangle(p1, p2, p3);
+
+	}
+
+	// Return a string with the values of the vector
+	std::string ToString(const Vector2f& vector)
+	{
+		std::string stringV{};
+
+		stringV = "[" + std::to_string(vector.x) + ", " + std::to_string(vector.y) + "]";
+	
+		return stringV;
+	}
+
+	// Add two vectors and return the result vector
+	Vector2f Add(const Vector2f& v1, const Vector2f& v2)
+	{
+		Vector2f vectorSum{};
+
+		// Addition of the components of both vectors
+		vectorSum.x = v1.x + v2.x;
+		vectorSum.y = v1.y + v2.y;
+
+
+		//std::cout << vectorSum.x << std::endl;
+		//std::cout << vectorSum.y << std::endl;
+
+		return vectorSum;
+	}
+
+	// Subtract two vectors and return the result vector
+	Vector2f Subtract(const Vector2f& v1, const Vector2f& v2)
+	{
+		Vector2f vectorSub{};
+
+		vectorSub.x = v1.x - v2.x;
+		vectorSub.y = v1.y - v2.y;
+
+		return vectorSub;
+
+	}
+	// Calculates the dot product of two vectors
+	float DotProduct(const Vector2f& v1, const Vector2f& v2)
+	{
+		float vectorDot{};
+
+		// Multiply components of both vectors and add them. Result is a scalar
+		vectorDot = (v1.x * v2.x) + (v1.y * v2.y);
+		
+		return vectorDot;
+	}
+
+	// Calculates the cross product of two vectors with Z-component=0
+	float CrossProduct(const Vector2f& v1, const Vector2f& v2)
+	{
+		float lengthZ{};
+
+		// Cross product is for 3D vectors only, so the Z-Component is 0 here
+		// The result of the cross product for the X and Y components are going to be 0
+		// So we only calculate the component for the  Z-axis
+		lengthZ = (v1.x*v2.y) - (v1.y*v2.x);	/// Z-component
+
+		return lengthZ;
+	}
+
+	// Calculates the length of the vector using pithagoras
+	float Length(const Vector2f& v)
+	{
+		float length{};
+
+		// Pithagoras Theorem
+		length = sqrt((v.x * v.x) + (v.y * v.y));
+
+		return length;
+	}
+
+	// Returns a scaled vector by the result of multiplicate a scalar to the vector
+	Vector2f Scale(const Vector2f& v, float scalar)
+	{
+		Vector2f scaledV{};
+
+		// New scaled vector
+		scaledV.x = scalar * v.x;
+		scaledV.y = scalar * v.y;
+
+		return scaledV;
+	}
+	// Returns a normalized vector
+	Vector2f Normalize(const Vector2f& v)
+	{
+		Vector2f normalizedV{};
+		float length;
+
+		// Calculate length of the vector
+		length = Length(v);
+
+		// Divide the components by the length of the vector --> Normalized vector
+		normalizedV.x = v.x / length;
+		normalizedV.y = v.y / length;
+
+		return normalizedV;
+	}
+
+	// Calculates the angle between two given vectors using the atan2 function
+	float AngleBetween(const Vector2f& v1, const Vector2f& v2)
+	{
+		float angle{}, dot{}, cross{};
+
+		cross = CrossProduct(v1, v2);
+		dot = DotProduct(v1, v2);
+
+		// Inverse tangent of cross/dot gives the angle between
+		angle = atan2(cross, dot);
+
+		return angle;
+		
+	}
+
+	// Check if both vectors are equal(almost (same length and direction)
+	bool AreEqual(const Vector2f& v1, const Vector2f& v2)
+	{
+		bool equals{};
+
+		if (abs(Length(v1) - Length(v2)) <= 0.001f)
+		{
+			// Both vectors have the same length
+
+			if (abs(v1.x - v2.x) <= 0.001f && abs(v1.y - v2.y) <= 0.001f)
+			{
+				// Both vectors also have the same direction
+				equals = true;
+			}
+		}
+		return equals;
+	}
+	
+
+
+
+
+
+#pragma endregion VectorFunctionality
 }

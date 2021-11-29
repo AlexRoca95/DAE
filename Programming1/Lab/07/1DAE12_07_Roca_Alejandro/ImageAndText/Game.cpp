@@ -47,22 +47,33 @@ void Draw()
 	destinationRect.width = g_DAELogo.width / 2;
 	DrawTexture(g_DAELogo, destinationRect);
 
+	
+	Rectf sourceRectangle{};
+	// Check g_Positions using Paint of the image
+	// Also check width and height with the select tool
+	sourceRectangle.left = 55;
+	sourceRectangle.bottom = 50;
+	sourceRectangle.width = 30;
+	sourceRectangle.height = 10;
+	DrawTexture(g_DAELogo, g_FramePos, sourceRectangle);  // Draw a certain part of the texture
 }
 
 void Update(float elapsedSec)
 {
 	// process input, do physics 
-
-	// e.g. Check keyboard state
-	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-	//if ( pStates[SDL_SCANCODE_RIGHT] )
-	//{
-	//	std::cout << "Right arrow key is down\n";
-	//}
-	//if ( pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
-	//{
-	//	std::cout << "Left and up arrow keys are down\n";
-	//}
+	const float speed{ 50 };
+	 //e.g. Check keyboard state
+	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );  // Uint8 --> unsigned int of 8 bits
+	if ( pStates[SDL_SCANCODE_RIGHT] )
+	{
+		g_FramePos.x += speed * elapsedSec;
+		//std::cout << "Right arrow key is down\n";
+	}
+	if ( pStates[SDL_SCANCODE_LEFT])
+	{
+		g_FramePos.x -= speed * elapsedSec;
+		//std::cout << "Left and up arrow keys are down\n";
+	}
 }
 
 void End()
