@@ -19,7 +19,8 @@ int g_IdxNext{};							// Index of the next clicked point
 bool g_DrawPolygon{};
 // Declare your own functions here
 void AddClickedPoint(const Point2f&);
-void DrawPolygon();
+void DrawClickedPoints();
+void DrawLines();
 
 #pragma endregion ownDeclarations
 

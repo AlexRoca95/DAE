@@ -14,7 +14,7 @@ void Draw()
 	ClearBackground(0.f, 0.f, 0.f);
 
 	// Put your own draw statements here
-	DrawPolygon();
+	DrawClickedPoints();
 }
 
 void Update(float elapsedSec)
@@ -98,7 +98,7 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 // and first element is lost
 void AddClickedPoint(const Point2f& mousePos)
 {
-	if (g_IdxNext == g_MaxClicks - 1)
+	if (g_IdxNext == g_MaxClicks)
 	{
 		// Array full. Shift all elements one pos to the left
 		for (int i = 0; i < g_MaxClicks-1; i++)
@@ -109,7 +109,8 @@ void AddClickedPoint(const Point2f& mousePos)
 			}
 		}
 
-		g_ArrayClicks[g_IdxNext] = mousePos;
+		// Now we only  add at the last pos of the array
+		g_ArrayClicks[g_IdxNext - 1] = mousePos;  
 		
 	}
 	else
@@ -118,16 +119,17 @@ void AddClickedPoint(const Point2f& mousePos)
 		g_ArrayClicks[g_IdxNext] = mousePos;
 		g_IdxNext++;
 	}
-
+	/*
 	for (int i = 0; i < g_MaxClicks; i++)
 	{
 		std::cout << g_ArrayClicks[i].x << ", " << g_ArrayClicks[i].y << std::endl;
 	}
+	*/
 }
 
 
 
-void DrawPolygon()
+void DrawClickedPoints()
 {
 	
 	if (g_DrawPolygon == true)
@@ -140,9 +142,19 @@ void DrawPolygon()
 		{
 			// Draw all polygons in the array
 			
-			utils::FillEllipse(g_ArrayClicks[i], 20, 20);
+			utils::FillEllipse(g_ArrayClicks[i], 10, 10);
+
+			if (i > 0)
+			{
+				// If we have at least two circles to conect --> Draw a line between them
+				utils::DrawLine(g_ArrayClicks[i], g_ArrayClicks[i - 1]);
+			}
+			
 		}
 	}
 }
+
+
+
 
 #pragma endregion ownDefinitions
