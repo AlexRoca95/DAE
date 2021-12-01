@@ -69,6 +69,7 @@ void Draw()
 		++posX2;
 	}
 
+	// Draws a circle
 	for (float angle{}; angle < g_Pi * 2; angle += step)
 	{
 		float posY1{ sin(angle) * scale + translation.y };
