@@ -49,6 +49,7 @@ void End()
 	// free game resources here
 
 	DeleteTexture(g_KnightSprite.texture);
+	DeleteTexture(g_TiboSprite.texture);
 }
 #pragma endregion gameFunctions
 

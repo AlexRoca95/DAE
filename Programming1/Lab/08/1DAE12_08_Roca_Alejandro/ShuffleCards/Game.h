@@ -15,9 +15,17 @@ float g_WindowHeight{ 300 };
 // Declare your own global variables here
 const int g_Size{ 52 };
 Texture	g_ArrayCards[g_Size]{};
-
+bool g_Shuffle{};
 
 // Declare your own functions here
+
+void LoadCards();
+int GetIndex(int rowIdx, int colIdx, int nrCols);
+void DrawCards();
+void Shuffle(Texture* pArray, const int size, const int swaps);
+void Swap(Texture* pArray, const int size, const int idx1, const int idx2);
+int RandomNumber(const int size);
+
 
 #pragma endregion ownDeclarations
 
