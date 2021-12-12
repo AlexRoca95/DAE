@@ -16,12 +16,17 @@ void Draw()
 
 	// Put your own draw statements here
 
-	if (state == StateGame::Start)
-	{
-		// Draw menu 
-	}
+	// Draw menu 
+	Rectf destinationRect{};
+	destinationRect.bottom = 0;
+	destinationRect.left = 0;
+	destinationRect.height = g_WindowHeight;
+	destinationRect.width = g_WindowWidth;
+	// DestinationRect will be the place where the texture will be draw
+	DrawTexture(g_StartScreen, destinationRect);
 
-	if (state != StateGame::Start)
+
+	if (state == StateGame::Playing || state == StateGame::Placing)
 	{
 		// Draw grids for player
 		//DrawShipInGrid();
@@ -29,6 +34,7 @@ void Draw()
 
 		if (state == StateGame::Placing)
 		{
+
 			// Draw ship at mouse pos
 			DrawShipPlacement();
 		}
@@ -36,9 +42,13 @@ void Draw()
 
 	if (state == StateGame::Playing)
 	{
-		// 
+		// Game Start. Draw the enemy grid
 		DrawGrid(g_EnemyGrid);
+		DrawGrid(g_PlayerGrid);
 	}
+
+	
+
 	
 }
 
@@ -46,13 +56,62 @@ void Update(float elapsedSec)
 {
 	// process input, do physics 
 	if (state == StateGame::Placing)
-	{
-		// Placing ships
-		UpdateShipPlacing();
-		SelectShip();
-		RotateShip();
-		CheckShipPlacement();
+	{	
+		if (g_ShipsLeft >0)
+		{
+			// Still ships to be placed
+			
+			// Placing ships
+			UpdateShipPlacing();
+
+			SelectShip();	
+
+			RotateShip();
+			CheckShipPlacement();
+
+			if (g_ShipsLeft == 0)
+			{
+				// All ships placed
+
+				// Ships of the enemy
+				PlaceEnemyShips();
+
+				// Game Start
+				state = StateGame::Playing;
+			}
+			
+		}
 		
+	}
+
+
+	if (state == StateGame::Playing)
+	{
+		if (g_PlayerTurn)
+		{
+			// Is player's turn
+			PlayerShoot(g_EnemyGrid);
+			
+		}
+		
+		if(g_PlayerTurn == false)
+		{
+			// Enemy's turn
+			EnemyShoot();
+			g_PlayerTurn = true;
+		}
+	}
+
+	if (state == StateGame::EndGame)
+	{
+		if (g_PlayerCountHits == g_MaxHits)
+		{
+			std::cout << "Enemy wins" << std::endl;
+		}
+		else
+		{
+			std::cout << "Player wins" << std::endl;
+		}
 	}
 	
 	// e.g. Check keyboard state
@@ -70,8 +129,11 @@ void Update(float elapsedSec)
 void End()
 {
 	// free game resources here
-	delete[] g_pArrayShips;
-	g_pArrayShips = nullptr;
+	delete[] g_pPlayerArrayShips;
+	g_pPlayerArrayShips = nullptr;
+
+	delete[] g_pEnemyArrayShips;
+	g_pEnemyArrayShips = nullptr;
 
 }
 #pragma endregion gameFunctions
@@ -108,6 +170,7 @@ void OnKeyUpEvent(SDL_Keycode key)
 	case SDLK_RIGHT:
 		if (state == StateGame::Placing)
 		{
+
 			// Select next ship
 			g_NextShip = true;
 		}
@@ -150,21 +213,23 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 				g_MouseClickPos.x = float(e.x);
 				g_MouseClickPos.y = float(g_WindowHeight - e.y);
 
-				if (g_pArrayShips[g_ShipsIndex].rotate)
+				if (state == StateGame::Placing)
 				{
-					// Ship rotated
-					g_MouseClickPos.x += 10.f;
-					g_MouseClickPos.y -= g_CellSize / 2;
-				}
-				else
-				{
-					// Ship not rotated
-					//g_MouseClickPos.x -= 10.f;
+					if (g_pPlayerArrayShips[g_ShipsIndex].rotate)
+					{
+						// Ship rotated
+						g_MouseClickPos.x += 10.f;
+						g_MouseClickPos.y -= g_CellSize / 2;
+					}
+					else
+					{
+						// Ship not rotated
+						//g_MouseClickPos.x -= 10.f;
 
+					}
 				}
-
-				std::cout << "Mouse clicked X :" << g_MouseClickPos.x << std::endl;
-				std::cout << "Mouse clicked Y :" << g_MouseClickPos.y << std::endl;
+				//std::cout << "Mouse clicked X :" << g_MouseClickPos.x << std::endl;
+				//std::cout << "Mouse clicked Y :" << g_MouseClickPos.y << std::endl;
 			}
 			break;
 		}
@@ -181,6 +246,15 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 // Init all game resources
 void InitGame()
 {
+	bool succesful = TextureFromFile("Resources/battleship.png", g_StartScreen);
+
+	if (!succesful)
+		std::cout << "Loading failed" << std::endl;
+
+
+	g_PlayerTurn = true;  // The player's start
+	g_Player.shipsLeft = g_ArraysShipSize;
+	g_Enemy.shipsLeft = g_ArraysShipSize;
 
 	state = StateGame::Start;
 	InitGrid(g_EnemyGrid, g_GridEnemyPos.x, g_GridEnemyPos.y);
@@ -203,6 +277,7 @@ void InitGrid(GridCell* grid, float xPos, float yPos)
 			grid[idx].shoot = false;
 			grid[idx].pos.y = yPos;
 			grid[idx].pos.x = xPos;
+			grid[idx].first = false;
 
 			xPos += g_CellSize;
 
@@ -218,32 +293,55 @@ void InitGrid(GridCell* grid, float xPos, float yPos)
 // Init data for ships
 void InitShips()
 {
-	g_pArrayShips = new Ship[g_ArraysShipSize];
+	g_pPlayerArrayShips = new Ship[g_ArraysShipSize];
 	g_ShipsIndex = 2;
+	g_ShipsLeft = g_ArraysShipSize;
 
 	// Carrier ship
 	Ship carrier{};
-	InitShip(carrier, 5, 0);  // Ship, size and index of the array
+	InitShip(g_pPlayerArrayShips, carrier, 5, 0);  // Ship, size and index of the array
 
 	// Battleship
 	Ship battleship{};
-	InitShip(battleship, 4, 1);
+	InitShip(g_pPlayerArrayShips, battleship, 4, 1);
 
 	// Destroyer
 	Ship destroyer{};
-	InitShip(destroyer, 3, 2);
+	InitShip(g_pPlayerArrayShips, destroyer, 3, 2);
 
 	// Submarine
 	Ship submarine{};
-	InitShip(carrier, 3, 3);
+	InitShip(g_pPlayerArrayShips,submarine, 3, 3);
+
 	// Patrol Boat
 	Ship patrolBoat{};
-	InitShip(carrier, 2, 4);
+	InitShip(g_pPlayerArrayShips, patrolBoat, 2, 4);
+
+	g_pEnemyArrayShips = new Ship[g_ArraysShipSize];
+
+	// Carrier ship
+	Ship carrier2{};
+	InitShip(g_pEnemyArrayShips, carrier2, 5, 0);  // Ship, size and index of the array
+
+	// Battleship
+	Ship battleship2{};
+	InitShip(g_pEnemyArrayShips, battleship2, 4, 1);
+
+	// Destroyer
+	Ship destroyer2{};
+	InitShip(g_pEnemyArrayShips, destroyer2, 3, 2);
+
+	// Submarine
+	Ship submarine2{};
+	InitShip(g_pEnemyArrayShips, submarine2, 3, 3);
+	// Patrol Boat
+	Ship patrolBoat2{};
+	InitShip(g_pEnemyArrayShips, patrolBoat2, 2, 4);
 
 }
 
 // Initialice the data for the ship passed by parameter
-void InitShip(Ship& ship, int size, int index)
+void InitShip(Ship* arrayShips, Ship& ship, int size, int index)
 {
 	ship.type.left = 0.f;
 	ship.type.bottom =0.f;
@@ -252,7 +350,7 @@ void InitShip(Ship& ship, int size, int index)
 	ship.type.height = g_CellSize * -(ship.size);  // Height according with the size of the ship
 	ship.countHits = 0;
 
-	g_pArrayShips[index] = ship;
+	arrayShips[index] = ship;
 }
 
 // Get the index of the 2D array
@@ -301,11 +399,14 @@ void DrawGrid(GridCell* grid)
 				utils::DrawLine(grid[idx].pos, p2);
 			}
 			
-			// Check if there is a ship in the cell
-			if (grid[idx].ship == true)
+			// Check if there is a ship in the cell and if it is the first cell for a ship
+			if (grid[idx].ship == true && grid[idx].first == true)
 			{	
-				// Draw the shape of the ship
-				DrawShipInGrid(grid, idx, rowIdx, colIdx);
+			
+				// Draw the shape of the ship (only for the player)
+				if(grid == g_PlayerGrid)
+					DrawShipInGrid(grid, idx, rowIdx, colIdx);
+				
 			}			
 
 		}
@@ -331,7 +432,7 @@ bool DrawEnemyMove(GridCell* grid, int idx)
 		if (grid[idx].miss == true)
 		{
 			// Miss
-			utils::SetColor(0.f, 1.f, 0.f);
+			utils::SetColor(0.72f, 0.82f, 0.93f);
 			EnemyMove = true;
 		}
 	}
@@ -383,7 +484,7 @@ void DrawShipPlacement()
 {
 
 	utils::SetColor(0.5f, 0.5f, 0.5f);
-	utils::FillRect(g_pArrayShips[g_ShipsIndex].type);
+	utils::FillRect(g_pPlayerArrayShips[g_ShipsIndex].type);
 
 }
 
@@ -391,17 +492,17 @@ void DrawShipPlacement()
 void UpdateShipPlacing()
 {
 	// Change pos ship with the mouse movement
-	if (g_pArrayShips[g_ShipsIndex].rotate)
+	if (g_pPlayerArrayShips[g_ShipsIndex].rotate)
 	{
 		// Ship rotated
-		g_pArrayShips[g_ShipsIndex].type.left = g_MousePos.x + 10.f;
-		g_pArrayShips[g_ShipsIndex].type.bottom = g_MousePos.y - g_CellSize/2;
+		g_pPlayerArrayShips[g_ShipsIndex].type.left = g_MousePos.x + 10.f;
+		g_pPlayerArrayShips[g_ShipsIndex].type.bottom = g_MousePos.y - g_CellSize/2;
 	}
 	else
 	{
 		// Ship not rotated
-		g_pArrayShips[g_ShipsIndex].type.left = g_MousePos.x;
-		g_pArrayShips[g_ShipsIndex].type.bottom = g_MousePos.y;
+		g_pPlayerArrayShips[g_ShipsIndex].type.left = g_MousePos.x;
+		g_pPlayerArrayShips[g_ShipsIndex].type.bottom = g_MousePos.y;
 	}
 
 
@@ -414,16 +515,22 @@ void SelectShip()
 {
 	if (g_NextShip)
 	{
-		if (g_ShipsIndex == g_ArraysShipSize - 1)
-		{
-			// Reset index when it reachs max array size
-			g_ShipsIndex = 0;
-		}
-		else
-		{
-			// Next ship
-			g_ShipsIndex++;
-		}
+		// Want to select next ship available
+		do {
+
+			if (g_ShipsIndex == g_ArraysShipSize - 1)
+			{
+				// Reset index when it reachs max array size
+				g_ShipsIndex = 0;
+			}
+			else
+			{
+				// Next ship
+				g_ShipsIndex++;
+			}
+
+			// Do it until we find a ship that hasnt been placed yet
+		} while (g_pPlayerArrayShips[g_ShipsIndex].placed);
 
 		g_NextShip = false;
 	}
@@ -431,17 +538,20 @@ void SelectShip()
 	{
 		if (g_PreviousShip)
 		{
+			do {
+				if (g_ShipsIndex == 0)
+				{
+					// Reset to the final pos of the array
+					g_ShipsIndex = g_ArraysShipSize - 1;
+				}
+				else
+				{
+					// Previous ship
+					g_ShipsIndex--;
+				}
+
+			} while (g_pPlayerArrayShips[g_ShipsIndex].placed);
 			
-			if (g_ShipsIndex == 0)  
-			{
-				// Reset to the final pos of the array
-				g_ShipsIndex = g_ArraysShipSize - 1;
-			}
-			else
-			{
-				// Previous ship
-				g_ShipsIndex--;
-			}
 
 			g_PreviousShip = false;
 		}
@@ -454,20 +564,19 @@ void RotateShip()
 	if (g_RotateShip)
 	{
 		// Player wants to rotate
-		
 		// Exchange width and height values
-		float safe{ g_pArrayShips[g_ShipsIndex].type.width };
-		g_pArrayShips[g_ShipsIndex].type.width = g_pArrayShips[g_ShipsIndex].type.height;
-		g_pArrayShips[g_ShipsIndex].type.height = safe;
+		float safe{ g_pPlayerArrayShips[g_ShipsIndex].type.width };
+		g_pPlayerArrayShips[g_ShipsIndex].type.width = g_pPlayerArrayShips[g_ShipsIndex].type.height;
+		g_pPlayerArrayShips[g_ShipsIndex].type.height = safe;
 		
 		// Change from rotated/notRotated to NoRotated/Rotated
-		if (g_pArrayShips[g_ShipsIndex].rotate)
+		if (g_pPlayerArrayShips[g_ShipsIndex].rotate)
 		{
-			g_pArrayShips[g_ShipsIndex].rotate = false;
+			g_pPlayerArrayShips[g_ShipsIndex].rotate = false;
 		}
 		else
 		{
-			g_pArrayShips[g_ShipsIndex].rotate = true;
+			g_pPlayerArrayShips[g_ShipsIndex].rotate = true;
 		}
 
 		g_RotateShip = false;
@@ -484,6 +593,8 @@ void CheckShipPlacement()
 	{
 		// Left mouse clicked. We want to place a ship in the grid
 		int idx{};
+		float offSetX{}, offSetY{};
+
 		for (int rowIdx{}; rowIdx < g_GridSize; rowIdx++)
 		{
 			for (int colIdx{}; colIdx < g_GridSize; colIdx++)
@@ -494,38 +605,30 @@ void CheckShipPlacement()
 				{
 					if (g_MouseClickPos.y > g_PlayerGrid[idx].pos.y && g_MouseClickPos.y < g_PlayerGrid[idx].pos.y + g_CellSize)
 					{
-
-						if (g_pArrayShips[g_ShipsIndex].rotate == false)
+					
+						if (g_pPlayerArrayShips[g_ShipsIndex].rotate == false)
 						{
 							// Ship not rotated
-							// Save into the cell the info about the ship placed
-							g_PlayerGrid[idx].shipInfo = g_pArrayShips[g_ShipsIndex];
-							g_PlayerGrid[idx].ship = true;
-
-							g_pArrayShips[g_ShipsIndex].firstCell.x = g_PlayerGrid[idx].pos.x ;
-							// We place the ship one row above in order to draw in the exact pos of the mouse clicking
-							g_pArrayShips[g_ShipsIndex].firstCell.y = g_PlayerGrid[idx].pos.y + g_CellSize;
-
-							std::cout << "Grid X: " << g_PlayerGrid[idx].pos.x << std::endl;
-							std::cout << "Grid Y: " << g_PlayerGrid[idx].pos.y << std::endl;
+							offSetX = 0;
+							offSetY = g_CellSize;
+							SafeInfoShipInGrid(g_PlayerGrid, idx, offSetX, offSetY, rowIdx, colIdx);
+						
 						}
 						else
 						{
 							// Ship rotated
-							
-							// Save into the cell the info about the ship placed
-							g_PlayerGrid[idx].shipInfo = g_pArrayShips[g_ShipsIndex];
-							g_PlayerGrid[idx].ship = true;
-
-							g_pArrayShips[g_ShipsIndex].firstCell.x = g_PlayerGrid[idx].pos.x + g_CellSize;
-							g_pArrayShips[g_ShipsIndex].firstCell.y = g_PlayerGrid[idx].pos.y;
-
-							std::cout << "Grid X: " << g_PlayerGrid[idx].pos.x << std::endl;
-							std::cout << "Grid Y: " << g_PlayerGrid[idx].pos.y << std::endl;
+							offSetX = g_CellSize;
+							offSetY = 0;
+							SafeInfoShipInGrid(g_PlayerGrid, idx, offSetX, offSetY, rowIdx, colIdx);
 						}
-							
-							
-							
+						
+						g_pPlayerArrayShips[g_ShipsIndex].placed = true;
+						g_ShipsLeft--;		// One less ship to place
+						if (g_ShipsLeft > 0)
+						{
+							g_NextShip = true;
+							SelectShip();
+						}
 						
 					}
 				}
@@ -536,4 +639,235 @@ void CheckShipPlacement()
 	}
 }
 
+// Safe info about the ship into the grid
+void SafeInfoShipInGrid(GridCell* grid, int idx, float offSetX, float offSetY, int rowIdx, int colIdx)
+{
+	
+	int idx2{};
+
+	// We place the ship correctly into the grid according to his rotation
+	g_pPlayerArrayShips[g_ShipsIndex].firstCell.x = grid[idx].pos.x + offSetX;
+	g_pPlayerArrayShips[g_ShipsIndex].firstCell.y = grid[idx].pos.y + offSetY;
+
+	// Save into the cell the info about the ship placed
+	for (int i{ 0 }; i < g_pPlayerArrayShips[g_ShipsIndex].size; i++)
+	{
+		if (grid[idx].shipInfo.rotate)
+		{
+			// Rotated. Cols have to change
+			idx2 = GetIndex(rowIdx, colIdx - i, g_GridSize);
+		}
+		else
+		{
+			// Not Rotated. Rows have to change
+			idx2 = GetIndex(rowIdx - i, colIdx, g_GridSize);
+		}
+
+		grid[idx2].shipInfo = g_pPlayerArrayShips[g_ShipsIndex];
+		grid[idx2].ship = true;
+
+		if (i == 0)
+		{
+			// This cell is the first to draw for the ship
+			grid[idx2].first = true;
+		}
+	}
+
+
+
+	//std::cout << "Grid X: " << g_PlayerGrid[idx].pos.x << std::endl;
+	//std::cout << "Grid Y: " << g_PlayerGrid[idx].pos.y << std::endl;
+}
+
+// Place the enemy ships randomly inside the grid of the enemy
+void PlaceEnemyShips()
+{
+	int randRow{}, randCol{}, randRotate{}, idx{};
+	bool repeat{};
+	g_ShipsLeft = g_ArraysShipSize;
+	
+
+	for (g_ShipsIndex = 0; g_ShipsIndex < g_ArraysShipSize; g_ShipsIndex++)
+	{
+		//g_pEnemyArrayShips[g_ShipsIndex].rotate = randRotate = std::rand() % 2;
+		
+		if (g_pEnemyArrayShips[g_ShipsIndex].rotate)
+		{
+			// Ship rotated
+			randRow = std::rand() % g_GridSize;
+			do {
+
+				if (randCol - g_pEnemyArrayShips[g_ShipsIndex].size < 0)
+				{
+					// Not enough size for the ship
+					repeat = true;
+				}
+				else
+				{
+					// Check we dont place a ship in a cell where already is a ship
+					for (int i{}; i < g_pEnemyArrayShips[g_ShipsIndex].size; i++)
+					{
+						idx = GetIndex(randRow, randCol-i, g_GridSize);
+
+						if (g_EnemyGrid[idx].ship)
+						{
+							repeat = true;
+							break;
+						}
+						else
+						{
+							repeat = false;
+						}
+					}
+				}
+
+			} while (repeat);
+		}
+		else
+		{ 
+			// Ship not rotated
+			randCol = std::rand() % g_GridSize;
+			do {
+
+				randRow = std::rand() % g_GridSize;
+
+				if (randRow - g_pEnemyArrayShips[g_ShipsIndex].size < 0)
+				{
+					// Not enough size for the ship
+					repeat = true;
+				}
+				else
+				{
+					for (int i{}; i < g_pEnemyArrayShips[g_ShipsIndex].size; i++)
+					{
+						idx = GetIndex(randRow-i, randCol, g_GridSize);
+
+						if (g_EnemyGrid[idx].ship)
+						{
+							repeat = true;
+							break;
+						}
+						else
+						{
+							repeat = false;
+						}
+					}
+				}
+				
+				
+			} while (repeat);
+		}
+		
+
+		idx = GetIndex(randRow, randCol, g_GridSize);
+		
+		
+
+		// Safe the info into the enemy grid
+		SafeInfoShipInGrid(g_EnemyGrid, idx, 0, 0, randRow, randCol);
+	
+	}
+	
+
+
+
+	//std::cout << randRow << std::endl;
+	//std::cout << randCol << std::endl;
+}
+
+
+void PlayerShoot(GridCell* grid)
+{
+	if (g_MouseClicked)
+	{
+		int idx{}, idx2{};
+
+		for (int rowIdx{}; rowIdx < g_GridSize; rowIdx++)
+		{
+			for (int colIdx{}; colIdx < g_GridSize; colIdx++)
+			{
+				idx = GetIndex(rowIdx, colIdx, g_GridSize);
+
+				if (g_MouseClickPos.x > grid[idx].pos.x && g_MouseClickPos.x < grid[idx].pos.x + g_CellSize)
+				{
+					if (g_MouseClickPos.y > grid[idx].pos.y && g_MouseClickPos.y < grid[idx].pos.y + g_CellSize)
+					{
+						// Clicked inside the grid
+
+						if (grid[idx].ship && !grid[idx].shoot)
+						{
+							// There is a ship and we didnt shoot it already
+							// Ship hit
+							grid[idx].shoot = true;
+							g_EnemyCountHits++;
+
+							std::cout << g_EnemyCountHits << std::endl;
+							if (g_EnemyCountHits == 17)
+							{
+								// Game over. No ships left for the enemy
+								state = StateGame::EndGame;
+							}
+
+						}
+						else
+						{
+							if (grid[idx].ship == false && !grid[idx].miss)
+							{
+								// No ship and not already missed
+								// Miss
+								grid[idx].miss = true;
+							}
+						}
+
+					}
+				}
+			}
+		}
+
+		g_MouseClicked = false;
+		g_PlayerTurn = false;
+	}
+
+
+}
+
+// Enemy shoots
+void EnemyShoot()
+{
+
+	int randRow{}, randCol{}, idx;
+
+	randCol = std::rand() % g_GridSize;
+	randRow = std::rand() % g_GridSize;
+
+	idx = GetIndex(randRow, randCol, g_GridSize);
+
+	if (g_PlayerGrid[idx].ship && !g_PlayerGrid[idx].shoot)
+	{
+		// There is a ship and we didnt shoot it already
+		// Ship hit
+		g_PlayerGrid[idx].shoot = true;
+		
+		g_PlayerCountHits++;
+
+		if (g_PlayerCountHits == 17)
+		{
+			// Game over.
+			state = StateGame::EndGame;
+		}
+
+	}
+	else
+	{
+		if (g_PlayerGrid[idx].ship == false && !g_PlayerGrid[idx].miss)
+		{
+			// No ship and not already missed
+			// Miss
+			g_PlayerGrid[idx].miss = true;
+		}
+	}
+
+
+
+}
 #pragma endregion ownDefinitions
