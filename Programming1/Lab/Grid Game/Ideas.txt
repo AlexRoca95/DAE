@@ -1,0 +1,17 @@
+http://www.sdltutorials.com/sdl-maps 
+
+ Ideas: 
+	Player vs Player videogame
+	Random Map generator
+	With one or two powerups
+	Instead of tanks with soldiers
+	Reference the EpicBattleTank from Leho
+	Get Free Sprites from https://craftpix.net/ or other web page
+	or https://itch.io/game-assets/free
+
+	
+	Pacman game but instead of Pacman we replace it for the minotaur and the
+	assests from the laberyinth. Like we can draw a Laberynth (randomly)
+	and the objective is to reach one part and to get as many points as you
+	can, the points are the same as the pacman balls. Could be more than
+	one minotaur.
