@@ -2,7 +2,7 @@
 using namespace utils;
 #pragma region gameInformation
 // Set your name and group in the title here
-std::string g_WindowTitle{ "Battleship - Name, firstname - 1DAE12" };
+std::string g_WindowTitle{ "Battleship - Roca,Alejandro_ - 1DAE12" };
 
 // Change the window dimensions here
 float g_WindowWidth{ 1000 };
@@ -96,8 +96,8 @@ Ship* g_pEnemyArrayShips{};
 StateGame state{};
 
 
-Texture g_StartScreen{}, g_CarrierText{}, g_BattleshipText{}, g_DestroyerText{}, g_SubmarineText{}, g_PatrolBoatText{};
-
+Texture g_StartScreen{}, g_WinText{}, g_LooseText{};
+Texture g_Ships{}, g_CarrierText{}, g_BattleshipText{}, g_DestroyerText{}, g_SubmarineText{}, g_PatrolBoatText{};
 // Declare your own functions here
 
 // Init functions

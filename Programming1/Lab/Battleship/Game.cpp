@@ -47,7 +47,22 @@ void Draw()
 		DrawGrid(g_PlayerGrid);
 	}
 
-	
+
+
+	if (state == StateGame::EndGame)
+	{
+		Point2f position{ (g_WindowWidth / 2) - 110, 200 };
+
+		if (g_PlayerCountHits == g_MaxHits)
+		{
+			
+			DrawTexture(g_LooseText, position);
+		}
+		else
+		{
+			DrawTexture(g_WinText, position);
+		}
+	}
 
 	
 }
@@ -104,14 +119,7 @@ void Update(float elapsedSec)
 
 	if (state == StateGame::EndGame)
 	{
-		if (g_PlayerCountHits == g_MaxHits)
-		{
-			std::cout << "Enemy wins" << std::endl;
-		}
-		else
-		{
-			std::cout << "Player wins" << std::endl;
-		}
+		
 	}
 	
 	// e.g. Check keyboard state
@@ -134,6 +142,10 @@ void End()
 
 	delete[] g_pEnemyArrayShips;
 	g_pEnemyArrayShips = nullptr;
+
+	DeleteTexture(g_WinText);
+	DeleteTexture(g_LooseText);
+	DeleteTexture(g_StartScreen);
 
 }
 #pragma endregion gameFunctions
@@ -251,6 +263,18 @@ void InitGame()
 	if (!succesful)
 		std::cout << "Loading failed" << std::endl;
 
+	// Loading a text
+	succesful = TextureFromString("You Win!", "Resources/DIN-Light.otf", 60, Color4f{ 0,0,1,1 }, g_WinText);
+	if (!succesful)
+		std::cout << "Loading Text failed" << std::endl;
+
+	succesful = TextureFromString("Game Over", "Resources/DIN-Light.otf", 60, Color4f{ 1,0,0,1 }, g_LooseText);
+	if (!succesful)
+		std::cout << "Loading Text failed" << std::endl;
+
+	succesful = TextureFromFile("Resources/ship_sprites.png", g_Ships);
+	if (!succesful)
+		std::cout << "Loading failed" << std::endl;
 
 	g_PlayerTurn = true;  // The player's start
 	g_Player.shipsLeft = g_ArraysShipSize;
@@ -299,43 +323,53 @@ void InitShips()
 
 	// Carrier ship
 	Ship carrier{};
+	carrier.text = g_Ships;
 	InitShip(g_pPlayerArrayShips, carrier, 5, 0);  // Ship, size and index of the array
-
+	
 	// Battleship
 	Ship battleship{};
+	battleship.text = g_Ships;
 	InitShip(g_pPlayerArrayShips, battleship, 4, 1);
 
 	// Destroyer
 	Ship destroyer{};
+	destroyer.text = g_Ships;
 	InitShip(g_pPlayerArrayShips, destroyer, 3, 2);
 
 	// Submarine
 	Ship submarine{};
+	submarine.text = g_Ships;
 	InitShip(g_pPlayerArrayShips,submarine, 3, 3);
 
 	// Patrol Boat
 	Ship patrolBoat{};
+	patrolBoat.text = g_Ships;
 	InitShip(g_pPlayerArrayShips, patrolBoat, 2, 4);
 
 	g_pEnemyArrayShips = new Ship[g_ArraysShipSize];
 
 	// Carrier ship
 	Ship carrier2{};
+	carrier2.text = g_Ships;
 	InitShip(g_pEnemyArrayShips, carrier2, 5, 0);  // Ship, size and index of the array
 
 	// Battleship
 	Ship battleship2{};
+	battleship2.text = g_Ships;
 	InitShip(g_pEnemyArrayShips, battleship2, 4, 1);
 
 	// Destroyer
 	Ship destroyer2{};
+	destroyer2.text = g_Ships;
 	InitShip(g_pEnemyArrayShips, destroyer2, 3, 2);
 
 	// Submarine
 	Ship submarine2{};
+	submarine2.text = g_Ships;
 	InitShip(g_pEnemyArrayShips, submarine2, 3, 3);
 	// Patrol Boat
 	Ship patrolBoat2{};
+	patrolBoat2.text = g_Ships;
 	InitShip(g_pEnemyArrayShips, patrolBoat2, 2, 4);
 
 }
@@ -344,7 +378,7 @@ void InitShips()
 void InitShip(Ship* arrayShips, Ship& ship, int size, int index)
 {
 	ship.type.left = 0.f;
-	ship.type.bottom =0.f;
+	ship.type.bottom = 0.f;
 	ship.type.width = g_CellSize - g_CellSize / 4;
 	ship.size = size;
 	ship.type.height = g_CellSize * -(ship.size);  // Height according with the size of the ship
@@ -485,6 +519,7 @@ void DrawShipPlacement()
 
 	utils::SetColor(0.5f, 0.5f, 0.5f);
 	utils::FillRect(g_pPlayerArrayShips[g_ShipsIndex].type);
+
 
 }
 
@@ -801,7 +836,7 @@ void PlayerShoot(GridCell* grid)
 							grid[idx].shoot = true;
 							g_EnemyCountHits++;
 
-							std::cout << g_EnemyCountHits << std::endl;
+							//std::cout << g_EnemyCountHits << std::endl;
 							if (g_EnemyCountHits == 17)
 							{
 								// Game over. No ships left for the enemy
@@ -836,37 +871,46 @@ void EnemyShoot()
 {
 
 	int randRow{}, randCol{}, idx;
+	bool shoot{};
 
-	randCol = std::rand() % g_GridSize;
-	randRow = std::rand() % g_GridSize;
+	do {
+		randCol = std::rand() % g_GridSize;
+		randRow = std::rand() % g_GridSize;
 
-	idx = GetIndex(randRow, randCol, g_GridSize);
+		idx = GetIndex(randRow, randCol, g_GridSize);
 
-	if (g_PlayerGrid[idx].ship && !g_PlayerGrid[idx].shoot)
-	{
-		// There is a ship and we didnt shoot it already
-		// Ship hit
-		g_PlayerGrid[idx].shoot = true;
-		
-		g_PlayerCountHits++;
-
-		if (g_PlayerCountHits == 17)
+		if (g_PlayerGrid[idx].ship && !g_PlayerGrid[idx].shoot)
 		{
-			// Game over.
-			state = StateGame::EndGame;
-		}
+			// There is a ship and we didnt shoot it already
+			// Ship hit
+			g_PlayerGrid[idx].shoot = true;
 
-	}
-	else
-	{
-		if (g_PlayerGrid[idx].ship == false && !g_PlayerGrid[idx].miss)
+			g_PlayerCountHits++;
+
+			if (g_PlayerCountHits == 17)
+			{
+				// Game over.
+				state = StateGame::EndGame;
+			}
+
+			shoot = true;
+
+		}
+		else
 		{
-			// No ship and not already missed
-			// Miss
-			g_PlayerGrid[idx].miss = true;
+			if (g_PlayerGrid[idx].ship == false && !g_PlayerGrid[idx].miss)
+			{
+				// No ship and not already missed
+				// Miss
+				g_PlayerGrid[idx].miss = true;
+				shoot = true;
+			}
+			else
+			{
+				shoot = false;
+			}
 		}
-	}
-
+	} while (shoot == false);
 
 
 }
