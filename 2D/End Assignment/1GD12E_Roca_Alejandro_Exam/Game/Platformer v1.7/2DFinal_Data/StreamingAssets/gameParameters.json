@@ -29,7 +29,7 @@
 		},
 		{
 			"name": "characterIdle",
-			"yOffset": -0.74,
+			"yOffset": -0.5,
 			"columns": 1,
 			"rows": 1,
 			"numFrames": 1,
