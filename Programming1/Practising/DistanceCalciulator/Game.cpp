@@ -18,7 +18,9 @@ void Start()
 	// Initial pos of moving rect
 	g_RectX2 = g_WindowWidth / 2;
 	g_RectY2 = g_WindowHeight / 2;
-
+	
+	int a = 10;
+	std::cout << a++ << std::endl;
 }
 
 void Draw()

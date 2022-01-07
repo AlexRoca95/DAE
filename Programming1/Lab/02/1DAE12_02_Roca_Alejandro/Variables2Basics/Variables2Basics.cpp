@@ -90,7 +90,7 @@ void RandomNumbers()
     {
         // [-2, 2]
         randomValue = (rand() % 3) - 2;         //[-2, 0]
-        randomValue += (rand() % 2) + 1;        // [-2, 2] + [1, 2] = [-2, 2]
+        randomValue += (rand() % 2) + 1;        // [-2, 0] + [1, 2] = [-2, 2]
        // std::cout << "Random value between [-2, 2]: " << randomValue << std::endl;
     }
 
