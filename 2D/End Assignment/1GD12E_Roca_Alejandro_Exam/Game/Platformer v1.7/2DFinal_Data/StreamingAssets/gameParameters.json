@@ -5,13 +5,13 @@
 			"name": "characterRun",
 			"yOffset": -0.74,
 			"columns": 4,
-			"rows": 2,
-			"numFrames": 8,
+			"rows": 1,
+			"numFrames": 4,
 			"frameSpeed": 0.1,
 			"loopUpStartsAt": 1,
-			"loopUpEndsAt": 8,
+			"loopUpEndsAt": 4,
 			"loopDownStartsAt": 1,
-			"loopDownEndsAt": 8,
+			"loopDownEndsAt": 4,
 			"shouldFlip": true
 		},
 		{
@@ -29,7 +29,7 @@
 		},
 		{
 			"name": "characterIdle",
-			"yOffset": -0.5,
+			"yOffset": -0.74,
 			"columns": 1,
 			"rows": 1,
 			"numFrames": 1,
@@ -67,5 +67,5 @@
 			"shouldFlip": false
 		}
 	],
-	"color": [ 124, 226, 255 ]
+	"color": [ 33, 137, 166 ]
 }
