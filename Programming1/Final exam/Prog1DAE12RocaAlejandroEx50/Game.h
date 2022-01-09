@@ -37,6 +37,8 @@ void CheckMouseTiles();
 void CheckNextAnimal(const Point2f& pos);
 int GetIndex(int rowIdx, int colIdx, int nrCols);
 void DeactivateTiles();
+void RandomTiles();
+void CheckSameTiles();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

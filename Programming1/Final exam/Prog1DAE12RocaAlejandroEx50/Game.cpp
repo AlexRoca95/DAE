@@ -72,19 +72,12 @@ void OnKeyDownEvent(SDL_Keycode key)
 
 void OnKeyUpEvent(SDL_Keycode key)
 {
-	//switch (key)
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	switch (key)
+	{
+		case SDLK_r:
+			RandomTiles();
+			break;
+	}
 }
 
 void OnMouseMotionEvent(const SDL_MouseMotionEvent& e)
@@ -204,34 +197,9 @@ void DrawPuzzleBorder()
 
 	if (g_CheckSolve)
 	{
+		// Check if the tiles are the same
+		CheckSameTiles();
 		
-		g_SameAnimal = true;
-		int saveNr{}, number{};
-		// One tile change, So we check if the puzzle is solved
-		for (int i{ 0 }; i < g_TotalTiles && g_SameAnimal!=false; i++)
-		{
-			number = g_pArrayTiles[i]->GetCurrentAnimal();
-
-			if (i != 0)
-			{
-				if (number != saveNr)
-				{
-					// 2 tiles have diferent animal
-					g_SameAnimal = false;
-				}
-				else
-				{
-					// Save number for check the next tile
-					saveNr = number;
-				}
-			}
-			else
-			{
-				saveNr = number;
-			}
-		}
-
-		g_CheckSolve = false;
 	}
 
 	// Border around the tiles
@@ -281,6 +249,51 @@ void DeactivateTiles()
 	{
 		g_pArrayTiles[i]->Deactivate();
 	}
+}
+void CheckSameTiles()
+{
+	g_SameAnimal = true;
+	int saveNr{}, number{};
+	// One tile change, So we check if the puzzle is solved
+	for (int i{ 0 }; i < g_TotalTiles && g_SameAnimal != false; i++)
+	{
+		number = g_pArrayTiles[i]->GetCurrentAnimal();
+
+		if (i != 0)
+		{
+			if (number != saveNr)
+			{
+				// 2 tiles have diferent animal
+				g_SameAnimal = false;
+			}
+			else
+			{
+				// Save number for check the next tile
+				saveNr = number;
+			}
+		}
+		else
+		{
+			saveNr = number;
+		}
+	}
+
+	g_CheckSolve = false;
+}
+// Randomize all the tiles. It randomizes again if the puzzle is solved after randomizing
+void RandomTiles()
+{
+	do {
+
+		// Randomize all tiles
+		for (int i{ 0 }; i < g_TotalTiles; i++)
+		{
+			g_pArrayTiles[i]->Randomize();
+		}
+
+		CheckSameTiles();
+	} while (g_SameAnimal == true);  // Repeat if puzzle was solved
+	
 }
 
 // Get the index of the 2D array

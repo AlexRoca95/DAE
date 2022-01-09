@@ -16,9 +16,8 @@ Tile::Tile(const Rectf& dstRect, const std::string& textPath, int nrAnimals)
 	if(!load)
 		std::cout << "Error loading the texture " << textPath << std::endl;
 
-	// Choose randomly the animal to draw
-	m_CurrentAnimal = rand() % nrAnimals;
-
+	// Choose a random current animal
+	Randomize();
 
 	// Small hitting rectangles values
 	m_LefHitRegion.bottom = dstRect.bottom;
@@ -141,6 +140,14 @@ bool Tile::CheckHit(const Point2f& pos)
 	}
 
 	return hit;
+}
+
+// Get a random current animal
+void Tile::Randomize()
+{
+	// Choose randomly the animal to draw
+	m_CurrentAnimal = rand() % m_TotalAnimals;
+
 }
 
 

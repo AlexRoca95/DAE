@@ -11,7 +11,7 @@ public:
 	bool CheckHit(const Point2f& pos);
 	int GetCurrentAnimal();
 	void Deactivate();
-	//void Randomize( );
+	void Randomize( );
 
 private: 
 	Rectf m_DestRect;			// Position where we will draw the tile
