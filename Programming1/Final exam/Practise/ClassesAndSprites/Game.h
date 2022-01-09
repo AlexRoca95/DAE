@@ -16,10 +16,15 @@ float g_WindowHeight{ 300 };
 #pragma region ownDeclarations
 // Declare your own global variables here
 
-Sprite* pSpr1{nullptr};
+const int g_SizeArray{ 5 };
+Sprite* g_pArraSpr[g_SizeArray]{ nullptr };
+
+Texture g_DAE1{}, g_Text{};
 
 // Declare your own functions here
 
+void InitArraySprites();
+void DrawLogo();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

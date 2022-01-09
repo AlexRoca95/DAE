@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "Sprite.h"
+#include <iostream>
 
 //Basic game functions
 #pragma region gameFunctions											
@@ -8,7 +9,19 @@ void Start()
 {
 	// initialize game resources here
 
-	pSpr1 = new Sprite{ "Resources/RunningKnight.png", 8, 1, 1 / 10.f, 10 };
+
+	InitArraySprites();
+	
+	bool success = TextureFromFile("Resources/DAE.png", g_DAE1);
+
+	if(!success)
+		std::cout << "Fail loading texture "<< std::endl;
+	
+
+	success = TextureFromString("Hello", "Resources/DIN-Light.otf", 12, Color4f{ 0, 0, 0, 1 }, g_Text);
+
+	if(!success)
+		std::cout << "Fail loading font " << std::endl;
 }
 
 void Draw()
@@ -16,12 +29,33 @@ void Draw()
 	ClearBackground();
 
 	// Put your own draw statements here
+	Point2f pos{ 10 , g_WindowHeight / 2 };
+	
+	for (int i{ 0 }; i < g_SizeArray; i++)
+	{
+		
+		g_pArraSpr[i]->Draw(pos);
+
+		pos.x += g_pArraSpr[i]->GetFrameWidth() * g_pArraSpr[i]->GetScale();
+		
+	}
+
+	DrawLogo();
 
 }
 
 void Update(float elapsedSec)
 {
 	// process input, do physics 
+
+	for (int i{ 0 }; i < g_SizeArray; i++)
+	{
+		if (g_pArraSpr != nullptr)
+		{
+			// Pointer initialized to a sprite
+			g_pArraSpr[i]->Update(elapsedSec);
+		}
+	}
 
 	// e.g. Check keyboard state
 	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
@@ -38,6 +72,15 @@ void Update(float elapsedSec)
 void End()
 {
 	// free game resources here
+
+	for (int i{ 0 }; i < g_SizeArray; i++)
+	{
+		g_pArraSpr[i] = nullptr;
+	}
+
+	DeleteTexture(g_DAE1);
+	DeleteTexture(g_Text);
+	
 }
 #pragma endregion gameFunctions
 
@@ -99,5 +142,38 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 
 #pragma region ownDefinitions
 // Define your own functions here
+
+void InitArraySprites()
+{
+
+	g_pArraSpr[0] = new Sprite{ "Resources/RunningKnight.png", 8, 1, 1 / 10.f, 5 };
+	g_pArraSpr[1] = new Sprite{ "Resources/RunningKnight.png", 8, 1, 1 / 10.f, 3 };
+	g_pArraSpr[2] = new Sprite{ "Resources/RunningKnight.png", 8, 1, 1 / 10.f, 2 };
+	g_pArraSpr[3] = new Sprite{ "Resources/Tibo.png", 5, 5, 1 / 15.f, 1 };
+	g_pArraSpr[4] = new Sprite{ "Resources/Tibo.png", 5, 5, 1 / 15.f, 1 };
+
+}
+
+// Draw 3 times the DAE Logo
+void DrawLogo()
+{
+	const float separation{ 10.f };
+
+	Rectf destRect{};
+
+	destRect.left = separation;
+	destRect.bottom = separation;
+	destRect.width = g_DAE1.width / 2;
+	destRect.height = g_DAE1.height / 2;
+
+	
+	for (int i{ 0 }; i < 3; i++)
+	{
+		DrawTexture(g_DAE1, destRect);
+
+		destRect.left += destRect.width + separation;
+	}
+}
+
 
 #pragma endregion ownDefinitions

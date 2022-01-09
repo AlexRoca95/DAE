@@ -18,5 +18,6 @@ public:
 	void Draw(const Point2f& pos);
 	float GetFrameWidth();
 	float GetFrameHeight();
+	float GetScale();
 };
 
