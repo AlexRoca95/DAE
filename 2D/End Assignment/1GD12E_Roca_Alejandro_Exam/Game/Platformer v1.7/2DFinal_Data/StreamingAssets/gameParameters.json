@@ -3,7 +3,7 @@
 	"anims": [
 		{
 			"name": "characterRun",
-			"yOffset": -0.74,
+			"yOffset": -0.55,
 			"columns": 4,
 			"rows": 1,
 			"numFrames": 4,
@@ -16,7 +16,7 @@
 		},
 		{
 			"name": "characterJump",
-			"yOffset": -0.74,
+			"yOffset": -0.55,
 			"columns": 1,
 			"rows": 1,
 			"numFrames": 1,
@@ -29,7 +29,7 @@
 		},
 		{
 			"name": "characterIdle",
-			"yOffset": -0.74,
+			"yOffset": -0.55,
 			"columns": 1,
 			"rows": 1,
 			"numFrames": 1,
@@ -38,11 +38,11 @@
 			"loopUpEndsAt": -1,
 			"loopDownStartsAt": -1,
 			"loopDownEndsAt": -1,
-			"shouldFlip": true  
+			"shouldFlip": true
 		},
 		{
 			"name": "characterDie",
-			"yOffset": -0.74,
+			"yOffset": -0.55,
 			"columns": 1,
 			"rows": 1,
 			"numFrames": 1,
@@ -59,12 +59,12 @@
 			"columns": 2,
 			"rows": 2,
 			"numFrames": 4,
-			"frameSpeed": 0.07,
+			"frameSpeed": 0.11,
 			"loopUpStartsAt": -1,
 			"loopUpEndsAt": -1,
 			"loopDownStartsAt": -1,
 			"loopDownEndsAt": -1,
-			"shouldFlip": false
+			"shouldFlip": true
 		}
 	],
 	"color": [ 33, 137, 166 ]
