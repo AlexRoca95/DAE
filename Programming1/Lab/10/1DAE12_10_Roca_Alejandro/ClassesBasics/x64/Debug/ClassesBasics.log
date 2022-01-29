@@ -1,7 +1,0 @@
-﻿  pch.cpp
-  ClassesBasics.cpp
-  Square.cpp
-  Time.cpp
-C:\Estudios\Howest\DAE\DAE\Programming1\Lab\10\1DAE12_10_Roca_Alejandro\ClassesBasics\Time.cpp(31,20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  Generating Code...
-  ClassesBasics.vcxproj -> C:\Estudios\Howest\DAE\DAE\Programming1\Lab\10\1DAE12_10_Roca_Alejandro\ClassesBasics\x64\Debug\ClassesBasics.exe

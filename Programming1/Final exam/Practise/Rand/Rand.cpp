@@ -47,7 +47,17 @@ int main()
 	rand6 += (rand() % 4); // Rand [0, 2]
 	std::cout << rand6 << std::endl;
 
+	// [5.00, 10.00]
+	float(randomValue) = (rand() % 51 + 50) / 10.f;         //[5.00, 10.00]
+	// First is from 0 to 50, then goes from 50 to 100. Then divides this by 10.f outside the rand
+	// so the result is a float
 
-	
+
+	for (int i{ 0 }; i < 100; i++)
+	{
+		float(randomValue) = (rand() % 11) / 10.f;
+		std::cout << randomValue << std::endl;
+	}
+
 }
 

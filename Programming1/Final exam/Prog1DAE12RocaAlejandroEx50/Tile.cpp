@@ -48,7 +48,7 @@ void Tile::Draw()
 	m_SrcRect.bottom = m_SrcRect.height;
 	m_SrcRect.left = m_SrcRect.width * (m_CurrentAnimal % m_TotalAnimals);
 
-
+	// Draw only the animal that we want from the texture(m_SrcRect) at the position indicated by m_DestRect
 	utils::DrawTexture(m_Tile, m_DestRect, m_SrcRect);
 
 
