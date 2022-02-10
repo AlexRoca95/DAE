@@ -1,0 +1,2 @@
+- Dont use letter and a number for a name for the matrix, it will conflict with
+the spreasheet.
