@@ -1,6 +1,19 @@
 #pragma once
 
 class Ball;
+class Texture;
+
+
+struct Sprite
+{
+	Texture* texture;
+	int frames;
+	int cols;
+	float frameTime;
+	int currentFrame;
+	float accumulatedTime;
+	Point2f pos;
+};
 
 class Game final
 {
@@ -27,10 +40,15 @@ private:
 	const Window m_Window;
 	static const int m_NrBalls{ 2 };
 	Ball* m_pBallArray[m_NrBalls]{};		// Nullpointer initiliazed array of two ball class
-
+	Texture* m_pDAEImage;
+	Texture* m_pText;
+	Sprite m_Knight;
 
 	// FUNCTIONS
 	void Initialize( );
+	void LoadResources();
 	void Cleanup( );
 	void ClearBackground( ) const;
+	void DrawKnight() const;
+	void MoveKnight(float elapsedSec);
 };
