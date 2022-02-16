@@ -1,0 +1,34 @@
+- F focus object
+- 1 cm = 1 unit
+- Display - Grid - Size = 100 units
+		   Lines = 10 units
+		   Subdivisions = 1
+
+- Ctrl + h --> Hide object
+- Shift + h --> Show object (select it first)
+
+- Create --> Poly param --> Interactive creation = Allow create editable objects
+- X (while creation object) --> Snap object along the grid
+- Shift + right click --> Marking menu (recommend to use - More faster)
+	You can extrude parts of the object
+- Alt + left key --> Move around
+- Space --> Maya --> Left button --> See scene different views
+- W --> Move objects
+- E --> Rotate objects
+- R --> Scale objects
+- Q --> Select objects
+- Right click --> You can select vertices, faces or edges to modify or move them
+- F8 --> Change between obejct mode (all edges green) and Suboject
+- Mesh --> Cleanup --> See if you have endgones and delete them
+- Select object --> 4 --> Wireframe mode
+		--> 5 --> Solid mode
+		--> Wireframe mode --> D --> Change pivot position
+					--> V --> Snap pivot to vertex object
+					 --> Modify --> bake pivot --> Reset pos
+- Ctrl + D --> Clone objects
+- Shift + Select objects --> Group select
+			  -- > Shift + right click --> Combine objects
+						   	--> Watch symbol on menu -> Delete history (important!) 
+- Bridge --> Delete the faces of the objects --> Select the edges you want to conect
+- Create edgeds loop --> Select and edge --> Shift + right click --> Multi cut --> Ctrl
+		     			 			 --> Conect tool --> Shift + Middle mouse button

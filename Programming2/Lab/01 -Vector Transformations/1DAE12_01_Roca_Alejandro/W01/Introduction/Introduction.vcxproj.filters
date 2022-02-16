@@ -54,9 +54,6 @@
     <ClCompile Include="Ball.cpp">
       <Filter>Framework files</Filter>
     </ClCompile>
-    <ClCompile Include="Card.cpp">
-      <Filter>Framework files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -93,9 +90,6 @@
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Ball.h">
-      <Filter>Framework files</Filter>
-    </ClInclude>
-    <ClInclude Include="Card.h">
       <Filter>Framework files</Filter>
     </ClInclude>
   </ItemGroup>

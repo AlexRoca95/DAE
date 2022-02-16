@@ -2,7 +2,8 @@
 #include "Game.h"
 #include "Ball.h"
 #include "Texture.h"
-#include "utils.h"
+#include <vector>
+#include <iostream>
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
@@ -17,24 +18,14 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	
-	Point2f center{ 20.f, 100.f };
-	Vector2f vel{ 50.f, 80.f };
-	Color4f color{ 0.84f, 0.68f, 0.32f, 1.f };
-	float radius{ 20.f };
+	VectorTest();
 
-	Ball* ball1 = new Ball(center, vel, color, radius);
-
-	center.x = 50.f;
-	vel.y = 100.f;
-	vel.x = 120.f;
-	color.r = 1.f;
-	color.g = 0.5f;
-	radius = 40.f;
-	Ball* ball2 = new Ball(center, vel, color, radius);
-
-	m_pBallArray[0] = ball1;
-	m_pBallArray[1] = ball2;
+	const float radius{ 40.f };
+	for (int i{ 0 }; i < m_NrBalls; i++)
+	{
+		m_pBallArray[i] = new Ball{ Point2f{rand() % (int)(m_Window.width - 2.f*radius) + radius, 100 }, 
+						  Vector2f{100,100}, Color4f{1, 0, 0,1 }, radius };
+	}
 
 	LoadResources();
 
@@ -87,7 +78,7 @@ void Game::Update( float elapsedSec )
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
 
-	Rectf wind{ 0.f, 0.f, m_Window.width, m_Window.height };
+	const Rectf wind{ 0.f, 0.f, m_Window.width, m_Window.height };
 	for (int i{ 0 }; i < m_NrBalls; i++)
 	{
 		m_pBallArray[i]->Update(elapsedSec, wind);
@@ -107,12 +98,15 @@ void Game::Update( float elapsedSec )
 
 	MoveKnight(elapsedSec);
 
-	
+	m_Angle += elapsedSec * 30.f;
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
+
+	glPushMatrix();		// Put the matrix in the container (the entire scene that is being draw)
+	
 
 	for (int i{ 0 }; i < m_NrBalls; i++)
 	{
@@ -147,7 +141,13 @@ void Game::Draw( ) const
 	dstRectangle.height = m_pText->GetHeight();
 	m_pText->Draw(dstRectangle);
 
-	DrawKnight();
+	glTranslatef(80, 0, 0);
+	glRotatef(m_Angle, 0, 0, 1.f);
+	glScalef(0.5f, 0.5f, 1.f);
+	glTranslatef(-m_pDAEImage->GetWidth() / 2, -m_pDAEImage->GetHeight() / 2, 0); // Rotates his own center
+	DrawKnight();					// Transformations will only applied to this
+
+	glPopMatrix();  // Remove the matrix from the container (it resets everything)
 	
 }
 
@@ -249,4 +249,24 @@ void Game::ClearBackground( ) const
 {
 	glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT );
+}
+
+
+void Game::VectorTest()
+{
+	std::vector<int> numbers{4, 8, 3, 6, 9};
+	numbers.push_back(rand());
+
+	for (int i{ 0 }; i < numbers.size(); i++)
+	{
+		std::cout << i << '\t' << numbers[i] << '\n';
+	}
+
+	numbers.pop_back();
+
+	for (int value : numbers)
+	{
+		std::cout << value << '\n';
+	}
+
 }

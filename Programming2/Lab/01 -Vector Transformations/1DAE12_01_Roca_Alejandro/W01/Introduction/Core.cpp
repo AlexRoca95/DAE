@@ -102,14 +102,14 @@ void Core::Initialize( )
 		return;
 	}
 
-	// Initialize SDL_ttf
+	// Initialize SDL_ttf (fonts)
 	if ( TTF_Init( ) == -1 )
 	{
 		std::cerr << "Core::Initialize( ), error when calling TTF_Init: " << TTF_GetError( ) << std::endl;
 		return;
 	}
 
-	//Initialize SDL_mixer
+	//Initialize SDL_mixer (sound)
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		std::cerr << "Core::Initialize( ), error when calling Mix_OpenAudio: " << Mix_GetError() << std::endl;

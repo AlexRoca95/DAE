@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Introduction", "Introduction\Introduction.vcxproj", "{F67A819C-74B0-47DB-A8B4-5B95D863C617}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VectorContainerBasics", "VectorContainerBasics\VectorContainerBasics.vcxproj", "{D487C396-9A54-4E98-89BA-AB35F9729E64}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TrafficLights", "TrafficLights\TrafficLights.vcxproj", "{21854F1B-5211-412E-B934-7DAAEE63BD44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +25,22 @@ Global
 		{F67A819C-74B0-47DB-A8B4-5B95D863C617}.Release|x64.Build.0 = Release|x64
 		{F67A819C-74B0-47DB-A8B4-5B95D863C617}.Release|x86.ActiveCfg = Release|Win32
 		{F67A819C-74B0-47DB-A8B4-5B95D863C617}.Release|x86.Build.0 = Release|Win32
+		{D487C396-9A54-4E98-89BA-AB35F9729E64}.Debug|x64.ActiveCfg = Debug|x64
+		{D487C396-9A54-4E98-89BA-AB35F9729E64}.Debug|x64.Build.0 = Debug|x64
+		{D487C396-9A54-4E98-89BA-AB35F9729E64}.Debug|x86.ActiveCfg = Debug|Win32
+		{D487C396-9A54-4E98-89BA-AB35F9729E64}.Debug|x86.Build.0 = Debug|Win32
+		{D487C396-9A54-4E98-89BA-AB35F9729E64}.Release|x64.ActiveCfg = Release|x64
+		{D487C396-9A54-4E98-89BA-AB35F9729E64}.Release|x64.Build.0 = Release|x64
+		{D487C396-9A54-4E98-89BA-AB35F9729E64}.Release|x86.ActiveCfg = Release|Win32
+		{D487C396-9A54-4E98-89BA-AB35F9729E64}.Release|x86.Build.0 = Release|Win32
+		{21854F1B-5211-412E-B934-7DAAEE63BD44}.Debug|x64.ActiveCfg = Debug|x64
+		{21854F1B-5211-412E-B934-7DAAEE63BD44}.Debug|x64.Build.0 = Debug|x64
+		{21854F1B-5211-412E-B934-7DAAEE63BD44}.Debug|x86.ActiveCfg = Debug|Win32
+		{21854F1B-5211-412E-B934-7DAAEE63BD44}.Debug|x86.Build.0 = Debug|Win32
+		{21854F1B-5211-412E-B934-7DAAEE63BD44}.Release|x64.ActiveCfg = Release|x64
+		{21854F1B-5211-412E-B934-7DAAEE63BD44}.Release|x64.Build.0 = Release|x64
+		{21854F1B-5211-412E-B934-7DAAEE63BD44}.Release|x86.ActiveCfg = Release|Win32
+		{21854F1B-5211-412E-B934-7DAAEE63BD44}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

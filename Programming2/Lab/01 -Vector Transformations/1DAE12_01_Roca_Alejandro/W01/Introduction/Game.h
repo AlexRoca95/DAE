@@ -3,7 +3,6 @@
 class Ball;
 class Texture;
 
-
 struct Sprite
 {
 	Texture* texture;
@@ -38,11 +37,12 @@ public:
 private:
 	// DATA MEMBERS
 	const Window m_Window;
-	static const int m_NrBalls{ 2 };
+	static const int m_NrBalls{ 2 };		
 	Ball* m_pBallArray[m_NrBalls]{};		// Nullpointer initiliazed array of two ball class
-	Texture* m_pDAEImage;
-	Texture* m_pText;
+	Texture* m_pDAEImage{};
+	Texture* m_pText{};
 	Sprite m_Knight;
+	float m_Angle{};
 
 	// FUNCTIONS
 	void Initialize( );
@@ -51,4 +51,5 @@ private:
 	void ClearBackground( ) const;
 	void DrawKnight() const;
 	void MoveKnight(float elapsedSec);
+	void VectorTest();
 };
