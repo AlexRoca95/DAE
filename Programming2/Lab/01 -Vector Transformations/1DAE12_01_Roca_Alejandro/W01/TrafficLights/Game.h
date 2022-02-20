@@ -1,5 +1,7 @@
 #pragma once
+#include <vector>
 
+class TrafficLight;
 class Game final
 {
 public:
@@ -23,7 +25,10 @@ public:
 private:
 	// DATA MEMBERS
 	const Window m_Window;
-
+	const int m_NrTrafficLights{ 10 };
+	std::vector<TrafficLight*> m_pTrafficLights{};
+	Point2f m_MousePos;
+	bool m_Click;
 	// FUNCTIONS
 	void Initialize( );
 	void Cleanup( );
