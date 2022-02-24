@@ -21,6 +21,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>Framework files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2f.cpp">
+      <Filter>Framework files</Filter>
+    </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>Framework files</Filter>
     </ClCompile>
@@ -45,13 +51,10 @@
     <ClCompile Include="Matrix2x3.cpp">
       <Filter>Framework files</Filter>
     </ClCompile>
-    <ClCompile Include="Core.cpp">
-      <Filter>Framework files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector2f.cpp">
-      <Filter>Framework files</Filter>
-    </ClCompile>
     <ClCompile Include="PowerUpp.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerUpManager.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,13 +86,16 @@
     <ClInclude Include="utils.h">
       <Filter>Framework files</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Game Files</Filter>
-    </ClInclude>
     <ClInclude Include="Vector2f.h">
       <Filter>Framework files</Filter>
     </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
     <ClInclude Include="PowerUp.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerUpManager.h">
       <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>
