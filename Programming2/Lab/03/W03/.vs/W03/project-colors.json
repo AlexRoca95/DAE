@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "2732c6f3-33c4-4486-b034-7d8a402bda21": {
+      "ProjectGuid": "2732c6f3-33c4-4486-b034-7d8a402bda21",
+      "DisplayName": "TheoryDemo",
+      "ColorIndex": 0
+    },
+    "c1434f31-7444-4562-aed3-74710eaf38a9": {
+      "ProjectGuid": "c1434f31-7444-4562-aed3-74710eaf38a9",
+      "DisplayName": "RaycastDemo",
+      "ColorIndex": 1
+    },
+    "c3fd2cf3-26b2-4c5b-884b-f5950642c14b": {
+      "ProjectGuid": "c3fd2cf3-26b2-4c5b-884b-f5950642c14b",
+      "DisplayName": "InheritanceShapes",
+      "ColorIndex": 2
+    },
+    "bc5323db-fca8-49d3-9c76-1880d8d261c6": {
+      "ProjectGuid": "bc5323db-fca8-49d3-9c76-1880d8d261c6",
+      "DisplayName": "RaycastBasics",
+      "ColorIndex": 3
+    }
+  },
+  "NextColorIndex": 4
+}
