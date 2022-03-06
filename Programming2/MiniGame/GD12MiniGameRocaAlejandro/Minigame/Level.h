@@ -11,8 +11,8 @@ public:
 	~Level();
 	void DrawBackground() const;
 	void DrawForeground() const;
-	void HandleCollision(Rectf& actorShape, Vector2f& velocity);
-	bool IsOnGround(const Rectf& actorShape);
+	void HandleCollision(Rectf& actorShape, Vector2f& velocity) const;
+	bool IsOnGround(const Rectf& actorShape) const;
 
 private:
 

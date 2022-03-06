@@ -13,7 +13,7 @@ public:
 	};
 
 	Avatar();
-	void Update(float elapsedSec, Level& level);
+	void Update(float elapsedSec, const Level& level);
 	void Draw() const;
 	void PowerUpHit();
 	Rectf GetShape() const;

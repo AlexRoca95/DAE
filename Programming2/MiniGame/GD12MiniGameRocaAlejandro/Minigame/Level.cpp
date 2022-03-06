@@ -39,12 +39,12 @@ void Level::DrawForeground() const
 	m_pForegroundTexture->Draw(m_FenceBottomLeft);
 }
 
-void Level::HandleCollision(Rectf& actorShape, Vector2f& velocity)
+void Level::HandleCollision(Rectf& actorShape, Vector2f& velocity) const
 {	
 	// The ray
 	Point2f ray{ actorShape.left + actorShape.width / 2, actorShape.bottom + actorShape.height };
 	Point2f rayBottom{ actorShape.left + actorShape.width / 2, actorShape.bottom };
-
+	
 	// The raycast
 	utils::HitInfo hitInfo{}; // Will hold info about the intersection point
 	if (utils::Raycast(m_Vertices, ray, rayBottom, hitInfo))
@@ -58,12 +58,13 @@ void Level::HandleCollision(Rectf& actorShape, Vector2f& velocity)
 	}
 }
 
-bool Level::IsOnGround(const Rectf& actorShape)
+bool Level::IsOnGround(const Rectf& actorShape) const
 {
 	// The ray
 	Point2f ray{ actorShape.left + actorShape.width / 2, actorShape.bottom + actorShape.height };
 	Point2f rayBottom{ actorShape.left + actorShape.width / 2, actorShape.bottom - 1 };
 
+	
 	// The raycast
 	utils::HitInfo hitInfo{}; // Will hold info about the intersection point
 	if (utils::Raycast(m_Vertices, ray, rayBottom, hitInfo))
