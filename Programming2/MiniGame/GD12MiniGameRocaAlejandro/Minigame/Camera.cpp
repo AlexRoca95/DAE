@@ -1,0 +1,75 @@
+#include "pch.h"
+#include "utils.h"
+#include "Camera.h"
+
+
+Camera::Camera(float width, float height)
+	:m_Width(width),
+	m_Height(height),
+	m_LevelBoundaries{0, 0, width, height}
+{
+
+}
+
+void Camera::SetLevelBoundaries(const Rectf& levelBoundaries)
+{
+	m_LevelBoundaries = levelBoundaries;
+}
+
+void Camera::Draw(const Rectf& target) const
+{
+	Point2f newCameraPos{};
+	newCameraPos = Track(target);
+	Clamp(newCameraPos);
+
+	glPushMatrix();
+
+	glTranslatef(newCameraPos.x, newCameraPos.y, 0.f);
+
+	glTranslatef(-newCameraPos.x, -newCameraPos.y, 0.f);
+	utils::SetColor(Color4f{ 1.f, 0.f, 1.f, 1.f });
+	utils::DrawRect(newCameraPos.x, newCameraPos.y, m_Width, m_Height);
+
+	glPopMatrix();
+
+
+}
+
+// Center the camera around the target pass by parameter
+Point2f Camera::Track(const Rectf target) const
+{
+	Point2f newPos{};
+
+	newPos.x = (target.left + target.width/2) - (m_Width/2);
+	newPos.y = (target.bottom + target.height / 2) - (m_Height / 2);
+
+	return newPos;
+}
+
+// Correct camera pos so it doesn't leave the boundaries
+void Camera::Clamp(Point2f& bottomLeftPos) const
+{
+
+	if (m_LevelBoundaries.left > bottomLeftPos.x)
+	{
+		bottomLeftPos.x = 0;
+	}
+	
+	if (m_LevelBoundaries.left + m_LevelBoundaries.width < bottomLeftPos.x + m_Width)
+	{
+		bottomLeftPos.x = m_LevelBoundaries.width - m_Width;
+	}
+	
+
+	if (m_LevelBoundaries.bottom + m_LevelBoundaries.height < bottomLeftPos.y + m_Height)
+	{
+		bottomLeftPos.y = m_LevelBoundaries.height - m_Height;
+	}
+
+	if (m_LevelBoundaries.bottom > bottomLeftPos.y)
+	{
+		bottomLeftPos.y = 0;
+	}
+
+}
+

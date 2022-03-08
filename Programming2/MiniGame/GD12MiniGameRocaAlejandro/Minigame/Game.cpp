@@ -1,10 +1,11 @@
 #include "pch.h"
 #include <iostream>
 #include "Game.h"
+#include "Camera.h"
 #include "utils.h"
 
 Game::Game( const Window& window )
-	:m_Window{ window }
+	:m_Window{ window }	
 {	 
 	Initialize( );
 }
@@ -16,12 +17,22 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
+	InitCamera();
 	ShowTestMessage( );
 	AddPowerUps( );
 }
 
+void Game::InitCamera()
+{
+	m_pCamera = new Camera(m_Window.width, m_Window.height);
+	m_pCamera->SetLevelBoundaries(Rectf{ m_Level.GetBoundaries().left,  m_Level.GetBoundaries().bottom, 
+		m_Level.GetBoundaries().left + m_Level.GetBoundaries().width ,
+		 m_Level.GetBoundaries().bottom + m_Level.GetBoundaries().height });
+}
 void Game::Cleanup( )
 {
+
+	delete m_pCamera;
 }
 
 void Game::Update( float elapsedSec )
@@ -42,6 +53,7 @@ void Game::Draw( ) const
 	m_PowerUpManager.Draw( );
 	m_Avatar.Draw( );
 	m_Level.DrawForeground( );
+	m_pCamera->Draw(m_Avatar.GetShape());
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

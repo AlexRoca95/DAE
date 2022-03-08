@@ -4,6 +4,7 @@
 #include "Avatar.h"
 #include "Vector2f.h"
 
+class Camera;
 
 class Game final
 {
@@ -32,6 +33,7 @@ private:
 	Level m_Level;
 	PowerUpManager m_PowerUpManager;
 	Avatar m_Avatar;
+	Camera* m_pCamera;
 
 
 	// FUNCTIONS
@@ -41,4 +43,5 @@ private:
 	void ShowTestMessage( ) const;
 	void AddPowerUps( );
 	void DoCollisionTests( );
+	void InitCamera();
 };
