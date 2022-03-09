@@ -49,11 +49,15 @@ void Game::Draw( ) const
 {
 	ClearBackground( );
 
-	m_Level.DrawBackground( );
-	m_PowerUpManager.Draw( );
-	m_Avatar.Draw( );
-	m_Level.DrawForeground( );
-	m_pCamera->Draw(m_Avatar.GetShape());
+	glPushMatrix();
+	m_pCamera->Transform(m_Avatar.GetShape());
+
+	m_Level.DrawBackground();
+	m_PowerUpManager.Draw();
+	m_Avatar.Draw();
+	m_Level.DrawForeground();
+
+	glPopMatrix();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

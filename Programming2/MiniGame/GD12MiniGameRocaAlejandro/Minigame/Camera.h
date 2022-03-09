@@ -4,7 +4,7 @@ class Camera
 public:
 	Camera(float width, float height);
 	void SetLevelBoundaries(const Rectf& levelBoundaries);
-	void Draw(const Rectf& target) const;
+	void Transform(const Rectf& target) const;
 
 private:
 	float m_Width;

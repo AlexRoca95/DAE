@@ -16,21 +16,13 @@ void Camera::SetLevelBoundaries(const Rectf& levelBoundaries)
 	m_LevelBoundaries = levelBoundaries;
 }
 
-void Camera::Draw(const Rectf& target) const
+void Camera::Transform(const Rectf& target) const
 {
 	Point2f newCameraPos{};
 	newCameraPos = Track(target);
 	Clamp(newCameraPos);
 
-	glPushMatrix();
-
-	glTranslatef(newCameraPos.x, newCameraPos.y, 0.f);
-
 	glTranslatef(-newCameraPos.x, -newCameraPos.y, 0.f);
-	utils::SetColor(Color4f{ 1.f, 0.f, 1.f, 1.f });
-	utils::DrawRect(newCameraPos.x, newCameraPos.y, m_Width, m_Height);
-
-	glPopMatrix();
 
 
 }
