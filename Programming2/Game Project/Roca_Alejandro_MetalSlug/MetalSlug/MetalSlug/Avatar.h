@@ -11,7 +11,8 @@ public:
 	enum class ActionState {
 		waiting,
 		moving,
-		jumping
+		jumping,
+		crawling
 	};
 
 	Avatar();
@@ -29,11 +30,12 @@ public:
 	void InitSpriteValuesBody(int cols, int frames, float frameTime, float widht, float height, float spriteSheetTop);
 
 	void UpdateSprite(float elapsedSeconds);
+	void UpdateSrcRects();
 
 	void HandleInput();
 	void Move(float elapsedSec);
 	void DrawAvatar() const;
-	void UpdateSrcRects();
+	void ResetSprite();
 
 private:
 
@@ -53,6 +55,8 @@ private:
 
 	// Movement
 	bool m_MovingRight;
+	bool m_Crawling;
+	bool m_Up;
 	
 
 };

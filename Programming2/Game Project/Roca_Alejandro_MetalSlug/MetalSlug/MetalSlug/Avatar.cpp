@@ -48,11 +48,6 @@ void Avatar::Initialize()
 	m_SrcRect.left = m_CurrentFrame * m_Width;
 	InitSrcRect();
 
-	
-
-
-	
-
 }
 
 // Initialize all data needed for the Legs sprite (except currentFrame and accumTime)
@@ -149,15 +144,30 @@ void Avatar::DrawAvatar() const
 		glScalef(-1, 1, 1);
 		glTranslatef(-(m_DestRect.left + m_Width / 2), -(m_DestRect.bottom + m_Height / 2), 0.f);
 
-		m_pSpritesLegsText->Draw(m_DestRect, m_SrcRect);
-		m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
+		if (m_Crawling)
+		{
+			m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
+		}
+		else
+		{
+			m_pSpritesLegsText->Draw(m_DestRect, m_SrcRect);
+			m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
+		}
+		
 
 		glPopMatrix();
 	}
 	else
 	{
-		m_pSpritesLegsText->Draw(m_DestRect, m_SrcRect);
-		m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
+		if (m_Crawling)
+		{
+			m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
+		}
+		else
+		{
+			m_pSpritesLegsText->Draw(m_DestRect, m_SrcRect);
+			m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
+		}
 	}
 	
 }
@@ -169,10 +179,6 @@ void Avatar::Update(float elapsedSeconds)
 	UpdateSprite(elapsedSeconds);
 	Move(elapsedSeconds);
 	
-	
-	
-
-
 }
 
 // Updates both sprites with different frame rates
@@ -192,7 +198,7 @@ void Avatar::UpdateSprite(float elapsedSeconds)
 
 	}
 
-	// Marco BodY
+	// Marco Body
 	if (m_AccumTimeTop > m_FrameTimeTop)
 	{
 		++m_CurrentFrameTop %= m_FramesTop;
@@ -207,12 +213,23 @@ void Avatar::UpdateSrcRects()
 	switch (m_ActionState)
 	{
 	case Avatar::ActionState::waiting:
-		// Marco Legs (Iddle)
-		InitSpriteValuesLegs(1, 1, 15.f, 25.f, 15.f, 15.f);
 
-		// Marco Body (Iddle)
-		InitSpriteValuesBody(4, 4, 7.f, 33.f, 27.f, 27.f);
-		m_DestRectTop.left = m_DestRect.left;
+		if (m_Crawling)
+		{
+			// Marco Body (Crawling)
+			InitSpriteValuesBody(4, 4, 7.f, 36.f, 24.f, 204.f);
+
+		}
+		else
+		{
+			// Marco Legs (Iddle)
+			InitSpriteValuesLegs(1, 1, 15.f, 25.f, 15.f, 15.f);
+
+			// Marco Body (Iddle)
+			InitSpriteValuesBody(4, 4, 7.f, 33.f, 27.f, 27.f);
+			m_DestRectTop.left = m_DestRect.left;
+		}
+		
 		break;
 	case Avatar::ActionState::moving:
 		// Marco Legs (moving)
@@ -223,8 +240,6 @@ void Avatar::UpdateSrcRects()
 		m_DestRectTop.left = m_DestRect.left + 5;
 		break;
 	case Avatar::ActionState::jumping:
-		break;
-	default:
 		break;
 	}
 
@@ -238,13 +253,21 @@ void Avatar::UpdateSrcRects()
 
 	if (m_PreviousActionState != m_ActionState)
 	{
-		m_CurrentFrame = 0;
-		m_CurrentFrameTop = 0;
-		m_PreviousActionState = m_ActionState;
+		// State changed from the previous one --> Reset sprite
+		ResetSprite();
 	}
-	
 
-	
+}
+
+// Reset the sprite current frame and left pos of SrcRect so it draws correctly
+void Avatar::ResetSprite()
+{
+	m_PreviousActionState = m_ActionState;   // Save current state for next check
+
+	m_CurrentFrame = 0;
+	m_CurrentFrameTop = 0;
+	m_SrcRect.left = (m_CurrentFrame * m_SrcRect.width);
+	m_SrcRectTop.left = (m_CurrentFrameTop * m_SrcRectTop.width);
 }
 
 void Avatar::HandleInput()
@@ -274,15 +297,22 @@ void Avatar::HandleInput()
 	if ((pStates[SDL_SCANCODE_UP]))
 	{
 		// Jump
+		m_ActionState = ActionState::jumping;
+	}
 
+	if ((pStates[SDL_SCANCODE_DOWN]))
+	{
+		// Crawling
+		m_Crawling = true;
+	}
+	else
+	{
+		m_Crawling = false;
 	}
 }
 
 void Avatar::Move(float elapsedSec)
 {
-
 	m_DestRect.left += m_Velocity.x * elapsedSec;
 	m_DestRectTop.left += m_Velocity.x * elapsedSec;
-
-	
 }
