@@ -58,7 +58,7 @@ void Avatar::Update(float elapsedSec, const Level& level)
 	{
 		level.HandleCollision(m_DstRect, m_Velocity);
 
-		if (level.IsOnGround(m_DstRect))
+		if (level.IsOnGround(m_DstRect, m_Velocity))
 		{
 			// In the ground
 			HandleMoveKeysState(elapsedSec);

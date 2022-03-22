@@ -5,7 +5,7 @@
 #include "Vector2f.h"
 
 class Camera;
-
+class HUD;
 class Game final
 {
 public:
@@ -18,6 +18,7 @@ public:
 
 	void Update( float elapsedSec );
 	void Draw( ) const;
+	void DrawEnding() const;
 
 	// Event handling
 	void ProcessKeyDownEvent( const SDL_KeyboardEvent& e );
@@ -34,7 +35,8 @@ private:
 	PowerUpManager m_PowerUpManager;
 	Avatar m_Avatar;
 	Camera* m_pCamera;
-
+	bool m_EndReached;
+	HUD* m_pHud;
 
 	// FUNCTIONS
 	void Initialize( );

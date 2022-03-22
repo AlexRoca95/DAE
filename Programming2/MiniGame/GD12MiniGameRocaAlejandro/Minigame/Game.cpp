@@ -3,9 +3,11 @@
 #include "Game.h"
 #include "Camera.h"
 #include "utils.h"
+#include "HUD.h"
 
 Game::Game( const Window& window )
-	:m_Window{ window }	
+	:m_Window{ window },
+	m_EndReached{false}
 {	 
 	Initialize( );
 }
@@ -17,9 +19,13 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
+	
 	InitCamera();
 	ShowTestMessage( );
 	AddPowerUps( );
+	Point2f pos{ m_pCamera->GetCameraPos().x, m_pCamera->GetCameraPos().y + m_Window.height };
+	m_pHud = new HUD(pos,int(m_PowerUpManager.Size()));
+		
 }
 
 void Game::InitCamera()
@@ -33,16 +39,26 @@ void Game::Cleanup( )
 {
 
 	delete m_pCamera;
+	delete m_pHud;
 }
 
 void Game::Update( float elapsedSec )
 {
 	// Update game objects
-	m_PowerUpManager.Update( elapsedSec );
-	m_Avatar.Update( elapsedSec, m_Level );
 
-	// Do collision
-	DoCollisionTests( );
+	// Check if player reached end of the level
+	if (!m_EndReached)
+	{
+		m_PowerUpManager.Update(elapsedSec);
+		m_pHud->UpdatePos(m_pCamera->GetCameraPos(), m_Window.height);
+		m_Avatar.Update(elapsedSec, m_Level);
+		
+		m_EndReached = m_Level.HasReachedEnd(m_Avatar.GetShape());
+
+		// Do collision
+		DoCollisionTests();
+	}
+	
 }
 
 void Game::Draw( ) const
@@ -50,6 +66,7 @@ void Game::Draw( ) const
 	ClearBackground( );
 
 	glPushMatrix();
+	
 	m_pCamera->Transform(m_Avatar.GetShape());
 
 	m_Level.DrawBackground();
@@ -57,7 +74,22 @@ void Game::Draw( ) const
 	m_Avatar.Draw();
 	m_Level.DrawForeground();
 
+	m_pHud->Draw();
+
+	if (m_EndReached)
+	{
+		DrawEnding();
+	}
+	
+
 	glPopMatrix();
+}
+
+void Game::DrawEnding() const
+{
+	utils::SetColor(Color4f{ 0.f, 0.f, 0.f, 0.5f });
+	utils::FillRect(m_pCamera->GetCameraPos().x, m_pCamera->GetCameraPos().y, m_Window.width, m_Window.height);
+
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -117,6 +149,7 @@ void Game::DoCollisionTests( )
 	if ( m_PowerUpManager.HitItem( m_Avatar.GetShape( ) ) )
 	{
 		m_Avatar.PowerUpHit( );
+		m_pHud->PowerUpHit();
 	}
 }
 

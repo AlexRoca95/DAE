@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "de1eab73-b7e0-401d-a83d-b76187355014": {
+      "ProjectGuid": "de1eab73-b7e0-401d-a83d-b76187355014",
+      "DisplayName": "SpriteTester",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
