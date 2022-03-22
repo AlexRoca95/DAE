@@ -5,6 +5,8 @@ class HUD
 {
 public:
 	HUD(const Point2f& topLeft, int totalPowerUps);
+	HUD(const HUD& hud) = delete;
+	HUD& operator=(const HUD& hud) = delete;
 	~HUD();
 	void Draw() const;
 	void DrawPowerUpHit(int& idx, float& leftPos) const;

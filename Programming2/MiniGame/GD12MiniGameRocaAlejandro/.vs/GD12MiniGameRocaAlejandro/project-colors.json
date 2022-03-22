@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "be6c7532-b93f-46a2-b270-5c49138aeb24": {
+      "ProjectGuid": "be6c7532-b93f-46a2-b270-5c49138aeb24",
+      "DisplayName": "Minigame",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

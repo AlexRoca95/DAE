@@ -3,7 +3,7 @@
 class Level;
 class Texture;
 
-class Avatar
+class Avatar final
 {
 
 public:
@@ -14,6 +14,8 @@ public:
 	};
 
 	Avatar();
+	Avatar(const Avatar& avatar) = delete;
+	Avatar& operator=(const Avatar& avatar) = delete;  // Rule of three
 	~Avatar();
 	void Update(float elapsedSec, const Level& level);
 	void Draw() const;

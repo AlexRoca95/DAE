@@ -3,6 +3,9 @@ class Camera
 {
 public:
 	Camera(float width, float height);
+	Camera(const Camera& camera) = delete;
+	Camera& operator=(const Camera& camera) = delete;
+	~Camera() = default;
 	void SetLevelBoundaries(const Rectf& levelBoundaries);
 	void Transform(const Rectf& target);
 	Point2f GetCameraPos() const;

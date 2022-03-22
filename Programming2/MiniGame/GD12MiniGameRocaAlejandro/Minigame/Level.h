@@ -10,6 +10,8 @@ class Level
 public:
 
 	Level();
+	Level(const Level& level) = delete;
+	Level& operator=(const Level& level) = delete;
 	~Level();
 	void DrawBackground() const;
 	void DrawForeground() const;

@@ -7,6 +7,8 @@ class Platform
 public:
 
 	Platform(const Point2f& bottomLeft);
+	Platform(const Platform& hud) = delete;
+	Platform& operator=(const Platform& hud) = delete;
 	~Platform();
 	void Draw() const;
 	void HandleCollision(Rectf& actorShape, Vector2f& actorVelocity);
