@@ -5,7 +5,7 @@ class GameObject
 {
 public:
 	GameObject(int id);
-	virtual ~GameObject();
+	virtual ~GameObject() = default;
 	virtual void Draw() const = 0;
 	virtual void Update(float elapsedSeconds) = 0;
 	virtual void InitDestRect() = 0;

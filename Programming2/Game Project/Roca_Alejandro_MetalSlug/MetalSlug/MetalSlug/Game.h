@@ -1,8 +1,11 @@
 #pragma once
 #include <vector>
+#include "Level.h"
+#include "Camera.h"
+
 
 class GameObject;
-
+class Avatar;
 class Game final
 {
 public:
@@ -30,10 +33,17 @@ private:
 	// All Objects from the game
 	std::vector <GameObject*> m_pGameObjects;
 
+	// Level
+	Level m_Level;
+	
+	Avatar* m_Avatar;
+
+	Camera m_Camera;
 	// FUNCTIONS
 
 	void Initialize( );
 	void InitAvatar();
+	void InitCamera();
 
 	void Cleanup( );
 	void ClearBackground( ) const;

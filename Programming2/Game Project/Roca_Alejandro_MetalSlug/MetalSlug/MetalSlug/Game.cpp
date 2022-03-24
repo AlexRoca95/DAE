@@ -2,8 +2,10 @@
 #include "Game.h"
 #include "Avatar.h"
 
+
 Game::Game( const Window& window ) 
 	:m_Window{ window }
+	,m_Camera{m_Window.width, m_Window.height}
 {
 	Initialize( );
 }
@@ -16,13 +18,19 @@ Game::~Game( )
 void Game::Initialize( )
 {
 	InitAvatar();
-
+	InitCamera();
 }
 
 void Game::InitAvatar()
 {
-	
-	m_pGameObjects.push_back(new Avatar());
+	m_Avatar = new Avatar();
+	m_pGameObjects.push_back(m_Avatar);
+
+}
+
+void Game::InitCamera()
+{
+	m_Camera.SetLevelBoundaries(m_Level.GetBoundaries());
 
 }
 
@@ -62,11 +70,18 @@ void Game::Draw( ) const
 {
 	ClearBackground( );
 
-	
+	glPushMatrix();
+
+	m_Camera.Transform(m_Avatar->GetShape());
+	m_Level.Draw();
+
+	// Draw all game objects
 	for (GameObject* ptr : m_pGameObjects)
 	{
 		ptr->Draw();
 	}
+
+	glPopMatrix();
 
 
 }

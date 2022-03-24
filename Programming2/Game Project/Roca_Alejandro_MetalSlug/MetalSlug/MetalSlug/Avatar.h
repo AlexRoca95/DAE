@@ -5,7 +5,7 @@
 
 class Texture;
 
-class Avatar : public GameObject
+class Avatar final : public GameObject
 {
 public:
 	enum class ActionState {
@@ -16,6 +16,8 @@ public:
 	};
 
 	Avatar();
+	Avatar(const Avatar& avatar) = delete;
+	Avatar& operator=(const Avatar& avatar) = delete;
 	~Avatar();
 
 	virtual void InitDestRect() override;
@@ -36,6 +38,9 @@ public:
 	void Move(float elapsedSec);
 	void DrawAvatar() const;
 	void ResetSprite();
+
+
+	Rectf GetShape();
 
 private:
 

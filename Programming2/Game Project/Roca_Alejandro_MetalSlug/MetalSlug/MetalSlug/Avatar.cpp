@@ -11,7 +11,7 @@ Avatar::Avatar()
 	m_pSpritesBodyText{new Texture("Resources/sprites/marco/MarcoBody.png")},
 	m_pSpritesLegsText{ new Texture("Resources/sprites/marco/MarcoLegs.png") },
 	m_Velocity{Point2f{0.f, 0.f}},
-	m_HorSpeed{100.f},
+	m_HorSpeed{400.f},
 	m_MovingRight{ true },
 	m_StartPosition{20.f, 200.f},
 	m_ActionState{ActionState::waiting},
@@ -315,4 +315,10 @@ void Avatar::Move(float elapsedSec)
 {
 	m_DestRect.left += m_Velocity.x * elapsedSec;
 	m_DestRectTop.left += m_Velocity.x * elapsedSec;
+}
+
+
+Rectf Avatar::GetShape()
+{
+	return m_DestRect;
 }

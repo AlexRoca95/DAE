@@ -11,7 +11,7 @@ int main( int argc, char *argv[] )
 
 	StartHeapControl();
 
-	Core* pCore{ new Core{ Window{ "MetalSlug 1 - Roca, Alejandro - 1DAE12", 1000.f , 650.f } } };
+	Core* pCore{ new Core{ Window{ "MetalSlug 1 - Roca, Alejandro - 1DAE12", 880.f , 600.f } } };
 	pCore->Run();
 	delete pCore;
 

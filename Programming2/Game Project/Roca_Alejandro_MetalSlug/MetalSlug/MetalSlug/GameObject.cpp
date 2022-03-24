@@ -33,8 +33,4 @@ GameObject::GameObject(int id)
 	
 }
 
-GameObject::~GameObject()
-{
-	
-}
 
