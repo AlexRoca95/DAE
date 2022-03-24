@@ -14,7 +14,7 @@ Level::Level()
 	, m_Vertices{}
 	, m_pLevelSVG{}
 {
-	//m_pLevelSVG->GetVerticesFromSvgFile("resources/sprites/Level/mission1_svg.svg", m_Vertices);
+	m_pLevelSVG->GetVerticesFromSvgFile("resources/sprites/Level/level.svg", m_Vertices);
 }
 
 
