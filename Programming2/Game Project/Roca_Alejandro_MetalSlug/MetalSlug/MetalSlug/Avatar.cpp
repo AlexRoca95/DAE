@@ -14,8 +14,9 @@ Avatar::Avatar()
 	m_HorSpeed{400.f},
 	m_MovingRight{ true },
 	m_StartPosition{20.f, 200.f},
-	m_ActionState{ActionState::waiting},
-	m_PreviousActionState{ActionState::waiting}
+	m_MainActionState{ActionState::standing},
+	m_SubActionState{ActionState::iddle},
+	m_PreviousActionState{ActionState::standing}
 	
 {
 	m_GameObjectCounter++;
@@ -26,9 +27,10 @@ Avatar::Avatar()
 
 void Avatar::Initialize()
 {
+	m_Scale = 2.5f;
 
 	// Marco Body (Iddle)
-	InitSpriteValuesBody(4, 4, 7.f, 33.f, 27.f, 27.f);
+	InitSpriteValuesBody(4, 1, 4, 7.f, 33.f, 27.f, 29.f);
 	m_CurrentFrameTop = 0;
 	m_AccumTimeTop = 0.f;
 
@@ -39,7 +41,7 @@ void Avatar::Initialize()
 	InitSrcRectTop();
 
 	// Marco Legs (Iddle)
-	InitSpriteValuesLegs(1, 1, 15.f, 25.f, 15.f, 15.f);
+	InitSpriteValuesLegs(1, 1, 1, 15.f, 25.f, 15.f, 15.f);
 	m_CurrentFrame = 0;
 	m_AccumTime = 0.f;
 
@@ -47,16 +49,18 @@ void Avatar::Initialize()
 	InitDestRect();
 	m_SrcRect.left = m_CurrentFrame * m_Width;
 	InitSrcRect();
-
+	
+	
 }
 
 // Initialize all data needed for the Legs sprite (except currentFrame and accumTime)
-void Avatar::InitSpriteValuesLegs(int cols, int frames, float frameTime, float width,
+void Avatar::InitSpriteValuesLegs(int cols, int rows, int frames, float frameTime, float width,
 	float height, float spriteSheetTop)
 {
 
 	m_Frames = frames;
-	m_ColsTop = cols;
+	m_Cols = cols;
+	m_Rows = rows;
 	m_FrameTime = 1 / frameTime;
 	m_Width = width;
 	m_Height = height;
@@ -64,12 +68,13 @@ void Avatar::InitSpriteValuesLegs(int cols, int frames, float frameTime, float w
 
 }
 
-void Avatar::InitSpriteValuesBody(int cols, int frames, float frameTime, float width,
+void Avatar::InitSpriteValuesBody(int cols, int rows, int frames, float frameTime, float width,
 	float height, float spriteSheetTop)
 {
 
 	m_FramesTop = frames;
 	m_ColsTop = cols;
+	m_RowsTop = rows;
 	m_FrameTimeTop = 1 / frameTime;
 	m_WidthTop = width;
 	m_HeightTop = height;
@@ -81,9 +86,9 @@ void Avatar::InitSpriteValuesBody(int cols, int frames, float frameTime, float w
 void Avatar::InitDestRect()
 {
 	
-	m_DestRect.bottom = m_DestRectTop.bottom - m_Height + 7;
-	m_DestRect.width = m_Width;
-	m_DestRect.height = m_Height;
+	m_DestRect.bottom = m_DestRectTop.bottom - m_Height - 6;
+	m_DestRect.width = m_Width * m_Scale;
+	m_DestRect.height = m_Height * m_Scale;
 
 }
 
@@ -107,8 +112,8 @@ void Avatar::InitSrcRectTop()
 
 void Avatar::InitDestRectTop()
 {
-	m_DestRectTop.width = m_WidthTop;
-	m_DestRectTop.height = m_HeightTop;
+	m_DestRectTop.width = m_WidthTop * m_Scale;
+	m_DestRectTop.height = m_HeightTop * m_Scale;
 
 }
 
@@ -144,32 +149,32 @@ void Avatar::DrawAvatar() const
 		glScalef(-1, 1, 1);
 		glTranslatef(-(m_DestRect.left + m_Width / 2), -(m_DestRect.bottom + m_Height / 2), 0.f);
 
-		if (m_Crawling)
-		{
-			m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
-		}
-		else
-		{
-			m_pSpritesLegsText->Draw(m_DestRect, m_SrcRect);
-			m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
-		}
+		CheckSpritesToDraw();
 		
-
 		glPopMatrix();
 	}
 	else
 	{
-		if (m_Crawling)
-		{
-			m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
-		}
-		else
-		{
-			m_pSpritesLegsText->Draw(m_DestRect, m_SrcRect);
-			m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
-		}
+		CheckSpritesToDraw();
 	}
 	
+}
+
+
+// Check if we have to draw one or two sprites of the avatar
+void Avatar::CheckSpritesToDraw() const
+{
+	if (m_MainActionState != ActionState::crawling)
+	{
+		m_pSpritesLegsText->Draw(m_DestRect, m_SrcRect);
+		m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
+
+	}
+	else
+	{
+		// Only one sprite drawing
+		m_pSpritesBodyText->Draw(m_DestRectTop, m_SrcRectTop);
+	}
 }
 
 void Avatar::Update(float elapsedSeconds)
@@ -208,40 +213,62 @@ void Avatar::UpdateSprite(float elapsedSeconds)
 	
 }
 
+// Update which part of the spritesheet we draw
 void Avatar::UpdateSrcRects()
 {
-	switch (m_ActionState)
+	switch (m_MainActionState)
 	{
-	case Avatar::ActionState::waiting:
+	case Avatar::ActionState::standing:  // Character is standing
 
-		if (m_Crawling)
+		if (m_SubActionState == ActionState::moving)
 		{
-			// Marco Body (Crawling)
-			InitSpriteValuesBody(4, 4, 7.f, 36.f, 24.f, 204.f);
+			// Marco Legs (Standing + moving)
+			InitSpriteValuesLegs(6, 1, 18, 15.f, 30.f, 19.f, 44.f);
 
+
+			// Marco Body (correct the position of the sprite)
+			//InitSpriteValuesBody(4, 1, 4, 5.f, 34.f, 32.f, 290.f);
+			m_DestRectTop.left = m_DestRect.left + 14;
 		}
-		else
-		{
-			// Marco Legs (Iddle)
-			InitSpriteValuesLegs(1, 1, 15.f, 25.f, 15.f, 15.f);
 
-			// Marco Body (Iddle)
-			InitSpriteValuesBody(4, 4, 7.f, 33.f, 27.f, 27.f);
+		if(m_SubActionState == ActionState::iddle)
+		{
+			// Marco Legs (Standing + Iddle)
+			InitSpriteValuesLegs(1, 1, 1, 15.f, 25.f, 15.f, 15.f);
+
+			// Marco Body (Standing + Iddle)
+			InitSpriteValuesBody(10, 1, 3, 4.f, 33.f, 27.f, 29.f);
 			m_DestRectTop.left = m_DestRect.left;
 		}
-		
+
+		if (m_SubActionState == ActionState::shooting)
+		{
+
+		}
+
 		break;
-	case Avatar::ActionState::moving:
-		// Marco Legs (moving)
-		InitSpriteValuesLegs(18, 18, 15.f, 30.f, 19.f, 44.f);
+	case Avatar::ActionState::crawling:
+		if (m_SubActionState == ActionState::moving)
+		{
 
+		}
 
-		// Marco Body
-		m_DestRectTop.left = m_DestRect.left + 5;
+		if (m_SubActionState == ActionState::iddle)
+		{
+			// Marco Body (Crawling + iddle)
+			InitSpriteValuesBody(4, 1, 4, 7.f, 36.f, 24.f, 204.f);
+		}
+
+		if (m_SubActionState == ActionState::shooting)
+		{
+
+		}
 		break;
 	case Avatar::ActionState::jumping:
 		break;
 	}
+
+
 
 	// Marco Body
 	InitDestRectTop();
@@ -250,8 +277,9 @@ void Avatar::UpdateSrcRects()
 	// Marco legs
 	InitDestRect();
 	InitSrcRect();
+	
 
-	if (m_PreviousActionState != m_ActionState)
+	if (m_PreviousActionState != m_MainActionState)
 	{
 		// State changed from the previous one --> Reset sprite
 		ResetSprite();
@@ -262,7 +290,7 @@ void Avatar::UpdateSrcRects()
 // Reset the sprite current frame and left pos of SrcRect so it draws correctly
 void Avatar::ResetSprite()
 {
-	m_PreviousActionState = m_ActionState;   // Save current state for next check
+	m_PreviousActionState = m_MainActionState;   // Save current state for next check
 
 	m_CurrentFrame = 0;
 	m_CurrentFrameTop = 0;
@@ -274,40 +302,78 @@ void Avatar::HandleInput()
 {
 	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
 
-	if (pStates[SDL_SCANCODE_RIGHT])
-	{
-		m_MovingRight = true;
-		m_ActionState = ActionState::moving;
-		m_Velocity.x = m_HorSpeed;
-	}
-	else if (pStates[SDL_SCANCODE_LEFT])
-	{
-		m_MovingRight = false;
-		m_ActionState = ActionState::moving;
-		m_Velocity.x = -m_HorSpeed;
-	}
-	else
-	{
-		// No movement
-		m_Velocity.x = 0.f;
-		m_ActionState = ActionState::waiting;
-	}
-
-
-	if ((pStates[SDL_SCANCODE_UP]))
+	if ((pStates[SDL_SCANCODE_C]))
 	{
 		// Jump
-		m_ActionState = ActionState::jumping;
+		m_MainActionState = ActionState::jumping;
 	}
 
 	if ((pStates[SDL_SCANCODE_DOWN]))
 	{
 		// Crawling
-		m_Crawling = true;
+		m_MainActionState = ActionState::crawling;
 	}
 	else
 	{
-		m_Crawling = false;
+		// Character up sprite
+		m_MainActionState = ActionState::standing;
+	}
+
+
+	if (pStates[SDL_SCANCODE_RIGHT])
+	{
+		// Right Movement
+		m_MovingRight = true;
+		m_SubActionState = ActionState::moving;
+
+		CheckMainActionState();		// Check wich main action the character is doing
+		
+	}
+	else if (pStates[SDL_SCANCODE_LEFT])
+	{
+		// Left Movement
+		m_MovingRight = false;
+		m_SubActionState = ActionState::moving;
+
+		CheckMainActionState();
+	}
+	else
+	{
+		// No movement
+		m_Velocity.x = 0.f;
+		m_SubActionState = ActionState::iddle;
+	}
+}
+
+// Check if the avatar is stading, crawling or jumping for the sprite drawing
+void Avatar::CheckMainActionState()
+{
+	if (m_MainActionState == ActionState::standing || m_MainActionState == ActionState::jumping)
+	{
+		// Normal speed
+		if (m_MovingRight)
+		{
+			m_Velocity.x = m_HorSpeed;
+		}
+		else
+		{
+			m_Velocity.x = -m_HorSpeed;
+		}
+		
+	}
+
+	if (m_MainActionState == ActionState::crawling)
+	{
+		// Reduced speed
+		if (m_MovingRight)
+		{
+			m_Velocity.x = m_HorSpeed / 2;
+		}
+		else
+		{
+			m_Velocity.x = -m_HorSpeed / 2;
+		}
+		
 	}
 }
 

@@ -23,6 +23,7 @@ protected:
 	Rectf m_SrcRect;
 	Rectf m_DestRect;
 	int m_Cols;
+	int m_Rows;
 	float m_Width;
 	float m_Height;
 	float m_SpriteSheetLeft;
@@ -33,11 +34,12 @@ protected:
 	float m_FrameTime;
 	int m_CurrentFrame;
 	float m_AccumTime;
-
+	float m_Scale;
 	// For sprites with two parts (Top Part)
 	Rectf m_SrcRectTop;
 	Rectf m_DestRectTop;
 	int m_ColsTop;
+	int m_RowsTop;
 	float m_WidthTop;
 	float m_HeightTop;
 	float m_SpriteSheetTop2;

@@ -8,11 +8,13 @@ class Texture;
 class Avatar final : public GameObject
 {
 public:
-	enum class ActionState {
-		waiting,
-		moving,
+	enum class ActionState {   // Main action of the character
+		standing,
+		crawling,
 		jumping,
-		crawling
+		moving,
+		iddle,
+		shooting
 	};
 
 	Avatar();
@@ -28,15 +30,17 @@ public:
 	virtual void Update(float elapsedSeconds) override;
 
 	void Initialize();
-	void InitSpriteValuesLegs(int cols, int frames, float frameTime, float widht, float height, float spriteSheetTop);
-	void InitSpriteValuesBody(int cols, int frames, float frameTime, float widht, float height, float spriteSheetTop);
+	void InitSpriteValuesLegs(int cols, int rows, int frames, float frameTime, float widht, float height, float spriteSheetTop);
+	void InitSpriteValuesBody(int cols, int rows, int frames, float frameTime, float widht, float height, float spriteSheetTop);
 
 	void UpdateSprite(float elapsedSeconds);
 	void UpdateSrcRects();
 
 	void HandleInput();
+	void CheckMainActionState();
 	void Move(float elapsedSec);
 	void DrawAvatar() const;
+	void CheckSpritesToDraw() const;
 	void ResetSprite();
 
 
@@ -46,7 +50,8 @@ private:
 
 	// General
 	static int m_GameObjectCounter;
-	ActionState m_ActionState;
+	ActionState m_MainActionState;
+	ActionState m_SubActionState;
 	ActionState m_PreviousActionState;
 	Point2f m_StartPosition{};
 
@@ -60,8 +65,6 @@ private:
 
 	// Movement
 	bool m_MovingRight;
-	bool m_Crawling;
-	bool m_Up;
 	
 
 };

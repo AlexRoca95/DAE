@@ -7,6 +7,7 @@ GameObject::GameObject(int id)
 	, m_SrcRect{}
 	, m_DestRect{}
 	, m_Cols{}
+	, m_Rows{}
 	, m_Width{}
 	, m_Height{}
 	, m_SpriteSheetLeft{}
@@ -17,11 +18,13 @@ GameObject::GameObject(int id)
 	, m_AccumTime{}
 	, m_SpriteSheetWidth{}
 	, m_SpriteSheetHeight{}
+	, m_Scale{}
 
 	// For sprites with two parts
 	, m_SrcRectTop{}
 	, m_DestRectTop{}
 	, m_ColsTop{}
+	, m_RowsTop{}
 	, m_WidthTop{}
 	, m_HeightTop{}
 	, m_SpriteSheetTop2{}
