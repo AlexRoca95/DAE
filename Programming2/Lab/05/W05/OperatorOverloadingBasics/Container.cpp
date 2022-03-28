@@ -71,14 +71,16 @@ void Container::Reserve( int newCapacity )
 int Container::operator[](int idx) const
 {
 
-	return this->Get(idx);
+	assert(idx >= 0 && idx < m_Size);
+	return m_pElement[idx];
 
 }
 
-void Container::operator=(const Container& c, int value)
+int& Container::operator[](int idx) 
 {
 
-
+	assert(idx >= 0 && idx < m_Size);
+	return m_pElement[idx];
 
 }
 
