@@ -6,6 +6,7 @@
 Game::Game( const Window& window ) 
 	:m_Window{ window }
 	,m_Camera{m_Window.width, m_Window.height}
+	, m_Scale{2.7f}
 {
 	Initialize( );
 }
@@ -61,9 +62,9 @@ void Game::Update( float elapsedSec )
 
 	for (GameObject* ptr : m_pGameObjects)
 	{
-		ptr->Update(elapsedSec);
+		ptr->Update(elapsedSec, m_Level);
 	}
-
+	
 }
 
 void Game::Draw( ) const
@@ -71,16 +72,17 @@ void Game::Draw( ) const
 	ClearBackground( );
 
 	glPushMatrix();
-
+	
 	m_Camera.Transform(m_Avatar->GetShape());
-	m_Level.Draw();
-
+	
+	m_Level.DrawForeground();
+			
 	// Draw all game objects
 	for (GameObject* ptr : m_pGameObjects)
 	{
 		ptr->Draw();
 	}
-
+		
 	glPopMatrix();
 
 

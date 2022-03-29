@@ -35,10 +35,9 @@ private:
 
 	// Level
 	Level m_Level;
-	
 	Avatar* m_Avatar;
-
 	Camera m_Camera;
+	const float m_Scale;
 	// FUNCTIONS
 
 	void Initialize( );

@@ -2,6 +2,7 @@
 #include "Avatar.h"
 #include "Texture.h"
 #include "utils.h"
+#include "Level.h"
 #include <iostream>
 
 int Avatar::m_GameObjectCounter = 0;
@@ -11,9 +12,11 @@ Avatar::Avatar()
 	m_pSpritesBodyText{new Texture("Resources/sprites/marco/MarcoBody.png")},
 	m_pSpritesLegsText{ new Texture("Resources/sprites/marco/MarcoLegs.png") },
 	m_Velocity{Point2f{0.f, 0.f}},
-	m_HorSpeed{400.f},
+	m_Acceleration{Point2f{0.f, -981.f}},
+	m_HorSpeed{200.f},
+	m_JumpSpeed{200.f},
 	m_MovingRight{ true },
-	m_StartPosition{20.f, 200.f},
+	m_StartPosition{20.f, 300.f},
 	m_MainActionState{ActionState::standing},
 	m_SubActionState{ActionState::iddle},
 	m_PreviousActionState{ActionState::standing}
@@ -27,7 +30,7 @@ Avatar::Avatar()
 
 void Avatar::Initialize()
 {
-	m_Scale = 2.5f;
+	m_Scale = 2.7f;
 
 	// Marco Body (Iddle)
 	InitSpriteValuesBody(4, 1, 4, 7.f, 33.f, 27.f, 29.f);
@@ -177,12 +180,21 @@ void Avatar::CheckSpritesToDraw() const
 	}
 }
 
-void Avatar::Update(float elapsedSeconds)
+void Avatar::Update(float elapsedSeconds, const Level& level)
 {
+	
 	HandleInput();
 	UpdateSrcRects();
 	UpdateSprite(elapsedSeconds);
 	Move(elapsedSeconds);
+
+	m_Velocity.y += m_Acceleration.y * elapsedSeconds;
+	m_DestRect.bottom += m_Velocity.y * elapsedSeconds;
+	m_DestRect.left += m_Velocity.x * elapsedSeconds;   // Keep moving in the direction of the jump
+
+	
+	level.HandleCollision(m_DestRect, m_Velocity);
+
 	
 }
 
@@ -237,7 +249,7 @@ void Avatar::UpdateSrcRects()
 			InitSpriteValuesLegs(1, 1, 1, 15.f, 25.f, 15.f, 15.f);
 
 			// Marco Body (Standing + Iddle)
-			InitSpriteValuesBody(10, 1, 3, 4.f, 33.f, 27.f, 29.f);
+			InitSpriteValuesBody(10, 1, 3, 4.f, 33.f, 29.f, 29.f);
 			m_DestRectTop.left = m_DestRect.left;
 		}
 
@@ -302,13 +314,15 @@ void Avatar::HandleInput()
 {
 	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
 
-	if ((pStates[SDL_SCANCODE_C]))
+	if (pStates[SDL_SCANCODE_C])
 	{
 		// Jump
 		m_MainActionState = ActionState::jumping;
+
+		m_Velocity.y = m_JumpSpeed;
 	}
 
-	if ((pStates[SDL_SCANCODE_DOWN]))
+	if (pStates[SDL_SCANCODE_DOWN])
 	{
 		// Crawling
 		m_MainActionState = ActionState::crawling;
@@ -326,8 +340,13 @@ void Avatar::HandleInput()
 		m_MovingRight = true;
 		m_SubActionState = ActionState::moving;
 
-		CheckMainActionState();		// Check wich main action the character is doing
+		CheckMainActionState();		// Check which main action the character is doing
 		
+		if (pStates[SDL_SCANCODE_RIGHT] && pStates[SDL_SCANCODE_C])
+		{
+			m_Velocity.y = m_JumpSpeed;
+		}
+
 	}
 	else if (pStates[SDL_SCANCODE_LEFT])
 	{
@@ -336,6 +355,12 @@ void Avatar::HandleInput()
 		m_SubActionState = ActionState::moving;
 
 		CheckMainActionState();
+
+
+		if (pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_C])
+		{
+			m_Velocity.y = m_JumpSpeed;
+		}
 	}
 	else
 	{
@@ -380,7 +405,9 @@ void Avatar::CheckMainActionState()
 void Avatar::Move(float elapsedSec)
 {
 	m_DestRect.left += m_Velocity.x * elapsedSec;
+	m_DestRect.bottom += m_Velocity.y * elapsedSec;
 	m_DestRectTop.left += m_Velocity.x * elapsedSec;
+	m_DestRectTop.bottom += m_Velocity.y * elapsedSec;
 }
 
 

@@ -4,7 +4,7 @@
 #include "Vector2f.h"
 
 class Texture;
-
+class Level;
 class Avatar final : public GameObject
 {
 public:
@@ -19,16 +19,20 @@ public:
 
 	Avatar();
 	Avatar(const Avatar& avatar) = delete;
+	Avatar(Avatar&& avatar) = delete;
 	Avatar& operator=(const Avatar& avatar) = delete;
+	Avatar& operator=(Avatar&& avatar) = delete;
 	~Avatar();
+
+	virtual void Draw() const override;
+	virtual void Update(float elapsedSeconds, const Level& level);
+
 
 	virtual void InitDestRect() override;
 	virtual void InitSrcRect() override;
 	virtual void InitDestRectTop() override;
 	virtual void InitSrcRectTop() override;
-	virtual void Draw() const override;
-	virtual void Update(float elapsedSeconds) override;
-
+	
 	void Initialize();
 	void InitSpriteValuesLegs(int cols, int rows, int frames, float frameTime, float widht, float height, float spriteSheetTop);
 	void InitSpriteValuesBody(int cols, int rows, int frames, float frameTime, float widht, float height, float spriteSheetTop);
@@ -61,7 +65,9 @@ private:
 
 	// Physics variables
 	Vector2f m_Velocity;
+	Vector2f m_Acceleration; // For gravity when jumping
 	const float m_HorSpeed;
+	const float m_JumpSpeed;
 
 	// Movement
 	bool m_MovingRight;

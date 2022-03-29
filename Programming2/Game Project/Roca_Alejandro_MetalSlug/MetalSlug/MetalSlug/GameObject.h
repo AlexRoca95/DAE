@@ -1,13 +1,15 @@
 #pragma once
 // Abstract class from which all objects from the game will inherit
 
+class Level;
+
 class GameObject
 {
 public:
 	GameObject(int id);
 	virtual ~GameObject() = default;
 	virtual void Draw() const = 0;
-	virtual void Update(float elapsedSeconds) = 0;
+	virtual void Update(float elapsedSeconds, const Level& level) = 0;
 	virtual void InitDestRect() = 0;
 	virtual void InitSrcRect() = 0;
 
