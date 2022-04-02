@@ -12,12 +12,12 @@ Game::Game( const Window& window )
 	, m_ShowInfo{ true }
 
 	// TODO: Adapt following initialization to your sprite properties
-	, m_Texture{ "Resources/MarcoLegs.png" }
+	, m_Texture{ "Resources/MarcoBody.png" }
 	, m_SpriteSheetLeft{0.0f}
-	, m_SpriteSheetTop{ 25.f }
-	, m_SpriteSheetWidth{360.f }
-	, m_SpriteSheetHeight{ 19.f }
-	, m_Cols{ 12 }
+	, m_SpriteSheetTop{ 27.f }
+	, m_SpriteSheetWidth{132.f }
+	, m_SpriteSheetHeight{ 27.f }
+	, m_Cols{ 4 }
 	, m_Rows{ 1 }
 	, m_FramesPerSec{ 10 }
 	, m_Scale{ 1.f }

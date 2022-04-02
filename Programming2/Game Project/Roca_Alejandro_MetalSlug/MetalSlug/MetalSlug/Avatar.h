@@ -27,25 +27,17 @@ public:
 	virtual void Draw() const override;
 	virtual void Update(float elapsedSeconds, const Level& level);
 
-
-	virtual void InitDestRect() override;
-	virtual void InitSrcRect() override;
-	virtual void InitDestRectTop() override;
-	virtual void InitSrcRectTop() override;
 	
 	void Initialize();
-	void InitSpriteValuesLegs(int cols, int rows, int frames, float frameTime, float widht, float height, float spriteSheetTop);
-	void InitSpriteValuesBody(int cols, int rows, int frames, float frameTime, float widht, float height, float spriteSheetTop);
 
-	void UpdateSprite(float elapsedSeconds);
 	void UpdateSrcRects();
 
 	void HandleInput();
 	void CheckMainActionState();
 	void Move(float elapsedSec);
-	void DrawAvatar() const;
 	void CheckSpritesToDraw() const;
 	void ResetSprite();
+	void AvatarFalling(float elapsedSec);
 
 
 	Rectf GetShape();
@@ -58,10 +50,6 @@ private:
 	ActionState m_SubActionState;
 	ActionState m_PreviousActionState;
 	Point2f m_StartPosition{};
-
-	// Sprite realated 
-	const Texture* m_pSpritesBodyText;
-	const Texture* m_pSpritesLegsText;
 
 	// Physics variables
 	Vector2f m_Velocity;

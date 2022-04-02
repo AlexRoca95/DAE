@@ -53,7 +53,7 @@ void Level::DrawForeground() const
 
 	//utils::DrawPolygon(m_Vertices[17]);
 
-	utils::DrawPolygon(m_TransformedVertices);
+	//utils::DrawPolygon(m_TransformedVertices);
 }
 
 
