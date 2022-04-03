@@ -8,13 +8,11 @@ class Level;
 class Avatar final : public GameObject
 {
 public:
+	
 	enum class ActionState {   // Main action of the character
 		standing,
 		crawling,
-		jumping,
-		moving,
-		iddle,
-		shooting
+		jumping	
 	};
 
 	Avatar();
@@ -33,9 +31,10 @@ public:
 	void UpdateSrcRects();
 
 	void HandleInput();
-	void CheckMainActionState();
+	void CheckPreviousKey();
+	void CheckActionState();
 	void Move(float elapsedSec);
-	void CheckSpritesToDraw() const;
+	void DrawAvatar() const;
 	void ResetSprite();
 	void AvatarFalling(float elapsedSec);
 
@@ -46,20 +45,24 @@ private:
 
 	// General
 	static int m_GameObjectCounter;
-	ActionState m_MainActionState;
-	ActionState m_SubActionState;
-	ActionState m_PreviousActionState;
+	ActionState m_ActionState;			// Current action state
 	Point2f m_StartPosition{};
 
 	// Physics variables
 	Vector2f m_Velocity;
-	Vector2f m_Acceleration; // For gravity when jumping
-	const float m_HorSpeed;
+	Vector2f m_Acceleration;		// For gravity when jumping
+	const float m_NormalSpeed;
+	const float m_SlowSpeed;
 	const float m_JumpSpeed;
 
-	// Movement
-	bool m_MovingRight;
-	
+	// Booleans
+	bool m_MovingRight;				// Moving right or not (for OpenGL)
+	bool m_Moving;					// Indicates if character is moving or not (for sprites)
+	bool m_ActionStateChanged;      // Indicates if ActionState has changed or not
+	bool m_OnGround;				// Avatar is in the ground or not
 
+	// In order to know when player press a different key
+	unsigned int m_KeyPressed;
+	unsigned int m_PreviousKey;
 };
 

@@ -11,14 +11,16 @@ Avatar::Avatar()
 	:GameObject(m_GameObjectCounter + 1),
 	m_Velocity{Point2f{0.f, 0.f}},
 	m_Acceleration{Point2f{0.f, -981.f}},
-	m_HorSpeed{200.f},
-	m_JumpSpeed{200.f},
+	m_NormalSpeed{200.f},
+	m_SlowSpeed{80.f},
+	m_JumpSpeed{550.f},
 	m_MovingRight{ true },
 	m_StartPosition{20.f, 300.f},
-	m_MainActionState{ActionState::standing},
-	m_SubActionState{ActionState::iddle},
-	m_PreviousActionState{ActionState::standing}
-	
+	m_ActionState{ActionState::standing},
+	m_KeyPressed{},
+	m_PreviousKey{},
+	m_ActionStateChanged{},
+	m_OnGround{}
 {
 	m_GameObjectCounter++;
 
@@ -32,7 +34,6 @@ Avatar::~Avatar()
 
 	delete m_pBottomSprite;
 	delete m_pTopSprite;
-
 }
 
 
@@ -70,37 +71,33 @@ void Avatar::Draw() const
 		glTranslatef(-(m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetFrameWidth() / 2),
 			-(m_pBottomSprite->GetDstRect().bottom + m_pBottomSprite->GetFrameHeight() / 2 ), 0.f);
 	
-		CheckSpritesToDraw();
+		DrawAvatar();
 
 		glPopMatrix();
 	}
 	else
 	{
-		CheckSpritesToDraw();
+		DrawAvatar();
 	}
 	
-
-	//DrawAvatar();
-	
-
 }
 
 
 
-// Check if we have to draw one or two sprites of the avatar
-void Avatar::CheckSpritesToDraw() const
+// Check how many sprites do we have to draw depending on the ActionState
+void Avatar::DrawAvatar() const
 {
 	
-	if (m_MainActionState != ActionState::crawling)
+	if (m_ActionState != ActionState::crawling)
 	{
-		// Draw both parts of the sprite
+		// Not Crawling --> Draw both parts of the sprite
 		m_pBottomSprite->Draw();
 		m_pTopSprite->Draw();
 
 	}
 	else
 	{
-		// Only one sprite drawing
+		// Crawling --> Only one sprite drawing
 		m_pBottomSprite->Draw();
 	}
 	
@@ -122,6 +119,11 @@ void Avatar::Update(float elapsedSeconds, const Level& level)
 	if (!level.IsOnGround(m_pBottomSprite->GetDstRect(), m_Velocity))
 	{
 		AvatarFalling(elapsedSeconds);
+		m_OnGround = false;
+	}
+	else
+	{
+		m_OnGround = true;
 	}
 
 	Move(elapsedSeconds);
@@ -147,10 +149,10 @@ void Avatar::Update(float elapsedSeconds, const Level& level)
 // Update which part of the spritesheet we draw
 void Avatar::UpdateSrcRects()
 {
-	switch (m_MainActionState)
+	switch (m_ActionState)
 	{
 	case Avatar::ActionState::standing:  // Character is standing
-
+		/*
 		if (m_SubActionState == ActionState::moving)
 		{
 			// Marco Legs (Standing + moving)
@@ -161,25 +163,63 @@ void Avatar::UpdateSrcRects()
 			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left + 14);
 		
 		}
-
-		if(m_SubActionState == ActionState::iddle)
+		*/
+		if(!m_Moving)
 		{
+			// Avatar not moving (Iddle)
 			// Marco Legs (Standing + Iddle)
 			m_pBottomSprite->UpdateValues(1, 1, 1, 15.f, 25.f, 15.f, 15.f);
 			
 			// Marco Body (Standing + Iddle)
 			m_pTopSprite->UpdateValues(3, 1, 4, 5.f, 33.f, 29.f, 29.f);
-			
 			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left);
 		}
+		else
+		{
+			// Avatar moving
+			// Marco Legs (Standing + moving)
+			m_pBottomSprite->UpdateValues(12, 1, 12, 15.f, 30.f, 19.f, 44.f);
 
+			// Marco Body (correct the position of the sprite)
+			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left + 14);
+		}
+		break;
+		/*
 		if (m_SubActionState == ActionState::shooting)
 		{
 
 		}
 
 		break;
+		*/
 	case Avatar::ActionState::crawling:
+
+		if (!m_Moving)
+		{
+			// Marco Body (Crawling + iddle)
+			m_pBottomSprite->UpdateValues(4, 1, 1, 5.f, 36.f, 24.f, 144.f);
+		}
+		else
+		{
+			// Marco Body (Crawling + moving)
+			m_pBottomSprite->UpdateValues(7, 1, 1, 5.f, 36.f, 24.f, 168.f);
+		}
+		break;
+
+	case Avatar::ActionState::jumping:
+		if (!m_Moving)
+		{
+			m_pTopSprite->UpdateValues(4, 1, 4, 5.f, 32.f, 25.f, 54.f);
+			m_pBottomSprite->UpdateValues(6, 1, 1, 15.f, 25.f, 25.f, 100.f);
+
+		}
+		else
+		{
+			m_pTopSprite->UpdateValues(4, 1, 4, 5.f, 32.f, 25.f, 54.f);
+			m_pBottomSprite->UpdateValues(6, 1, 1, 15.f, 32.f, 20.f, 120.f);
+		}
+		break;
+		/*
 		if (m_SubActionState == ActionState::moving)
 		{
 			m_pBottomSprite->UpdateValues(7, 1, 1, 5.f, 36.f, 24.f, 168.f);
@@ -196,120 +236,197 @@ void Avatar::UpdateSrcRects()
 			m_pBottomSprite->UpdateValues(7, 1, 1, 12.f, 50.f, 28.f, 197.f);
 		}
 		break;
+
+		
 	case Avatar::ActionState::jumping:
 		//m_pBottomSprite->UpdateValues(6, 1, 1, 15.f, 25.f, 25.f, 100.f);
 		// m_pBottomSprite->UpdateValues(6, 1, 1, 15.f, 32.f, 20.f, 120.f);
 		break;
+		*/
 	}
 
-	if (m_PreviousActionState != m_MainActionState)
+	// Previous Action State different?
+	if (m_ActionStateChanged)
 	{
-		// State changed from the previous one --> Reset sprite
-		//ResetSprite();
+		ResetSprite();
 	}
 
 }
 
-// Reset the sprite current frame and left pos of SrcRect so it draws correctly
+// Reset the Active frame to zero when the animation sprite has changed
 void Avatar::ResetSprite()
 {
-	/*
-	m_PreviousActionState = m_MainActionState;   // Save current state for next check
+	m_pBottomSprite->ResetActFrame();
+	m_pTopSprite->ResetActFrame();
 
-	m_CurrentFrame = 0;
-	m_CurrentFrameTop = 0;
-	m_SrcRect.left = (m_CurrentFrame * m_SrcRect.width);
-	m_SrcRectTop.left = (m_CurrentFrameTop * m_SrcRectTop.width);
-	*/
+	m_pBottomSprite->UpdateLeftSrcRect();
+	m_pTopSprite->UpdateLeftSrcRect();
+
+	m_ActionStateChanged = false;
+
 }
 
 void Avatar::HandleInput()
 {
 	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
-
-	if (pStates[SDL_SCANCODE_C])
-	{
-		// Jump
-		m_MainActionState = ActionState::jumping;
-
-		m_Velocity.y = m_JumpSpeed;
-	}
-
+	
 	if (pStates[SDL_SCANCODE_DOWN])
 	{
 		// Crawling
-		m_MainActionState = ActionState::crawling;
-	}
-	else
-	{
-		// Character up sprite
-		m_MainActionState = ActionState::standing;
-	}
-
-
-	if (pStates[SDL_SCANCODE_RIGHT])
-	{
-		// Right Movement
-		m_MovingRight = true;
-		m_SubActionState = ActionState::moving;
-
-		CheckMainActionState();		// Check which main action the character is doing
+		m_ActionState = ActionState::crawling;
+		m_Moving = false;
+		m_KeyPressed = 1;
+		m_Velocity.x = 0;
 		
-		if (pStates[SDL_SCANCODE_RIGHT] && pStates[SDL_SCANCODE_C])
+		// Check if Crawling + Moving
+		if (pStates[SDL_SCANCODE_DOWN] && pStates[SDL_SCANCODE_RIGHT])
 		{
-			m_Velocity.y = m_JumpSpeed;
+			m_Moving = true;
+			m_MovingRight = true;
+			m_KeyPressed = 2;
+			m_Velocity.x = m_SlowSpeed;  // Reduce speed movement
 		}
-
-	}
-	else if (pStates[SDL_SCANCODE_LEFT])
-	{
-		// Left Movement
-		m_MovingRight = false;
-		m_SubActionState = ActionState::moving;
-
-		CheckMainActionState();
-
-
-		if (pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_C])
+		
+		if (pStates[SDL_SCANCODE_DOWN] && pStates[SDL_SCANCODE_LEFT])
 		{
-			m_Velocity.y = m_JumpSpeed;
+			m_Moving = true;
+			m_MovingRight = false;
+			m_KeyPressed = 3;
+			m_Velocity.x = -m_SlowSpeed;
 		}
 	}
 	else
 	{
-		// No movement
-		m_Velocity.x = 0.f;
-		m_SubActionState = ActionState::iddle;
+		if (pStates[SDL_SCANCODE_RIGHT])
+		{
+			m_ActionState = ActionState::standing;
+			m_Moving = true;		// Moving 
+			m_MovingRight = true;  // and moving Right
+			m_KeyPressed = 4;
+			m_Velocity.x = m_NormalSpeed;
+			
+			// Check if Moving + Crawling
+			if (pStates[SDL_SCANCODE_RIGHT] && pStates[SDL_SCANCODE_DOWN])
+			{
+				m_ActionState = ActionState::crawling;
+				m_KeyPressed = 5;
+				m_Velocity.x = m_SlowSpeed;
+				
+			}
+
+			// Check if Moving + Jumping
+			if (pStates[SDL_SCANCODE_RIGHT] && pStates[SDL_SCANCODE_C])
+			{
+				if (m_OnGround)
+				{
+					m_ActionState = ActionState::jumping;
+					m_KeyPressed = 6;
+					m_Velocity.y = m_JumpSpeed;
+					m_Velocity.x = +m_NormalSpeed *2;	// Jump increases horizontal speed
+				}
+
+			}
+		}
+		else
+		{
+			if (pStates[SDL_SCANCODE_LEFT])
+			{
+				m_ActionState = ActionState::standing;
+				m_Moving = true;		// Moving 
+				m_MovingRight = false;  // To the left
+				m_KeyPressed = 7;
+				m_Velocity.x = -m_NormalSpeed;
+
+				if (pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_DOWN])
+				{
+					m_ActionState = ActionState::crawling;
+					m_KeyPressed = 8;
+					m_Velocity.x = -m_SlowSpeed;
+				}
+
+				// Check if Moving + Jumping
+				if (pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_C])
+				{
+					if (m_OnGround)
+					{
+						m_ActionState = ActionState::jumping;
+						m_KeyPressed = 9;
+						m_Velocity.y = m_JumpSpeed;
+						m_Velocity.x = -m_NormalSpeed*2;
+					}
+
+				}
+			}
+			else
+			{
+				if (pStates[SDL_SCANCODE_C])
+				{
+					if (m_OnGround)
+					{
+						m_ActionState = ActionState::jumping;
+						m_KeyPressed = 10;
+						m_Velocity.y = m_JumpSpeed;
+					}
+				}
+				else
+				{
+					if (m_OnGround)  // Keep moving forward until it reaches the ground
+					{
+						// Not Moving
+						m_ActionState = ActionState::standing;
+						m_Moving = false;
+						m_KeyPressed = 11;
+						m_Velocity.x = 0;
+					}
+				}
+				
+			}
+		}
+	}
+
+	// Check if player pressed a different key
+	CheckPreviousKey();
+
+
+}
+
+// Check if player pressed a different key
+void Avatar::CheckPreviousKey()
+{
+	if (m_KeyPressed != m_PreviousKey)
+	{
+		m_PreviousKey = m_KeyPressed;
+		m_ActionStateChanged = true;
 	}
 }
 
 // Check if the avatar is stading, crawling or jumping for the sprite drawing
-void Avatar::CheckMainActionState()
-{
-	if (m_MainActionState == ActionState::standing || m_MainActionState == ActionState::jumping)
+void Avatar::CheckActionState()
+{   
+	if (m_ActionState == ActionState::standing /* || m_MainActionState == ActionState::jumping */)
 	{
 		// Normal speed
 		if (m_MovingRight)
 		{
-			m_Velocity.x = m_HorSpeed;
+			m_Velocity.x = m_NormalSpeed;
 		}
 		else
 		{
-			m_Velocity.x = -m_HorSpeed;
+			m_Velocity.x = -m_NormalSpeed;
 		}
 		
 	}
 
-	if (m_MainActionState == ActionState::crawling)
+	if (m_ActionState == ActionState::crawling)
 	{
-		// Reduced speed
+		// Speed is reduced when crawling
 		if (m_MovingRight)
 		{
-			m_Velocity.x = m_HorSpeed / 2;
+			m_Velocity.x = m_SlowSpeed;
 		}
 		else
 		{
-			m_Velocity.x = -m_HorSpeed / 2;
+			m_Velocity.x = -m_SlowSpeed;
 		}
 		
 	}
@@ -328,6 +445,7 @@ void Avatar::Move(float elapsedSec)
 	m_pTopSprite->SetBottomDstRect(m_pBottomSprite->GetDstRect().bottom + m_pBottomSprite->GetFrameHeight() + 8 );
 
 
+	std::cout << m_Velocity.x << std::endl;
 
 }
 
@@ -335,7 +453,7 @@ void Avatar::Move(float elapsedSec)
 void Avatar::AvatarFalling(float elapsedSec)
 {
 	m_Velocity.y += m_Acceleration.y * elapsedSec;
-
+	
 	//Move(elapsedSec);
 /*
 	m_DestRect.bottom += m_Velocity.y * elapsedSec;

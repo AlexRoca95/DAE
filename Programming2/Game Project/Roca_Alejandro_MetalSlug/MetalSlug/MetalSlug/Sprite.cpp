@@ -161,6 +161,11 @@ void Sprite::Draw( /*const Point2f& pos, float scale*/) const
 	m_pTexture->Draw(m_DstRect, m_SrcRect);
 }
 
+void Sprite::ResetActFrame()
+{
+	m_ActFrame = 0;
+}
+
 float Sprite::GetFrameWidth( )
 {
 	//return m_pTexture->GetWidth( ) / m_Cols;
