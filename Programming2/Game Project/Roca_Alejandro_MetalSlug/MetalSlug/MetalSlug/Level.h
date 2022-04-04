@@ -27,6 +27,7 @@ public:
 private:
 
 	const Texture* m_pLevelTexture;
+	const Texture* m_pLevelLakeTexture;
 	const float m_Scale;
 	const Rectf m_Boundaries;
 	std::vector <std::vector<Point2f>> m_Vertices;

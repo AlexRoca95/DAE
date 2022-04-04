@@ -7,7 +7,8 @@
 
 
 Level::Level()
-	:m_pLevelTexture{ new Texture("resources/sprites/level/mission1_level.png")}
+	:m_pLevelTexture{ new Texture("resources/sprites/level/level.png")}
+	, m_pLevelLakeTexture{ new Texture("resources/sprites/level/level2.png") }
 	, m_Scale{ 2.7f }
 	, m_Boundaries{0.f, 0.f, m_pLevelTexture->GetWidth() * m_Scale,  m_pLevelTexture->GetHeight() * m_Scale }
 	, m_Vertices{}
@@ -21,6 +22,7 @@ Level::Level()
 Level::~Level()
 {
 	delete m_pLevelTexture;
+	delete m_pLevelLakeTexture;
 }
 
 // Scale the vertices from the SVG file so it matches with the map size
@@ -39,21 +41,41 @@ void Level::TransformSVGVertices()
 
 void Level::DrawBackground() const
 {
-
-}
-
-void Level::DrawForeground() const
-{
 	glPushMatrix();
 
 	glScalef(m_Scale, m_Scale, 1.f);    // Scale all the map to the correct size
 	m_pLevelTexture->Draw();
-	
+
 	glPopMatrix();
 
 	//utils::DrawPolygon(m_Vertices[17]);
 
 	//utils::DrawPolygon(m_TransformedVertices);
+
+}
+
+void Level::DrawForeground() const
+{
+	const float frameWidth{ m_pLevelLakeTexture->GetWidth() / 1 };
+	const float frameHeight{ m_pLevelLakeTexture->GetHeight() / 8 };
+	int row = 0 / 1;
+	int col = 0 % 8;
+
+	Rectf srcRect;
+	srcRect.height = frameHeight;
+	srcRect.width = frameWidth;
+	srcRect.left = 0 % 1 * srcRect.width;
+	srcRect.bottom = 0 / 1 * srcRect.height + srcRect.height;
+	Rectf destRect{ 1860,-2,srcRect.width,srcRect.height };
+
+	glPushMatrix();
+
+	glScalef(m_Scale, m_Scale, 1.f);    // Scale all the map to the correct size
+	m_pLevelLakeTexture->Draw();
+
+	glPopMatrix();
+
+	
 }
 
 

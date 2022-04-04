@@ -75,14 +75,15 @@ void Game::Draw( ) const
 	
 	m_Camera.Transform(m_Avatar->GetShape());
 	
-	m_Level.DrawForeground();
-			
+	m_Level.DrawBackground();
+	
 	// Draw all game objects
 	for (GameObject* ptr : m_pGameObjects)
 	{
 		ptr->Draw();
 	}
-		
+	m_Level.DrawForeground();
+
 	glPopMatrix();
 
 
