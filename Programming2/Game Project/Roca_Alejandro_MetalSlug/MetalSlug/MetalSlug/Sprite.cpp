@@ -2,6 +2,7 @@
 #include "Sprite.h"
 
 #include "Texture.h"
+#include <iostream>
 
 Sprite::Sprite( const std::string& path, int cols, int rows, float frameSec, float scale )
 	: m_Path{path}
@@ -118,7 +119,7 @@ Sprite::~Sprite( )
 	delete m_pTexture;
 }
 
-void Sprite::Update( float elapsedSec )
+void Sprite::Update( float elapsedSec, bool repeat )
 {
 	m_AccuSec += elapsedSec;
 
@@ -126,10 +127,18 @@ void Sprite::Update( float elapsedSec )
 	{
 		// Go to next frame
 		++m_ActFrame;
-		if ( m_ActFrame >= m_Cols * m_Rows )
+		if ( m_ActFrame >= m_Cols * m_Rows && repeat )
 		{
 			m_ActFrame = 0;
 			
+		}
+		else
+		{
+			if (m_ActFrame >= m_Cols * m_Rows && !repeat)
+			{
+				m_ActFrame = m_Cols;
+				std::cout << m_ActFrame << std::endl;
+			}
 		}
 		// Change the left pos of spritesheet according with active frame
 		UpdateLeftSrcRect();  
@@ -179,6 +188,12 @@ float Sprite::GetFrameHeight( )
 	return m_Height;
 }
 
+int Sprite::GetActFrame()
+{
+
+	return m_ActFrame;
+
+}
 Rectf Sprite::GetSrcRect()
 {
 	return m_SrcRect;

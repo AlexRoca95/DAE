@@ -12,7 +12,7 @@ public:
 	~Sprite( );
 	Sprite& operator=(const Sprite& spr1);
 	Sprite& operator= (Sprite&& spr1);
-	void Update( float elapsedSec );
+	void Update( float elapsedSec, bool repeat );
 	void Draw() const;
 
 	void UpdateLeftSrcRect();
@@ -23,6 +23,7 @@ public:
 	float GetFrameHeight( );
 	Rectf GetSrcRect();
 	Rectf& GetDstRect();
+	int GetActFrame();
 
 	// Setters
 	void SetDstRect(float x, float y, float width, float height);

@@ -12,7 +12,7 @@ public:
 	enum class ActionState {   // Main action of the character
 		standing,
 		crawling,
-		jumping	
+		jumping
 	};
 
 	Avatar();
@@ -29,7 +29,8 @@ public:
 	void Initialize();
 
 	void UpdateSrcRects();
-
+	void UpdateFrames(float elapsedSeconds);
+	void CorrectTopSprite();
 	void HandleInput();
 	void CheckPreviousKey();
 	void CheckActionState();
@@ -54,12 +55,15 @@ private:
 	const float m_NormalSpeed;
 	const float m_SlowSpeed;
 	const float m_JumpSpeed;
+	
+	float m_Offset;
 
 	// Booleans
 	bool m_MovingRight;				// Moving right or not (for OpenGL)
 	bool m_Moving;					// Indicates if character is moving or not (for sprites)
 	bool m_ActionStateChanged;      // Indicates if ActionState has changed or not
 	bool m_OnGround;				// Avatar is in the ground or not
+	bool m_Shooting;
 
 	// In order to know when player press a different key
 	unsigned int m_KeyPressed;
