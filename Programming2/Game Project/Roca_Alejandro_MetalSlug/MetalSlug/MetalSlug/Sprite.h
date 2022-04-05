@@ -24,6 +24,7 @@ public:
 	Rectf GetSrcRect();
 	Rectf& GetDstRect();
 	int GetActFrame();
+	Texture* GetTexture();
 
 	// Setters
 	void SetDstRect(float x, float y, float width, float height);

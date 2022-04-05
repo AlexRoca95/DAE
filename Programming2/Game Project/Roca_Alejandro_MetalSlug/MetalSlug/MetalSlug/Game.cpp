@@ -65,6 +65,7 @@ void Game::Update( float elapsedSec )
 		ptr->Update(elapsedSec, m_Level);
 	}
 	
+	m_Level.UpdateLevel(elapsedSec);
 }
 
 void Game::Draw( ) const

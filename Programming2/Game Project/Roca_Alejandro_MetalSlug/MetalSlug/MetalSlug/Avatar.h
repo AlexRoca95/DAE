@@ -57,6 +57,7 @@ private:
 	const float m_JumpSpeed;
 	
 	float m_Offset;
+	const float m_Scale;
 
 	// Booleans
 	bool m_MovingRight;				// Moving right or not (for OpenGL)

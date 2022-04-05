@@ -3,6 +3,7 @@
 
 class SVGParser;
 class Texture;
+class Sprite;
 class Level final
 {
 public:
@@ -17,6 +18,7 @@ public:
 
 	void DrawBackground() const;
 	void DrawForeground() const;
+	void UpdateLevel(float elapsedSec);
 
 	void TransformSVGVertices();
 	void HandleCollision(Rectf& actorShape, Vector2f& velocity) const;
@@ -26,9 +28,14 @@ public:
 
 private:
 
-	const Texture* m_pLevelTexture;
-	const Texture* m_pLevelLakeTexture;
-	const float m_Scale;
+	// Level sprites
+	Sprite* m_pLevelLakeTexture;
+	Sprite* m_pLevelTexture;
+	
+
+	const float m_Scale;			// Scale for the vertices
+	const float m_FrameRate;		// So all sprites of the level has the same framerate
+
 	const Rectf m_Boundaries;
 	std::vector <std::vector<Point2f>> m_Vertices;
 	std::vector<Point2f> m_TransformedVertices;

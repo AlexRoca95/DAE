@@ -22,7 +22,8 @@ Avatar::Avatar()
 	m_ActionStateChanged{},
 	m_OnGround{},
 	m_Offset{ 8 },
-	m_Shooting{ false }
+	m_Shooting{ false },
+	m_Scale{2.7f}
 {
 	m_GameObjectCounter++;
 
@@ -65,11 +66,11 @@ void Avatar::Draw() const
 	if (!m_MovingRight)
 	{
 		// Moving left --> Flip sprite to the left
+		
 		glPushMatrix();
-
 		glTranslatef(m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetFrameWidth() / 2, 
 			m_pBottomSprite->GetDstRect().bottom + m_pBottomSprite->GetFrameHeight() / 2 / 2, 0.f);
-		glScalef(-1, 1, 1);
+		glScalef(-1, 1, 1.f);
 		glTranslatef(-(m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetFrameWidth() / 2),
 			-(m_pBottomSprite->GetDstRect().bottom + m_pBottomSprite->GetFrameHeight() / 2 ), 0.f);
 	
@@ -79,7 +80,10 @@ void Avatar::Draw() const
 	}
 	else
 	{
+		
+		
 		DrawAvatar();
+	
 	}
 	
 }
@@ -172,7 +176,7 @@ void Avatar::UpdateSrcRects()
 			if (m_Shooting)
 			{	
 				// Marco Body (Standing + Shooting)
-				m_pTopSprite->UpdateValues(13, 1, 14, 20.f, 54.f, 27.f, 82.f);
+				m_pTopSprite->UpdateValues(13, 1, 13, 20.f, 54.f, 27.f, 82.f);
 				// Marco Legs (Standing + Iddle)
 				m_pBottomSprite->UpdateValues(1, 1, 1, 15.f, 25.f, 15.f, 15.f);
 
@@ -183,7 +187,7 @@ void Avatar::UpdateSrcRects()
 				m_pBottomSprite->UpdateValues(1, 1, 1, 15.f, 25.f, 15.f, 15.f);
 
 				// Marco Body (Standing + Iddle)
-				m_pTopSprite->UpdateValues(3, 1, 4, 5.f, 33.f, 29.f, 29.f);
+				m_pTopSprite->UpdateValues(3, 1, 3, 5.f, 33.f, 29.f, 29.f);
 			}
 			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left);
 		}
@@ -194,7 +198,7 @@ void Avatar::UpdateSrcRects()
 			m_pBottomSprite->UpdateValues(12, 1, 12, 15.f, 30.f, 19.f, 44.f);
 
 			// Marco Body (correct the position of the sprite)
-			m_pTopSprite->UpdateValues(3, 1, 4, 5.f, 33.f, 29.f, 29.f);
+			m_pTopSprite->UpdateValues(3, 1, 3, 5.f, 33.f, 29.f, 29.f);
 			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left + 14);
 		}
 		break;
@@ -205,24 +209,24 @@ void Avatar::UpdateSrcRects()
 		if (!m_Moving)
 		{
 			// Marco Body (Crawling + iddle)
-			m_pBottomSprite->UpdateValues(4, 1, 1, 5.f, 36.f, 24.f, 144.f);
+			m_pBottomSprite->UpdateValues(4, 1, 4, 5.f, 36.f, 24.f, 144.f);
 
 		}
 		else
 		{
 			// Marco Body (Crawling + moving)
-			m_pBottomSprite->UpdateValues(7, 1, 1, 5.f, 36.f, 24.f, 168.f);
+			m_pBottomSprite->UpdateValues(7, 1, 7, 5.f, 36.f, 24.f, 168.f);
 		}
 		break;
 
 	case Avatar::ActionState::jumping:
 		
 		// Marco Body
-		m_pTopSprite->UpdateValues(4, 1, 4, 11.f, 32.f, 25.f, 54.f);
+		m_pTopSprite->UpdateValues(5, 1, 5, 11.f, 32.f, 25.f, 54.f);
 		m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left - 18);
 
 		// Marco Legs
-		m_pBottomSprite->UpdateValues(5, 1, 1, 11.f, 25.f, 25.f, 100.f);
+		m_pBottomSprite->UpdateValues(6, 1, 6, 11.f, 25.f, 25.f, 100.f);
 
 		m_Offset = 35;
 		

@@ -136,7 +136,7 @@ void Sprite::Update( float elapsedSec, bool repeat )
 		{
 			if (m_ActFrame >= m_Cols * m_Rows && !repeat)
 			{
-				m_ActFrame = m_Cols;
+				m_ActFrame = m_Cols - 1;
 				std::cout << m_ActFrame << std::endl;
 			}
 		}
@@ -203,14 +203,18 @@ Rectf& Sprite::GetDstRect()
 	return m_DstRect;
 }
 
+Texture* Sprite::GetTexture()
+{
+	return m_pTexture;
+}
 
 void Sprite::SetDstRect(float x, float y, float width, float height)
 {
 
 	m_DstRect.left = x;
 	m_DstRect.bottom = y;
-	m_DstRect.width = width;
-	m_DstRect.height = height;
+	m_DstRect.width = width * m_Scale;
+	m_DstRect.height = height * m_Scale;
 
 }
 
@@ -232,14 +236,14 @@ void Sprite::SetBottomDstRect(float bottom)
 
 void Sprite::SetSrcRect(float y, float width, float height)
 {
-	m_SrcRect.bottom = m_SpriteSheetTop;
 	m_SrcRect.width = m_Width;
 	m_SrcRect.height = m_Height;
+	m_SrcRect.bottom = m_SpriteSheetTop * (m_ActFrame / m_Cols + 1);
 	
 }
 
 // Set the correct left sprite pos  of the spritesheet 
 void Sprite::UpdateLeftSrcRect()
 {
-	m_SrcRect.left = m_Width * m_ActFrame;
+	m_SrcRect.left = m_Width * (m_ActFrame % m_Cols);
 }
