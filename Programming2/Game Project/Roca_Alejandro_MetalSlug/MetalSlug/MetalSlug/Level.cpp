@@ -4,6 +4,7 @@
 #include "SVGParser.h"
 #include "Matrix2x3.h"
 #include "Sprite.h"
+#include <iostream>
 
 
 
@@ -45,14 +46,14 @@ void Level::TransformSVGVertices()
 void Level::DrawBackground() const
 {
 
-	m_pLevelTexture->UpdateValues(1, 8, 8, m_FrameRate, 4152.f, 352.f, 352.f);
+	m_pLevelTexture->UpdateValues(1, 8, 8, 15.f, 4152.f, 352.f, 352.f);
 	m_pLevelTexture->SetLeftDstRect(0);
 	m_pLevelTexture->SetBottomDstRect(0);
 	m_pLevelTexture->UpdateLeftSrcRect();
 
 	m_pLevelTexture->Draw();
 	
-	
+	std::cout << m_pLevelTexture->GetActFrame() << std::endl;
 
 	//utils::DrawPolygon(m_Vertices[17]);
 
@@ -62,7 +63,7 @@ void Level::DrawBackground() const
 
 void Level::DrawForeground() const
 {
-	m_pLevelLakeTexture->UpdateValues(1, 8, 8, m_FrameRate, 4152.f, 352.f, 352.f);
+	m_pLevelLakeTexture->UpdateValues(1, 8, 8, 20.f, 4152.f, 352.f, 352.f);
 	m_pLevelLakeTexture->SetLeftDstRect(0);
 	m_pLevelLakeTexture->SetBottomDstRect(0);
 	m_pLevelLakeTexture->UpdateLeftSrcRect();

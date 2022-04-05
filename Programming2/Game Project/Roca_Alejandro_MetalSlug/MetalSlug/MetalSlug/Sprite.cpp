@@ -238,7 +238,7 @@ void Sprite::SetSrcRect(float y, float width, float height)
 {
 	m_SrcRect.width = m_Width;
 	m_SrcRect.height = m_Height;
-	m_SrcRect.bottom = m_SpriteSheetTop * (m_ActFrame / m_Cols + 1);
+	m_SrcRect.bottom = y * (m_ActFrame / m_Cols + 1);
 	
 }
 

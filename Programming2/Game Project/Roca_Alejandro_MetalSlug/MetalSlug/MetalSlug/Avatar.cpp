@@ -80,8 +80,6 @@ void Avatar::Draw() const
 	}
 	else
 	{
-		
-		
 		DrawAvatar();
 	
 	}
