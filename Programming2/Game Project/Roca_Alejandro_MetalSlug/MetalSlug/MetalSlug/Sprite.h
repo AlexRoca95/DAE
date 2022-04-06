@@ -16,6 +16,7 @@ public:
 	void Draw() const;
 
 	void UpdateLeftSrcRect();
+	void UpdateBottomSrcRect();
 	void ResetActFrame();
 
 	// Getters

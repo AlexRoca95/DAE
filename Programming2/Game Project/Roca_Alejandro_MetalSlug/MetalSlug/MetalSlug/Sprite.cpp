@@ -137,11 +137,12 @@ void Sprite::Update( float elapsedSec, bool repeat )
 			if (m_ActFrame >= m_Cols * m_Rows && !repeat)
 			{
 				m_ActFrame = m_Cols - 1;
-				std::cout << m_ActFrame << std::endl;
+				//std::cout << m_ActFrame << std::endl;
 			}
 		}
-		// Change the left pos of spritesheet according with active frame
+		// Change the left and bottom pos of spritesheet according with active frame
 		UpdateLeftSrcRect();  
+		UpdateBottomSrcRect();
 
 		// Only keep the remaining time
 		m_AccuSec -= m_FrameSec;
@@ -246,4 +247,10 @@ void Sprite::SetSrcRect(float y, float width, float height)
 void Sprite::UpdateLeftSrcRect()
 {
 	m_SrcRect.left = m_Width * (m_ActFrame % m_Cols);
+}
+
+
+void Sprite::UpdateBottomSrcRect()
+{
+	m_SrcRect.bottom = m_SpriteSheetTop * (m_ActFrame / m_Cols + 1);
 }

@@ -16,6 +16,7 @@ public:
 
 protected:
 	int m_Id;
+	const float m_Scale;	// Scale for all the gameObjects
 
 	// Sprites needed for the game objects
 	Sprite* m_pTopSprite;

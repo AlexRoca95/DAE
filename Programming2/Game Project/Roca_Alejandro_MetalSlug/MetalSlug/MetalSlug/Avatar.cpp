@@ -11,9 +11,9 @@ Avatar::Avatar()
 	:GameObject(m_GameObjectCounter + 1),
 	m_Velocity{Point2f{0.f, 0.f}},
 	m_Acceleration{Point2f{0.f, -981.f}},
-	m_NormalSpeed{1000.f},
+	m_NormalSpeed{400.f},
 	m_SlowSpeed{80.f},
-	m_JumpSpeed{550.f},
+	m_JumpSpeed{500.f},
 	m_MovingRight{ true },
 	m_StartPosition{1000.f, 300.f},
 	m_ActionState{ActionState::jumping},
@@ -22,8 +22,7 @@ Avatar::Avatar()
 	m_ActionStateChanged{},
 	m_OnGround{},
 	m_Offset{ 8 },
-	m_Shooting{ false },
-	m_Scale{2.7f}
+	m_Shooting{ false }
 {
 	m_GameObjectCounter++;
 
@@ -110,9 +109,6 @@ void Avatar::DrawAvatar() const
 void Avatar::Update(float elapsedSeconds, const Level& level)
 {
 
-	level.HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
-	
-
 	HandleInput();
 	UpdateSrcRects();
 
@@ -132,6 +128,8 @@ void Avatar::Update(float elapsedSeconds, const Level& level)
 
 	//std::cout << m_OnGround << std::endl;
 	Move(elapsedSeconds);
+
+	level.HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
 
 }
 
