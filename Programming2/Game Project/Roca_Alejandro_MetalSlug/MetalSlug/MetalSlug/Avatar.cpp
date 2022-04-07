@@ -15,7 +15,7 @@ Avatar::Avatar()
 	m_SlowSpeed{80.f},
 	m_JumpSpeed{500.f},
 	m_MovingRight{ true },
-	m_StartPosition{1000.f, 300.f},
+	m_StartPosition{8000.f, 300.f},
 	m_ActionState{ActionState::jumping},
 	m_KeyPressed{},
 	m_PreviousKey{},

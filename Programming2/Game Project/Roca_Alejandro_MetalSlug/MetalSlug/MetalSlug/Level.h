@@ -18,7 +18,7 @@ public:
 
 	void DrawBackground() const;
 	void DrawForeground() const;
-	void UpdateLevel(float elapsedSec);
+	void Update(float elapsedSec, const Rectf& ActorShape);
 
 	void TransformSVGVertices();
 	void InitSprites();
@@ -36,12 +36,18 @@ private:
 	Sprite* m_pLevelLakeTexture;
 	Sprite* m_pLevelTexture;
 	
+	// Sprites and drawing
+	const float m_Scale;				// Scale for the vertices
+	const int m_NumberOfPaths;			// Total number of paths from the SVG File
+	const int m_Rows;
 
-	const float m_Scale;			// Scale for the vertices
-	const float m_FrameRate;		// So all sprites of the level has the same framerate
-	const int m_NumberOfPaths;		// Total number of paths from the SVG File
+	// Boundaries of the level
+	Rectf m_Boundaries;
+	float m_UpperBoundary;					// Upper limit for the level
+	float m_BottomBoundary;
+	const float m_UpperBoundaryValue;
+	const float m_XPosChangeBoundaries;    // Position from where boundaries will change
 
-	const Rectf m_Boundaries;
 	std::vector <std::vector<Point2f>> m_Vertices;
 	std::vector<std::vector<Point2f>> m_TransformedVertices;
 	SVGParser* m_pLevelSVG;
@@ -49,6 +55,8 @@ private:
 	// Collisions with the Level
 	void HorizCollision(Rectf& actorShape, Vector2f& velocity) const;
 	void VerticalCollision(Rectf& actorShape, Vector2f& velocity) const;
+
+	void UpdateLevelBoundaries();
 
 };
 

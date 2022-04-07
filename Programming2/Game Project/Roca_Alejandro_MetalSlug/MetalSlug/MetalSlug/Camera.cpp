@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Camera.h"
+#include <iostream>
 
 Camera::Camera(float width, float height)
 	:m_Width(width)
@@ -41,19 +42,25 @@ void Camera::Clamp(Point2f& bottomLeftPos) const
 		bottomLeftPos.y = m_LevelBoundaries.height - m_Height;
 	}
 
+
+
 	if (m_LevelBoundaries.bottom > bottomLeftPos.y)
 	{
-		bottomLeftPos.y = 0;
+		bottomLeftPos.y = m_LevelBoundaries.bottom;
+		
 	}
+
+	
 }
 
-// Keep track of the Avatar pos and center the camera around him
+// Keep track of the pos of the Avatar
+// Camera is center in X pos but not in Y in order to not exit the boundaries of the level
 Point2f Camera::Track(const Rectf target) const
 {
 	Point2f newPos{};
 
 	newPos.x = (target.left + target.width / 2) - (m_Width / 2);
-	newPos.y = (target.bottom + target.height / 2) - (m_Height / 2);
+	newPos.y = (target.bottom + target.height / 2) - (m_Height / 4.5f);
 
 	return newPos;
 }

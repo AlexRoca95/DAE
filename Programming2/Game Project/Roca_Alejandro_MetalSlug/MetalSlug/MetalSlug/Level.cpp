@@ -11,14 +11,23 @@
 Level::Level()
 	:m_pLevelTexture{ new Sprite("Resources/sprites/level/levelLeft.png") }
 	, m_pLevelLakeTexture{ new Sprite("Resources/sprites/level/levelRight.png")}
-	, m_Boundaries{0.f, 0.f, m_pLevelTexture->GetTexture()->GetWidth() * m_Scale,  m_pLevelTexture->GetTexture()->GetHeight() * m_Scale }
 	, m_Vertices{}
 	, m_pLevelSVG{}
 	, m_Scale{2.7f}
-	, m_FrameRate{20.f}
 	, m_NumberOfPaths{18}
 	, m_TransformedVertices{}
+	, m_Rows{ 8 }
+	, m_UpperBoundary{}
+	, m_UpperBoundaryValue{ 130.f }
+	, m_BottomBoundary{}
+	, m_Boundaries{}
+	, m_XPosChangeBoundaries{3340.f * m_Scale}
+
 {
+
+	m_Boundaries.left = 0.f;
+	m_Boundaries.width = m_pLevelTexture->GetTexture()->GetWidth() * m_Scale;
+	UpdateLevelBoundaries();
 	m_pLevelSVG->GetVerticesFromSvgFile("resources/sprites/Level/level.svg", m_Vertices);
 	TransformSVGVertices();
 
@@ -58,7 +67,8 @@ void Level::DrawBackground() const
 	m_pLevelTexture->Draw();
 	//utils::DrawPolygon(m_Vertices[17]);
 
-	//utils::DrawPolygon(m_TransformedVertices);
+	
+	//utils::DrawPolygon(m_TransformedVertices[17]);
 }
 
 void Level::DrawForeground() const
@@ -66,11 +76,28 @@ void Level::DrawForeground() const
 	m_pLevelLakeTexture->Draw();
 }
 
-void Level::UpdateLevel(float elapsedSec)
+void Level::Update(float elapsedSec, const Rectf& ActorShape)
 {
 	
+	if (ActorShape.left + ActorShape.width >= m_XPosChangeBoundaries)
+	{
+		m_UpperBoundary = 0.f;
+	}
+	else
+	{
+		m_UpperBoundary = m_UpperBoundaryValue;
+	}
+
+
+
+	// Update height and bottom boundaries
+	UpdateLevelBoundaries();
+
+	// Update the sprites
 	m_pLevelTexture->Update(elapsedSec, true);
 	m_pLevelLakeTexture->Update(elapsedSec, true);
+
+	//std::cout << m_pLevelTexture->GetActFrame() << std::endl;
 
 }
 
@@ -162,16 +189,24 @@ bool Level::IsOnGround(const Rectf& actorShape, const Vector2f& velocity) const
 void Level::InitSprites()
 {
 	// Mid Sprite Level Background
-	m_pLevelTexture->UpdateValues(1, 8, 8, 15.f, 4152.f, 352.f, 352.f);
+	m_pLevelTexture->UpdateValues(1, m_Rows, m_Rows, 15.f, 4152.f, 352.f, 352.f);
 	m_pLevelTexture->SetLeftDstRect(0);
 	m_pLevelTexture->SetBottomDstRect(0);
 	m_pLevelTexture->UpdateLeftSrcRect();
 
 	// Front Sprite Level 
-	m_pLevelLakeTexture->UpdateValues(1, 8, 8, 20.f, 4152.f, 352.f, 352.f);
+	m_pLevelLakeTexture->UpdateValues(1, m_Rows, m_Rows, 20.f, 4152.f, 352.f, 352.f);
 	m_pLevelLakeTexture->SetLeftDstRect(0);
 	m_pLevelLakeTexture->SetBottomDstRect(0);
 	m_pLevelLakeTexture->UpdateLeftSrcRect();
+
+}
+
+// Update bottom and height of the level boundaries
+void Level::UpdateLevelBoundaries()
+{
+	m_Boundaries.bottom = m_BottomBoundary;
+	m_Boundaries.height = ((m_pLevelTexture->GetTexture()->GetHeight() / m_Rows) - m_UpperBoundary)* m_Scale;
 
 }
 

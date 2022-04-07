@@ -49,23 +49,14 @@ void Game::Cleanup( )
 
 void Game::Update( float elapsedSec )
 {
-	// Check keyboard state
-	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-	//if ( pStates[SDL_SCANCODE_RIGHT] )
-	//{
-	//	std::cout << "Right arrow key is down\n";
-	//}
-	//if ( pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
-	//{
-	//	std::cout << "Left and up arrow keys are down\n";
-	//}
-
+	
 	for (GameObject* ptr : m_pGameObjects)
 	{
 		ptr->Update(elapsedSec, m_Level);
 	}
 	
-	m_Level.UpdateLevel(elapsedSec);
+	m_Level.Update(elapsedSec, m_Avatar->GetShape());
+	m_Camera.SetLevelBoundaries(m_Level.GetBoundaries());
 }
 
 void Game::Draw( ) const
