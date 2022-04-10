@@ -11,11 +11,11 @@ Avatar::Avatar()
 	:GameObject(m_GameObjectCounter + 1),
 	m_Velocity{Point2f{0.f, 0.f}},
 	m_Acceleration{Point2f{0.f, -981.f}},
-	m_NormalSpeed{400.f},
+	m_NormalSpeed{300.f},
 	m_SlowSpeed{80.f},
 	m_JumpSpeed{500.f},
 	m_MovingRight{ true },
-	m_StartPosition{8000.f, 300.f},
+	m_StartPosition{80.f, 300.f},
 	m_ActionState{ActionState::jumping},
 	m_KeyPressed{},
 	m_PreviousKey{},
@@ -110,10 +110,11 @@ void Avatar::Update(float elapsedSeconds, const Level& level)
 {
 
 	HandleInput();
-	UpdateSrcRects();
-
 	UpdateFrames(elapsedSeconds);
+	
+	
 
+	UpdateSrcRects();
 
 
 	if (!level.IsOnGround(m_pBottomSprite->GetDstRect(), m_Velocity))
@@ -127,34 +128,76 @@ void Avatar::Update(float elapsedSeconds, const Level& level)
 	}
 
 	//std::cout << m_OnGround << std::endl;
-	Move(elapsedSeconds);
 
+	Move(elapsedSeconds);
 	level.HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
+
+	//std::cout << m_pTopSprite->GetActFrame() << std::endl;
 
 }
 
 void Avatar::UpdateFrames(float elapsedSeconds)
 {
-	bool repeat{ true };  // To know if the animation has to keep repeating or not
+	bool repeatBottom{ true };  // To know if the animation has to keep repeating or not
+	bool repeatTop{ true };
 
 	switch (m_ActionState)
 	{
 	case Avatar::ActionState::standing:
-		repeat = true;
+		repeatBottom = true;
+		repeatTop = true;
 		break;
 	case Avatar::ActionState::crawling:
-		repeat = true;
+		repeatBottom = true;
+		repeatTop = true;
 		break;
 	case Avatar::ActionState::jumping:
-		repeat = false;
+		repeatBottom = false;
+		repeatTop = false;
 		break;
 
 	}
 
 	
+	if (m_Shooting)
+	{
+		repeatTop = false;
+		repeatBottom = true;
+	}
+	
 	// Update active frames
-	m_pTopSprite->Update(elapsedSeconds, repeat);
-	m_pBottomSprite->Update(elapsedSeconds, repeat);
+	m_pTopSprite->Update(elapsedSeconds, repeatTop);
+	m_pBottomSprite->Update(elapsedSeconds, repeatBottom);
+
+	if(m_Shooting && m_pTopSprite->GetAnimationFinish())
+	{
+		ResetSprite();
+		m_Shooting = false;
+		
+		//m_pTopSprite->ResetAnimationFinish(false);
+		
+	}
+	
+	
+
+	if (m_pTopSprite->GetAnimationFinish())
+	{
+		std::cout << "Top Sprite finish? Yes " << std::endl;
+	}
+	else
+	{
+		std::cout << "Top Sprite finish? No " << std::endl;
+	}
+
+	if (m_pBottomSprite->GetAnimationFinish())
+	{
+		std::cout << "Bottom Sprite finish? Yes " << std::endl;
+	}
+	else
+	{
+		std::cout << "Bottom Sprite finish? No " << std::endl;
+	}
+	
 }
 
 // Update which part of the spritesheet we draw
@@ -168,34 +211,49 @@ void Avatar::UpdateSrcRects()
 		if(!m_Moving)
 		{
 			// Avatar not moving (Iddle)
-
 			if (m_Shooting)
 			{	
-				// Marco Body (Standing + Shooting)
-				m_pTopSprite->UpdateValues(13, 1, 13, 20.f, 54.f, 27.f, 82.f);
-				// Marco Legs (Standing + Iddle)
-				m_pBottomSprite->UpdateValues(1, 1, 1, 15.f, 25.f, 15.f, 15.f);
-
+				m_Offset = 14;
+				// Marco Body ( Shooting)
+				m_pTopSprite->UpdateValues(10, 1, 10, 15.f, 60.f, 27.f, 275.f);
+				m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left - 15);
 			}
 			else
 			{
-				// Marco Legs (Standing + Iddle)
-				m_pBottomSprite->UpdateValues(1, 1, 1, 15.f, 25.f, 15.f, 15.f);
-
 				// Marco Body (Standing + Iddle)
 				m_pTopSprite->UpdateValues(3, 1, 3, 5.f, 33.f, 29.f, 29.f);
+				m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left);
+				//m_pTopSprite->UpdateValues(6, 1, 6, 15.f, 40.f, 29.f, 118.f);   // Pointing Up
+				//m_pTopSprite->UpdateValues(4, 1, 4, 15.f, 40.f, 29.f, 147.f);   // Holding
+				//m_pTopSprite->UpdateValues(6, 1, 6, 15.f, 40.f, 29.f, 176.f);   // Going down 
+				//m_pTopSprite->UpdateValues(10, 1, 10, 15.f, 40.f, 70.f, 248.f);   // Shooting Up
+				//m_pTopSprite->UpdateValues(5, 1, 5, 15.f, 36.f, 30.f, 307.f);	// Grenade
 			}
-			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left);
+
+			// Marco Legs (Standing + Iddle)
+			m_pBottomSprite->UpdateValues(1, 1, 1, 15.f, 25.f, 15.f, 15.f);
+			
 		}
 		else
 		{
+
+			if (m_Shooting)
+			{
+				m_Offset = 18;
+				// Marco Body (Shooting)
+				m_pTopSprite->UpdateValues(10, 1, 10, 15.f, 60.f, 27.f, 275.f);
+			}
+			else
+			{
+				// Marco Body Moving 
+				m_pTopSprite->UpdateValues(12, 1, 12, 20.f, 40.f, 29.f, 87.f);
+				
+			}
 			// Avatar moving
 			// Marco Legs (Standing + moving)
-			m_pBottomSprite->UpdateValues(12, 1, 12, 15.f, 30.f, 19.f, 44.f);
-
-			// Marco Body (correct the position of the sprite)
-			m_pTopSprite->UpdateValues(3, 1, 3, 5.f, 33.f, 29.f, 29.f);
-			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left + 14);
+			m_pBottomSprite->UpdateValues(12, 1, 12, 20.f, 30.f, 19.f, 44.f);
+			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left); // (correct the position of the sprite)
+			
 		}
 		break;
 		
@@ -204,8 +262,10 @@ void Avatar::UpdateSrcRects()
 
 		if (!m_Moving)
 		{
+
 			// Marco Body (Crawling + iddle)
 			m_pBottomSprite->UpdateValues(4, 1, 4, 5.f, 36.f, 24.f, 144.f);
+			//m_pBottomSprite->UpdateValues(16, 1, 16, 15.f, 40.f, 40.f, 242.f);  // Dying
 
 		}
 		else
@@ -213,44 +273,38 @@ void Avatar::UpdateSrcRects()
 			// Marco Body (Crawling + moving)
 			m_pBottomSprite->UpdateValues(7, 1, 7, 5.f, 36.f, 24.f, 168.f);
 		}
+
+		if (m_Shooting)
+		{
+			m_pBottomSprite->UpdateValues(7, 1, 7, 15.f, 50.f, 28.f, 197.f);
+		}
+
 		break;
 
 	case Avatar::ActionState::jumping:
 		
-		// Marco Body
-		m_pTopSprite->UpdateValues(5, 1, 5, 11.f, 32.f, 25.f, 54.f);
-		m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left - 18);
+		m_Offset = 35;
+		if (m_Shooting)
+		{
+			m_Offset = 18;
+			// Marco Body (Shooting)
+			m_pTopSprite->UpdateValues(10, 1, 10, 15.f, 60.f, 27.f, 275.f);
+			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left - 18);
+		}
+		else
+		{
+			// Marco Body
+			m_pTopSprite->UpdateValues(5, 1, 5, 11.f, 32.f, 25.f, 54.f);
+			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left - 18);
+		}
+		
 
 		// Marco Legs
 		m_pBottomSprite->UpdateValues(6, 1, 6, 11.f, 25.f, 25.f, 100.f);
 
-		m_Offset = 35;
+	
 		
-		break;
-		/*
-		if (m_SubActionState == ActionState::moving)
-		{
-			m_pBottomSprite->UpdateValues(7, 1, 1, 5.f, 36.f, 24.f, 168.f);
-		}
-
-		if (m_SubActionState == ActionState::iddle)
-		{
-			// Marco Body (Crawling + iddle)
-			m_pBottomSprite->UpdateValues(4, 1, 1, 5.f, 36.f, 24.f, 144.f);
-		}
-
-		if (m_SubActionState == ActionState::shooting)
-		{
-			m_pBottomSprite->UpdateValues(7, 1, 1, 12.f, 50.f, 28.f, 197.f);
-		}
-		break;
-
-		
-	case Avatar::ActionState::jumping:
-		//m_pBottomSprite->UpdateValues(6, 1, 1, 15.f, 25.f, 25.f, 100.f);
-		// m_pBottomSprite->UpdateValues(6, 1, 1, 15.f, 32.f, 20.f, 120.f);
-		break;
-		*/
+		break;	
 	}
 
 	// Previous Action State different?
@@ -264,11 +318,26 @@ void Avatar::UpdateSrcRects()
 // Reset the Active frame to zero when the animation sprite has changed
 void Avatar::ResetSprite()
 {
-	m_pBottomSprite->ResetActFrame();
-	m_pTopSprite->ResetActFrame();
 
-	m_pBottomSprite->UpdateLeftSrcRect();
-	m_pTopSprite->UpdateLeftSrcRect();
+	if (m_Shooting)
+	{
+
+		// Only reset the Top sprite for shooting
+		m_pTopSprite->ResetActFrame();
+		
+		m_pTopSprite->UpdateLeftSrcRect();
+
+	}
+	else
+	{
+		// Reset both sprites
+		m_pBottomSprite->ResetActFrame();
+		m_pTopSprite->ResetActFrame();
+
+		m_pBottomSprite->UpdateLeftSrcRect();
+		m_pTopSprite->UpdateLeftSrcRect();
+	}
+	
 
 	m_ActionStateChanged = false;
 
@@ -277,7 +346,8 @@ void Avatar::ResetSprite()
 void Avatar::HandleInput()
 {
 	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
-	
+
+
 	if (pStates[SDL_SCANCODE_DOWN])
 	{
 		// Crawling
@@ -311,7 +381,6 @@ void Avatar::HandleInput()
 	{
 		if (pStates[SDL_SCANCODE_RIGHT])
 		{
-			
 			if (m_OnGround)
 			{
 				// Only change animation when on Ground
@@ -349,14 +418,6 @@ void Avatar::HandleInput()
 				}
 
 			}
-
-			// Moving + shotting
-			if (pStates[SDL_SCANCODE_RIGHT] && pStates[SDL_SCANCODE_X])
-			{
-
-				//m_Shooting = true;
-
-			}
 			
 		}
 		else
@@ -373,7 +434,7 @@ void Avatar::HandleInput()
 				m_Velocity.x = -m_NormalSpeed;
 				m_Moving = true;		// Moving 
 				m_MovingRight = false;  // To the left
-				
+			
 
 				if (pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_DOWN])
 				{
@@ -406,6 +467,7 @@ void Avatar::HandleInput()
 						m_Velocity.y = m_JumpSpeed;
 						
 					}
+
 				}
 				else
 				{
@@ -414,15 +476,12 @@ void Avatar::HandleInput()
 						// Not Moving
 						m_ActionState = ActionState::standing;
 						m_Moving = false;
+						
 						m_KeyPressed = 11;
+						
 						m_Velocity.x = 0;
 						
-
-						if (pStates[SDL_SCANCODE_X])
-						{
-							//m_KeyPressed = 12;
-							//m_Shooting = true;
-						}
+						
 					}
 				}
 				
@@ -430,9 +489,11 @@ void Avatar::HandleInput()
 		}
 	}
 
+	
+
 	// Check if player pressed a different key
 	CheckPreviousKey();
-
+	
 
 }
 
@@ -443,6 +504,7 @@ void Avatar::CheckPreviousKey()
 	{
 		m_PreviousKey = m_KeyPressed;
 		m_ActionStateChanged = true;
+
 	}
 }
 
@@ -497,6 +559,15 @@ void Avatar::Move(float elapsedSec)
 
 }
 
+void Avatar::Shoot()
+{
+	m_Shooting = true;
+	m_KeyPressed = 12;
+
+	// Check if player pressed a different key
+	CheckPreviousKey();
+}
+
 void Avatar::CorrectTopSprite()
 {
 	m_pTopSprite->SetBottomDstRect(m_pBottomSprite->GetDstRect().bottom + m_pBottomSprite->GetFrameHeight() + m_Offset);
@@ -514,3 +585,5 @@ Rectf Avatar::GetShape()
 {
 	return m_pBottomSprite->GetDstRect();
 }
+
+

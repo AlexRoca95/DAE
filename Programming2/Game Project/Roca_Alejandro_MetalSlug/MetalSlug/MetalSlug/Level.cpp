@@ -67,7 +67,6 @@ void Level::DrawBackground() const
 	m_pLevelTexture->Draw();
 	//utils::DrawPolygon(m_Vertices[17]);
 
-	
 	//utils::DrawPolygon(m_TransformedVertices[17]);
 }
 

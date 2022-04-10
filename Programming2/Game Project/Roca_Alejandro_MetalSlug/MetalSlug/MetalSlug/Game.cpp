@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "Avatar.h"
+#include <iostream>
 
 
 Game::Game( const Window& window ) 
@@ -57,6 +58,9 @@ void Game::Update( float elapsedSec )
 	
 	m_Level.Update(elapsedSec, m_Avatar->GetShape());
 	m_Camera.SetLevelBoundaries(m_Level.GetBoundaries());
+
+
+	
 }
 
 void Game::Draw( ) const
@@ -84,6 +88,13 @@ void Game::Draw( ) const
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
 	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
+
+	if (e.keysym.sym == SDLK_x)
+	{
+		m_Avatar->Shoot();
+		//std::cout << "Entro" << std::endl;
+	}
+	
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
@@ -124,6 +135,8 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 	//	std::cout << " middle button " << std::endl;
 	//	break;
 	//}
+
+	
 }
 
 void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )

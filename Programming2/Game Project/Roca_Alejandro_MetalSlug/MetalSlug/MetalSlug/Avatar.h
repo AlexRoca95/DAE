@@ -39,6 +39,7 @@ public:
 	void ResetSprite();
 	void AvatarFalling(float elapsedSec);
 
+	void Shoot();
 
 	Rectf GetShape();
 

@@ -17,6 +17,7 @@ Sprite::Sprite( const std::string& path, int cols, int rows, float frameSec, flo
 	, m_Width{}
 	, m_Height{} 
 	, m_Scale{ scale }
+	, m_Finish{}
 {
 	//m_pTexture = new Texture( path );
 }
@@ -121,8 +122,19 @@ Sprite::~Sprite( )
 
 void Sprite::Update( float elapsedSec, bool repeat )
 {
+	if (repeat)
+	{
+		m_Finish = true;  // Loop Animation
+	}
+	else
+	{
+		m_Finish = false; // No loop Animation
+	}
+	
 	m_AccuSec += elapsedSec;
 
+
+	
 	if ( m_AccuSec > m_FrameSec )
 	{
 		// Go to next frame
@@ -136,7 +148,9 @@ void Sprite::Update( float elapsedSec, bool repeat )
 		{
 			if (m_ActFrame >= m_Cols * m_Rows && !repeat)
 			{
+				std::cout << "entro" << std::endl;
 				m_ActFrame = m_Cols - 1;
+				m_Finish = true;	// Animation finished
 				//std::cout << m_ActFrame << std::endl;
 			}
 		}
@@ -209,6 +223,11 @@ Texture* Sprite::GetTexture()
 	return m_pTexture;
 }
 
+bool Sprite::GetAnimationFinish()
+{
+	return m_Finish;
+}
+
 void Sprite::SetDstRect(float x, float y, float width, float height)
 {
 
@@ -243,6 +262,8 @@ void Sprite::SetSrcRect(float y, float width, float height)
 	
 }
 
+
+
 // Set the correct left sprite pos  of the spritesheet 
 void Sprite::UpdateLeftSrcRect()
 {
@@ -253,4 +274,10 @@ void Sprite::UpdateLeftSrcRect()
 void Sprite::UpdateBottomSrcRect()
 {
 	m_SrcRect.bottom = m_SpriteSheetTop * (m_ActFrame / m_Cols + 1);
+}
+
+
+void Sprite::ResetAnimationFinish(bool reset)
+{
+	m_Finish = reset;
 }

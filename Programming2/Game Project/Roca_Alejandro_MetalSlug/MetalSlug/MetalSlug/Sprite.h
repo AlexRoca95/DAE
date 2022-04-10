@@ -26,6 +26,7 @@ public:
 	Rectf& GetDstRect();
 	int GetActFrame();
 	Texture* GetTexture();
+	bool GetAnimationFinish();
 
 	// Setters
 	void SetDstRect(float x, float y, float width, float height);
@@ -33,6 +34,7 @@ public:
 	void SetLeftDstRect(float left);
 	void SetBottomDstRect(float bottom);
 	void SetSrcRect(float y, float width, float height);
+	void ResetAnimationFinish(bool reset);
 
 	
 	
@@ -53,6 +55,7 @@ private:
 	float m_Width;
 	float m_Height;
 	float m_Scale;
+	bool m_Finish;		// Animation finished or not
 	
 };
 
