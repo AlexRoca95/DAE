@@ -49,7 +49,7 @@ public:
 	~Avatar();
 
 	virtual void Draw() const override;
-	virtual void Update(float elapsedSeconds, const Level& level);
+	virtual void Update(float elapsedSeconds, const Level* level);
 
 	void Shoot();
 

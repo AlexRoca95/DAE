@@ -5,21 +5,23 @@
 #include <iostream>
 
 Sprite::Sprite( const std::string& path, int cols, int rows, float frameSec, float scale )
-	: m_Path{path}
+	: m_Path{ path }
 	, m_Cols( cols )
 	, m_Rows( rows )
 	, m_FrameSec( frameSec )
-	, m_AccuSec{}
-	, m_ActFrame{}
+	, m_AccuSec{ }
+	, m_ActFrame{ }
 	, m_pTexture{ new Texture( m_Path ) }
-	, m_SrcRect{}
-	, m_DstRect{}
-	, m_Width{}
-	, m_Height{} 
+	, m_SrcRect{ }
+	, m_DstRect{ }
+	, m_Width{ }
+	, m_Height{ } 
 	, m_Scale{ scale }
-	, m_Finish{ false }
+	, m_IsFinish{ false }
+	, m_Frames{ }
+	, m_SpriteSheetTop{ }
 {
-	//m_pTexture = new Texture( path );
+	
 }
 
 
@@ -31,8 +33,14 @@ Sprite::Sprite(const Sprite& spr1)
 	, m_ActFrame{spr1.m_ActFrame}
 	, m_Path{spr1.m_Path}
 	, m_pTexture{new Texture(spr1.m_Path)}  // Not copy the sprite, only the path
-	, m_SrcRect{}
-	, m_DstRect{}
+	, m_SrcRect{ spr1.m_SrcRect }
+	, m_DstRect{ spr1.m_DstRect }
+	, m_Width{ spr1.m_Width }
+	, m_Height{ spr1.m_Height }
+	, m_Scale{ spr1.m_Scale }
+	, m_IsFinish{ spr1.m_IsFinish }
+	, m_Frames{ spr1.m_Frames }
+	, m_SpriteSheetTop{ spr1.m_SpriteSheetTop }
 {
 
 }
@@ -49,6 +57,12 @@ Sprite& Sprite::operator=(const Sprite& spr1)
 		m_Path = spr1.m_Path;
 		m_SrcRect = spr1.m_SrcRect;
 		m_DstRect = spr1.m_DstRect;
+		m_Width = spr1.m_Width;
+		m_Height = spr1.m_Height;
+		m_Scale = spr1.m_Scale;
+		m_IsFinish = spr1.m_IsFinish;
+		m_Frames = spr1.m_Frames;
+		m_SpriteSheetTop = spr1.m_SpriteSheetTop;
 
 		delete m_pTexture;
 
@@ -70,6 +84,12 @@ Sprite::Sprite(Sprite&& spr1)
 	, m_pTexture{ new Texture(spr1.m_Path) }  // Not copy the sprite, only the path
 	, m_SrcRect{}
 	, m_DstRect{}
+	, m_Width{ spr1.m_Width }
+	, m_Height{ spr1.m_Height }
+	, m_Scale{ spr1.m_Scale }
+	, m_IsFinish{ spr1.m_IsFinish }
+	, m_Frames{ spr1.m_Frames }
+	, m_SpriteSheetTop{ spr1.m_SpriteSheetTop }
 
 {
 	spr1.m_Cols = 0;
@@ -79,6 +99,13 @@ Sprite::Sprite(Sprite&& spr1)
 	spr1.m_ActFrame = 0;
 	spr1.m_DstRect = Rectf{};
 	spr1.m_SrcRect = Rectf{};
+	spr1.m_Width = 0.f;
+	spr1.m_Height = 0.f;
+	spr1.m_Scale = 0.f;
+	spr1.m_IsFinish = false;
+	spr1.m_Frames = 0;
+	spr1.m_SpriteSheetTop = 0.f;
+
 	delete spr1.m_pTexture;
 	spr1.m_pTexture = nullptr;
 
@@ -98,6 +125,13 @@ Sprite& Sprite::operator= (Sprite&& spr1)
 		m_Path = spr1.m_Path;
 		m_SrcRect = spr1.m_SrcRect;
 		m_DstRect = spr1.m_DstRect;
+		m_Width = spr1.m_Width;
+		m_Height = spr1.m_Height;
+		m_Scale = spr1.m_Scale;
+		m_IsFinish = spr1.m_IsFinish;
+		m_Frames = spr1.m_Frames;
+		m_SpriteSheetTop = spr1.m_SpriteSheetTop;
+
 		m_pTexture = new Texture(spr1.m_Path);
 
 		spr1.m_Cols = 0;
@@ -108,6 +142,13 @@ Sprite& Sprite::operator= (Sprite&& spr1)
 		spr1.m_DstRect = Rectf{};
 		spr1.m_SrcRect = Rectf{};
 		spr1.m_Path = "";
+		spr1.m_Width = 0.f;
+		spr1.m_Height = 0.f;
+		spr1.m_Scale = 0.f;
+		spr1.m_IsFinish = false;
+		spr1.m_Frames = 0;
+		spr1.m_SpriteSheetTop = 0.f;
+
 		delete spr1.m_pTexture;
 		spr1.m_pTexture = nullptr;
 	}
@@ -120,29 +161,31 @@ Sprite::~Sprite( )
 	delete m_pTexture;
 }
 
-void Sprite::Update( float elapsedSec, bool repeat )
+void Sprite::Update( float elapsedSec, const bool repeat )
 {
 	m_AccuSec += elapsedSec;
 	
 	if ( m_AccuSec > m_FrameSec )
 	{
-		// Go to next frame
 		++m_ActFrame;
-		if ( m_ActFrame >= m_Cols * m_Rows && repeat )
+
+		// Loop Animations
+		if ( m_ActFrame >= ( m_Cols * m_Rows ) && repeat )
 		{
 			m_ActFrame = 0;
 			
 		}
 		else
 		{
-			if (m_ActFrame >= m_Cols * m_Rows && !repeat)
+			// No Loop Animations
+			if (m_ActFrame >= (m_Cols * m_Rows ) && !repeat)
 			{
-				//std::cout << "entro" << std::endl;
 				m_ActFrame = m_Cols - 1;
-				m_Finish = true;	// Animation finished
+				m_IsFinish = true;	// Animation finished
 
 			}
 		}
+
 		// Change the left and bottom pos of spritesheet according with active frame
 		UpdateLeftSrcRect();  
 		UpdateBottomSrcRect();
@@ -153,7 +196,8 @@ void Sprite::Update( float elapsedSec, bool repeat )
 }
 
 // Update all the values for the sprite. 
-void Sprite::UpdateValues(int cols, int rows, int frames, float frameSec, float width, float height, float spriteSheetTop)
+void Sprite::UpdateValues(const int cols, const int rows, const int frames, const float frameSec, const float width,
+	const float height, const float spriteSheetTop)
 {
 
 	m_Frames = frames;
@@ -169,55 +213,52 @@ void Sprite::UpdateValues(int cols, int rows, int frames, float frameSec, float 
 
 }
 
-void Sprite::Draw( /*const Point2f& pos, float scale*/) const
+void Sprite::Draw( ) const
 {
 	m_pTexture->Draw(m_DstRect, m_SrcRect);
 }
 
-void Sprite::ResetActFrame()
+void Sprite::ResetActFrame( )
 {
 	m_ActFrame = 0;
 }
 
-float Sprite::GetFrameWidth( )
+float Sprite::GetFrameWidth( ) const
 {
-	//return m_pTexture->GetWidth( ) / m_Cols;
-
 	return m_Width;
 }
 
-float Sprite::GetFrameHeight( )
+float Sprite::GetFrameHeight( ) const
 {
-	//return m_pTexture->GetHeight( ) / m_Rows;
 	return m_Height;
 }
 
-int Sprite::GetActFrame()
+int Sprite::GetActFrame( ) const
 {
 
 	return m_ActFrame;
 
 }
-Rectf Sprite::GetSrcRect()
+Rectf Sprite::GetSrcRect( ) const
 {
 	return m_SrcRect;
 }
-Rectf& Sprite::GetDstRect()
+Rectf& Sprite::GetDstRect( ) 
 {
 	return m_DstRect;
 }
 
-Texture* Sprite::GetTexture()
+Texture* Sprite::GetTexture( ) const
 {
 	return m_pTexture;
 }
 
-bool Sprite::GetAnimationFinish()
+bool Sprite::GetAnimationFinish( ) const
 {
-	return m_Finish;
+	return m_IsFinish;
 }
 
-void Sprite::SetDstRect(float x, float y, float width, float height)
+void Sprite::SetDstRect( const float x, const float y, const float width, const float height )
 {
 
 	m_DstRect.left = x;
@@ -227,23 +268,23 @@ void Sprite::SetDstRect(float x, float y, float width, float height)
 
 }
 
-void Sprite::SetDstRect(float width, float height)
+void Sprite::SetDstRect( const float width, const float height )
 {
-	m_DstRect.width = width * m_Scale;  // Apply the scale of the sprite we want
+	m_DstRect.width = width * m_Scale;  
 	m_DstRect.height = height * m_Scale;
 }
 
-void Sprite::SetLeftDstRect(float left)
+void Sprite::SetLeftDstRect( const float left )
 {
 	m_DstRect.left = left;
 }
 
-void Sprite::SetBottomDstRect(float bottom)
+void Sprite::SetBottomDstRect( const float bottom )
 {
 	m_DstRect.bottom = bottom;
 }
 
-void Sprite::SetSrcRect(float y, float width, float height)
+void Sprite::SetSrcRect( const float y, const float width, const float height )
 {
 	m_SrcRect.width = m_Width;
 	m_SrcRect.height = m_Height;
@@ -253,20 +294,20 @@ void Sprite::SetSrcRect(float y, float width, float height)
 
 
 
-// Set the correct left sprite pos  of the spritesheet 
-void Sprite::UpdateLeftSrcRect()
+// Set the correct left sprite pos of the spritesheet 
+void Sprite::UpdateLeftSrcRect( )
 {
 	m_SrcRect.left = m_Width * (m_ActFrame % m_Cols);
 }
 
 
-void Sprite::UpdateBottomSrcRect()
+void Sprite::UpdateBottomSrcRect( )
 {
 	m_SrcRect.bottom = m_SpriteSheetTop * (m_ActFrame / m_Cols + 1);
 }
 
 
-void Sprite::ResetAnimationFinish(bool reset)
+void Sprite::ResetAnimationFinish( bool reset )
 {
-	m_Finish = reset;
+	m_IsFinish = reset;
 }

@@ -30,13 +30,13 @@ private:
 	// DATA MEMBERS
 	const Window m_Window;
 
-	// All Objects from the game
+	// All GameObjects from the game
 	std::vector <GameObject*> m_pGameObjects;
 
 	// Level
-	Level m_Level;
+	Level* m_Level;
 	Avatar* m_Avatar;
-	Camera m_Camera;
+	Camera* m_Camera;
 	const float m_Scale;
 
 

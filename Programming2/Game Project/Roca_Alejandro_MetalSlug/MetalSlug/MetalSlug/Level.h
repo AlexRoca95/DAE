@@ -20,37 +20,40 @@ public:
 	void DrawForeground() const;
 	void Update(float elapsedSec, const Rectf& ActorShape);
 
-	void TransformSVGVertices();
-	void InitSprites();
-
 	// Collisions with the Level
 	void HandleCollision(Rectf& actorShape, Vector2f& velocity) const;
 	bool IsOnGround(const Rectf& actorShape, const Vector2f& velocity) const;
 
-	
+
 	Rectf GetBoundaries() const;
 
 private:
 
-	// Level sprites
+	// SPRITES
 	Sprite* m_pLevelLakeTexture;
 	Sprite* m_pLevelTexture;
 	
 	// Sprites and drawing
-	const float m_Scale;				// Scale for the vertices
-	const int m_NumberOfPaths;			// Total number of paths from the SVG File
+	const float m_Scale;						// Scale for the vertices
+	const int m_NrOfPaths;					// Total number of paths from the SVG File
 	const int m_Rows;
 
 	// Boundaries of the level
 	Rectf m_Boundaries;
-	float m_UpperBoundary;					// Upper limit for the level
-	float m_BottomBoundary;
+	float m_UpperBoundary;						// Upper limit for the level
+	float m_BotBoundary;
 	const float m_UpperBoundaryValue;
-	const float m_XPosChangeBoundaries;    // Position from where boundaries will change
+	const float m_BoundariesChangePos;			 // Position from where boundaries will change
 
 	std::vector <std::vector<Point2f>> m_Vertices;
 	std::vector<std::vector<Point2f>> m_TransformedVertices;
 	SVGParser* m_pLevelSVG;
+
+	
+	// PRIVATE FUNCTIONS 
+
+	void InitSprites();
+	void TransformSVGVertices();
 
 	// Collisions with the Level
 	void HorizCollision(Rectf& actorShape, Vector2f& velocity) const;

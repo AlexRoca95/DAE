@@ -109,7 +109,7 @@ void Avatar::DrawAvatar() const
 	
 }
 
-void Avatar::Update(float elapsedSeconds, const Level& level)
+void Avatar::Update(float elapsedSeconds, const Level* level)
 {
 
 	HandleInput();
@@ -120,7 +120,7 @@ void Avatar::Update(float elapsedSeconds, const Level& level)
 	UpdateBotSrcRect();
 
 
-	if (!level.IsOnGround(m_pBottomSprite->GetDstRect(), m_Velocity))
+	if (!level->IsOnGround(m_pBottomSprite->GetDstRect(), m_Velocity))
 	{
 		AvatarFalling(elapsedSeconds);
 		m_OnGround = false;
@@ -131,7 +131,7 @@ void Avatar::Update(float elapsedSeconds, const Level& level)
 	}
 
 	Move(elapsedSeconds);
-	level.HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
+	level->HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
 
 	if (m_Velocity.x == 0)
 	{

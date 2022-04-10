@@ -5,7 +5,9 @@ public:
 	Camera(float width, float height);
 	~Camera() = default;
 	Camera(const Camera& level) = delete;
+	Camera(Camera&& gameObject) = delete;
 	Camera& operator=(const Camera& level) = delete;
+	Camera& operator=(Camera&& camera) = delete;
 
 	void SetLevelBoundaries(const Rectf& levelBoundaries);
 	void Transform(const Rectf& target) const;

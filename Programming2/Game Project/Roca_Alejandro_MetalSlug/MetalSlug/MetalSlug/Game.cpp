@@ -6,8 +6,10 @@
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
-	,m_Camera{m_Window.width, m_Window.height}
-	, m_Scale{2.7f}
+	, m_Camera{ new Camera(m_Window.width, m_Window.height) }
+	, m_Level{ new Level }
+	, m_Avatar{ new Avatar }
+	, m_Scale{ 2.7f }
 {
 	Initialize( );
 }
@@ -25,20 +27,19 @@ void Game::Initialize( )
 
 void Game::InitAvatar()
 {
-	m_Avatar = new Avatar();
+	
 	m_pGameObjects.push_back(m_Avatar);
 
 }
 
 void Game::InitCamera()
 {
-	m_Camera.SetLevelBoundaries(m_Level.GetBoundaries());
+	m_Camera->SetLevelBoundaries(m_Level->GetBoundaries());
 
 }
 
 void Game::Cleanup( )
 {
-
 	for (GameObject* ptr : m_pGameObjects)
 	{
 		delete ptr;
@@ -46,6 +47,8 @@ void Game::Cleanup( )
 
 	m_pGameObjects.clear();  // Remove all elements from the vector
 
+	delete m_Level;
+	delete m_Camera;
 }
 
 void Game::Update( float elapsedSec )
@@ -56,11 +59,8 @@ void Game::Update( float elapsedSec )
 		ptr->Update(elapsedSec, m_Level);
 	}
 	
-	m_Level.Update(elapsedSec, m_Avatar->GetShape());
-	m_Camera.SetLevelBoundaries(m_Level.GetBoundaries());
-
-
-	
+	m_Level->Update(elapsedSec, m_Avatar->GetShape());
+	m_Camera->SetLevelBoundaries(m_Level->GetBoundaries());
 }
 
 void Game::Draw( ) const
@@ -69,16 +69,17 @@ void Game::Draw( ) const
 
 	glPushMatrix();
 	
-	m_Camera.Transform(m_Avatar->GetShape());
+		m_Camera->Transform(m_Avatar->GetShape());
 	
-	m_Level.DrawBackground();
+		m_Level->DrawBackground();
 	
-	// Draw all game objects
-	for (GameObject* ptr : m_pGameObjects)
-	{
-		ptr->Draw();
-	}
-	m_Level.DrawForeground();
+		// Draw all game objects
+		for (GameObject* ptr : m_pGameObjects)
+		{
+			ptr->Draw();
+		}
+
+		m_Level->DrawForeground();
 
 	glPopMatrix();
 
@@ -87,12 +88,10 @@ void Game::Draw( ) const
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
-	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
 
 	if (e.keysym.sym == SDLK_x)
 	{
 		m_Avatar->Shoot();
-		//std::cout << "Entro" << std::endl;
 	}
 	
 }

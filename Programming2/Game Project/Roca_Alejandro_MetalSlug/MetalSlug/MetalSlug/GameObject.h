@@ -3,20 +3,22 @@
 #include "Sprite.h"
 
 class Level;
-
-
 class GameObject
 {
 public:
-	GameObject(int id);
+	GameObject(const int id);
 	virtual ~GameObject() = default;
-	virtual void Draw() const = 0;
-	virtual void Update(float elapsedSeconds, const Level& level) = 0;
+	GameObject(const GameObject& gameObject) = delete;
+	GameObject(GameObject&& gameObject) = delete;
+	GameObject& operator=(const GameObject& gameObject) = delete;
+	GameObject& operator=(GameObject&& gameObject) = delete;
 
+	virtual void Draw() const = 0;
+	virtual void Update(float elapsedSeconds, const Level* level) = 0;
 
 protected:
 	int m_Id;
-	const float m_Scale;	// Scale for all the gameObjects
+	const float m_Scale;				// Scale for all the gameObjects
 
 	// Sprites needed for the game objects
 	Sprite* m_pTopSprite;

@@ -10,27 +10,28 @@
 
 Level::Level()
 	:m_pLevelTexture{ new Sprite("Resources/sprites/level/levelLeft.png") }
-	, m_pLevelLakeTexture{ new Sprite("Resources/sprites/level/levelRight.png")}
-	, m_Vertices{}
-	, m_pLevelSVG{}
-	, m_Scale{2.7f}
-	, m_NumberOfPaths{18}
-	, m_TransformedVertices{}
+	, m_pLevelLakeTexture{ new Sprite("Resources/sprites/level/levelRight.png") }
+	, m_Vertices{ }
+	, m_pLevelSVG{ }
+	, m_Scale{ 2.7f }
+	, m_NrOfPaths{ 18 }
+	, m_TransformedVertices{ }
 	, m_Rows{ 8 }
-	, m_UpperBoundary{}
+	, m_UpperBoundary{ }
 	, m_UpperBoundaryValue{ 130.f }
-	, m_BottomBoundary{}
-	, m_Boundaries{}
-	, m_XPosChangeBoundaries{3340.f * m_Scale}
+	, m_BotBoundary{ }
+	, m_Boundaries{ }
+	, m_BoundariesChangePos{ 3340.f * m_Scale }
 
 {
 
 	m_Boundaries.left = 0.f;
 	m_Boundaries.width = m_pLevelTexture->GetTexture()->GetWidth() * m_Scale;
+
 	UpdateLevelBoundaries();
+
 	m_pLevelSVG->GetVerticesFromSvgFile("resources/sprites/Level/level.svg", m_Vertices);
 	TransformSVGVertices();
-
 
 	InitSprites();
 }
@@ -40,7 +41,6 @@ Level::~Level()
 {
 	delete m_pLevelTexture;
 	delete m_pLevelLakeTexture;
-
 }
 
 // Scale the vertices from the SVG file so it matches with the map size
@@ -54,7 +54,7 @@ void Level::TransformSVGVertices()
 	// TRS Transformation
 	matWorld = matScale;
 
-	for (int i{ 0 }; i < m_NumberOfPaths; i++)
+	for (int i{ 0 }; i < m_NrOfPaths; i++)
 	{
 		m_TransformedVertices.push_back(matWorld.Transform(m_Vertices[i])); // Apply transformation to vertices
 	}
@@ -65,7 +65,6 @@ void Level::TransformSVGVertices()
 void Level::DrawBackground() const
 {
 	m_pLevelTexture->Draw();
-	//utils::DrawPolygon(m_Vertices[17]);
 
 	//utils::DrawPolygon(m_TransformedVertices[17]);
 }
@@ -77,8 +76,8 @@ void Level::DrawForeground() const
 
 void Level::Update(float elapsedSec, const Rectf& ActorShape)
 {
-	
-	if (ActorShape.left + ActorShape.width >= m_XPosChangeBoundaries)
+	// Check if Actor has crossed the point for changing boundaries
+	if ( (ActorShape.left + ActorShape.width) >= m_BoundariesChangePos)
 	{
 		m_UpperBoundary = 0.f;
 	}
@@ -87,16 +86,12 @@ void Level::Update(float elapsedSec, const Rectf& ActorShape)
 		m_UpperBoundary = m_UpperBoundaryValue;
 	}
 
-
-
 	// Update height and bottom boundaries
 	UpdateLevelBoundaries();
 
 	// Update the sprites
 	m_pLevelTexture->Update(elapsedSec, true);
 	m_pLevelLakeTexture->Update(elapsedSec, true);
-
-	//std::cout << m_pLevelTexture->GetActFrame() << std::endl;
 
 }
 
@@ -114,19 +109,19 @@ void Level::VerticalCollision(Rectf& actorShape, Vector2f& velocity) const
 	Point2f rayBottom{ actorShape.left + actorShape.width / 2, actorShape.bottom + 1 };
 
 	utils::HitInfo hitInfo{}; // Info about the intersection point
-	for (int i{ 0 }; i < m_NumberOfPaths; i++)
+
+	for ( int i{ 0 }; i < m_NrOfPaths; i++ )
 	{
-		if (utils::Raycast(m_TransformedVertices[i], ray, rayBottom, hitInfo))
+		if ( utils::Raycast(m_TransformedVertices[i], ray, rayBottom, hitInfo) )
 		{
-			if (velocity.y <= 0.f)  // Only check if Avatar is going down
+			if ( velocity.y <= 0.f )  // Only check if Avatar is going down
 			{
-				if (rayBottom.y <= hitInfo.intersectPoint.y)
+				if ( rayBottom.y <= hitInfo.intersectPoint.y )
 				{
 					// Collision with the ground
 					actorShape.bottom = hitInfo.intersectPoint.y;
 					velocity.y = 0.f;
-
-					break; // If collision == true ,no need to check the others
+					break; // If collision == true --> no need to check the others
 				}
 			}
 		}
@@ -142,13 +137,12 @@ void Level::HorizCollision(Rectf& actorShape, Vector2f& velocity) const
 
 	utils::HitInfo hitInfo{};
 
-	if (utils::Raycast(m_TransformedVertices[17], ray, rayEnd, hitInfo))
+	if ( utils::Raycast(m_TransformedVertices[17], ray, rayEnd, hitInfo) )
 	{
-		if (rayEnd.x <= hitInfo.intersectPoint.x)
+		if ( rayEnd.x <= hitInfo.intersectPoint.x )
 		{
 			actorShape.left = hitInfo.intersectPoint.x;
 			velocity.x = 0.f;
-	
 		}
 	}
 
@@ -159,20 +153,19 @@ bool Level::IsOnGround(const Rectf& actorShape, const Vector2f& velocity) const
 {
 	bool onGround = false;
 
-	// The ray
 	Point2f ray{ actorShape.left + actorShape.width / 2, actorShape.bottom + actorShape.height/2 };
 	Point2f rayBottom{ actorShape.left + actorShape.width / 2, actorShape.bottom - 1 };
 
-	// The raycast
 	utils::HitInfo hitInfo{}; // Will hold info about the intersection point
 
-	for (int i{ 0 }; i < m_NumberOfPaths; i++)
+	for (int i{ 0 }; i < m_NrOfPaths; i++)
 	{
-		if (utils::Raycast(m_TransformedVertices[i], ray, rayBottom, hitInfo))
+		if ( utils::Raycast(m_TransformedVertices[i], ray, rayBottom, hitInfo) )
 		{
-			if (velocity.y <= 0.f)
+			if ( velocity.y <= 0.f )
 			{
-				if (actorShape.bottom <= hitInfo.intersectPoint.y)
+				// Only check when Actor is going down
+				if ( actorShape.bottom <= hitInfo.intersectPoint.y )
 				{
 					onGround = true;
 					break;  
@@ -181,7 +174,6 @@ bool Level::IsOnGround(const Rectf& actorShape, const Vector2f& velocity) const
 		}
 	}
 	
-
 	return onGround;
 }
 
@@ -204,8 +196,8 @@ void Level::InitSprites()
 // Update bottom and height of the level boundaries
 void Level::UpdateLevelBoundaries()
 {
-	m_Boundaries.bottom = m_BottomBoundary;
-	m_Boundaries.height = ((m_pLevelTexture->GetTexture()->GetHeight() / m_Rows) - m_UpperBoundary)* m_Scale;
+	m_Boundaries.bottom = m_BotBoundary;
+	m_Boundaries.height = ( (m_pLevelTexture->GetTexture()->GetHeight() / m_Rows) - m_UpperBoundary ) * m_Scale;
 
 }
 
