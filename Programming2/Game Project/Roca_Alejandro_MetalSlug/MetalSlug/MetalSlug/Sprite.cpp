@@ -17,7 +17,7 @@ Sprite::Sprite( const std::string& path, int cols, int rows, float frameSec, flo
 	, m_Width{}
 	, m_Height{} 
 	, m_Scale{ scale }
-	, m_Finish{}
+	, m_Finish{ false }
 {
 	//m_pTexture = new Texture( path );
 }
@@ -122,18 +122,7 @@ Sprite::~Sprite( )
 
 void Sprite::Update( float elapsedSec, bool repeat )
 {
-	if (repeat)
-	{
-		m_Finish = true;  // Loop Animation
-	}
-	else
-	{
-		m_Finish = false; // No loop Animation
-	}
-	
 	m_AccuSec += elapsedSec;
-
-
 	
 	if ( m_AccuSec > m_FrameSec )
 	{
@@ -148,10 +137,10 @@ void Sprite::Update( float elapsedSec, bool repeat )
 		{
 			if (m_ActFrame >= m_Cols * m_Rows && !repeat)
 			{
-				std::cout << "entro" << std::endl;
+				//std::cout << "entro" << std::endl;
 				m_ActFrame = m_Cols - 1;
 				m_Finish = true;	// Animation finished
-				//std::cout << m_ActFrame << std::endl;
+
 			}
 		}
 		// Change the left and bottom pos of spritesheet according with active frame

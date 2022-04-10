@@ -16,13 +16,20 @@ Avatar::Avatar()
 	m_JumpSpeed{500.f},
 	m_MovingRight{ true },
 	m_StartPosition{80.f, 300.f},
-	m_ActionState{ActionState::jumping},
+	m_TopActionState{TopActionState::jumping},
+	m_BotActionState{BottomActionState::jumping},
+	m_CurrentTopAnimation{Animations::jumping},
+	m_CurrentBotAnimation{ Animations::jumping },
+	m_PreviousTopAnimation{ m_CurrentTopAnimation },
+	m_PreviousBotAnimation{ m_CurrentBotAnimation },
 	m_KeyPressed{},
 	m_PreviousKey{},
-	m_ActionStateChanged{},
+	m_TopActionStateChanged{},
+	m_BotActionStateChanged{},
 	m_OnGround{},
 	m_Offset{ 8 },
-	m_Shooting{ false }
+	m_Shooting{ false },
+	m_Moving{ false }
 {
 	m_GameObjectCounter++;
 
@@ -91,7 +98,7 @@ void Avatar::Draw() const
 void Avatar::DrawAvatar() const
 {
 	
-	if (m_ActionState != ActionState::crawling)
+	if (m_TopActionState != TopActionState::crawling)
 	{
 		// Not Crawling --> Draw both parts of the sprite
 		m_pBottomSprite->Draw();
@@ -112,9 +119,10 @@ void Avatar::Update(float elapsedSeconds, const Level& level)
 	HandleInput();
 	UpdateFrames(elapsedSeconds);
 	
-	
+	UpdateTopSrcRect();
+	UpdateBotSrcRect();
 
-	UpdateSrcRects();
+	//UpdateSrcRects();
 
 
 	if (!level.IsOnGround(m_pBottomSprite->GetDstRect(), m_Velocity))
@@ -134,75 +142,183 @@ void Avatar::Update(float elapsedSeconds, const Level& level)
 
 	//std::cout << m_pTopSprite->GetActFrame() << std::endl;
 
+	if (m_Velocity.x == 0)
+	{
+		m_Moving = false;
+	}
+
 }
 
+// Update the Source Rectangle of the Top Sprite
+void Avatar::UpdateTopSrcRect()
+{
+	m_Offset = 0;
+	switch (m_TopActionState)
+	{
+	case Avatar::TopActionState::iddle:
+		
+		if (m_Moving)
+		{
+			// Avatar Moving
+			m_pTopSprite->UpdateValues(12, 1, 12, 20.f, 40.f, 29.f, 87.f);
+			m_Offset = 10;
+		}
+		else
+		{
+			// Marco Body (Iddle)
+			m_pTopSprite->UpdateValues(3, 1, 3, 5.f, 33.f, 29.f, 29.f);
+			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left);
+			m_Offset = 7;
+		}
+
+		break;
+	case Avatar::TopActionState::crawling:   // Nothing to do here for Top Sprite
+		break;
+	case Avatar::TopActionState::jumping:
+		// Marco Body (JUMPING)
+		m_pTopSprite->UpdateValues(5, 1, 5, 11.f, 32.f, 25.f, 54.f);
+		m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left - 18);
+		m_Offset = 35;
+		break;
+	case Avatar::TopActionState::shooting:
+		// Marco Body ( Shooting)
+		m_pTopSprite->UpdateValues(10, 1, 10, 15.f, 60.f, 27.f, 275.f);
+		m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left - 15);
+		m_Offset = 14;
+		break;
+	case Avatar::TopActionState::pointingUp:
+		m_pTopSprite->UpdateValues(6, 1, 6, 15.f, 40.f, 29.f, 118.f);
+		m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left - 15);
+		m_Offset = 16;
+		break;
+	case Avatar::TopActionState::shootingUp:
+		m_pTopSprite->UpdateValues(10, 1, 10, 15.f, 40.f, 70.f, 248.f);
+		m_Offset = 14;
+		break;
+	}
+
+
+	// Previous Action State different?
+	if (m_TopActionStateChanged)
+	{
+		ResetSprite(m_pTopSprite, true);
+	}
+}
+
+
+// Update the Source Rectangle of the Sprite from Marco Legs (Bottom Sprite)
+void Avatar::UpdateBotSrcRect()
+{
+
+	switch (m_BotActionState)
+	{
+	case Avatar::BottomActionState::iddle:
+
+		if (m_Moving)
+		{
+			// Marco Legs (Moving)
+			m_pBottomSprite->UpdateValues(12, 1, 12, 20.f, 30.f, 19.f, 44.f);
+			m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left); // (correct the position of the sprite)
+		}
+		else
+		{
+			// Marco Legs (Iddle)
+			m_pBottomSprite->UpdateValues(1, 1, 1, 15.f, 25.f, 15.f, 15.f);
+		}
+		break;
+	case Avatar::BottomActionState::crawling:
+		if (m_Moving)
+		{
+			// Crawling + IDDLE
+			m_pBottomSprite->UpdateValues(7, 1, 7, 5.f, 36.f, 24.f, 168.f);
+		}
+		else
+		{
+			// Crawling + Not Moving
+			m_pBottomSprite->UpdateValues(4, 1, 4, 5.f, 36.f, 24.f, 144.f);
+		}
+		break;
+	case Avatar::BottomActionState::jumping:
+		m_pBottomSprite->UpdateValues(6, 1, 6, 11.f, 25.f, 25.f, 100.f);
+		break;
+	case Avatar::BottomActionState::shooting:  // Crawling Shooting
+		m_pBottomSprite->UpdateValues(7, 1, 7, 15.f, 50.f, 28.f, 197.f);
+		break;
+
+	}
+
+	// Previous Action State different?
+	if (m_BotActionStateChanged)
+	{
+		ResetSprite(m_pBottomSprite, false);
+	}
+}
 void Avatar::UpdateFrames(float elapsedSeconds)
 {
-	bool repeatBottom{ true };  // To know if the animation has to keep repeating or not
+	bool repeatBot{ true };  // To know if the animation has to keep repeating or not
 	bool repeatTop{ true };
 
-	switch (m_ActionState)
+
+	switch (m_TopActionState)
 	{
-	case Avatar::ActionState::standing:
-		repeatBottom = true;
+	case Avatar::TopActionState::iddle:
 		repeatTop = true;
 		break;
-	case Avatar::ActionState::crawling:
-		repeatBottom = true;
+	case Avatar::TopActionState::crawling:
 		repeatTop = true;
 		break;
-	case Avatar::ActionState::jumping:
-		repeatBottom = false;
+	case Avatar::TopActionState::jumping:
 		repeatTop = false;
 		break;
-
+	case Avatar::TopActionState::shooting:
+		repeatTop = false;
+		break;
+	case Avatar::TopActionState::pointingUp:
+		repeatTop = false;
+		break;
+	case Avatar::TopActionState::shootingUp:
+		repeatTop = false;
+		break;
+	default:
+		break;
 	}
-
 	
-	if (m_Shooting)
+
+	switch (m_BotActionState)
 	{
-		repeatTop = false;
-		repeatBottom = true;
+	case Avatar::BottomActionState::iddle:
+		repeatBot = true;
+		break;
+	case Avatar::BottomActionState::crawling:
+		repeatBot = true;
+		break;
+	case Avatar::BottomActionState::jumping:
+		repeatBot = false;
+		break;
+	case Avatar::BottomActionState::shooting:
+		repeatBot = true;
+		break;
 	}
+
 	
 	// Update active frames
 	m_pTopSprite->Update(elapsedSeconds, repeatTop);
-	m_pBottomSprite->Update(elapsedSeconds, repeatBottom);
-
+	m_pBottomSprite->Update(elapsedSeconds, repeatBot);
+	
 	if(m_Shooting && m_pTopSprite->GetAnimationFinish())
 	{
-		ResetSprite();
+		ResetSprite(m_pTopSprite, true);
 		m_Shooting = false;
 		
-		//m_pTopSprite->ResetAnimationFinish(false);
+		m_TopActionState = TopActionState::iddle;
 		
 	}
-	
-	
-
-	if (m_pTopSprite->GetAnimationFinish())
-	{
-		std::cout << "Top Sprite finish? Yes " << std::endl;
-	}
-	else
-	{
-		std::cout << "Top Sprite finish? No " << std::endl;
-	}
-
-	if (m_pBottomSprite->GetAnimationFinish())
-	{
-		std::cout << "Bottom Sprite finish? Yes " << std::endl;
-	}
-	else
-	{
-		std::cout << "Bottom Sprite finish? No " << std::endl;
-	}
-	
 }
 
 // Update which part of the spritesheet we draw
 void Avatar::UpdateSrcRects()
 {
+	/*
 	switch (m_ActionState)
 	{
 	case Avatar::ActionState::standing:  // Character is standing
@@ -312,13 +428,27 @@ void Avatar::UpdateSrcRects()
 	{
 		ResetSprite();
 	}
-
+	*/
 }
 
-// Reset the Active frame to zero when the animation sprite has changed
-void Avatar::ResetSprite()
+// Reset the Active frame to zero when the sprite animation has changed
+void Avatar::ResetSprite(Sprite* sprite, bool topSprite)
 {
+	sprite->ResetActFrame();
+	sprite->UpdateLeftSrcRect();
 
+	// Check wich sprite changed
+	if (topSprite)
+	{
+		m_TopActionStateChanged = false;
+	}
+	else
+	{
+		m_BotActionStateChanged = false;
+	}
+
+	
+	/*
 	if (m_Shooting)
 	{
 
@@ -339,7 +469,8 @@ void Avatar::ResetSprite()
 	}
 	
 
-	m_ActionStateChanged = false;
+	m_TopActionStateChanged = false;
+	*/
 
 }
 
@@ -348,72 +479,129 @@ void Avatar::HandleInput()
 	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
 
 
-	if (pStates[SDL_SCANCODE_DOWN])
+	if (m_Moving == false)
 	{
-		// Crawling
-		m_ActionState = ActionState::crawling;
-		m_Moving = false;
-		m_KeyPressed = 1;
-		m_Velocity.x = 0;
-	
-
-		// Check if Crawling + Moving
-		if (pStates[SDL_SCANCODE_DOWN] && pStates[SDL_SCANCODE_RIGHT])
+		if (m_OnGround)
 		{
-			m_Moving = true;
-			m_MovingRight = true;
-			m_KeyPressed = 2;
-			m_Velocity.x = m_SlowSpeed;  // Reduce speed movement
+			// BASE ANIMATION --> Not Moving
+			m_TopActionState = TopActionState::iddle;
+			m_BotActionState = BottomActionState::iddle;
+			m_Moving = false;
+
+
+			m_CurrentTopAnimation = Animations::iddle;
+			m_CurrentBotAnimation = Animations::iddle;
+
 		}
 		
-		if (pStates[SDL_SCANCODE_DOWN] && pStates[SDL_SCANCODE_LEFT])
+	}
+
+	if (m_OnGround)
+	{
+		if (pStates[SDL_SCANCODE_UP])
 		{
-			m_Moving = true;
-			m_MovingRight = false;
-			m_KeyPressed = 3;
-			m_Velocity.x = - m_SlowSpeed;
+			// Pointing UP
+			m_TopActionState = TopActionState::pointingUp;
+			m_CurrentTopAnimation = Animations::pointingUp;
+
+		}
+		else
+		{
+			// Crawling
+			if (pStates[SDL_SCANCODE_DOWN])
+			{
+
+				m_TopActionState = TopActionState::crawling;
+				m_BotActionState = BottomActionState::crawling;
+
+				m_CurrentTopAnimation = Animations::crawlingIddle;
+				m_CurrentBotAnimation = Animations::crawlingIddle;
+			}
+		}
+	}
+
+	// Jumping
+	if (pStates[SDL_SCANCODE_C])
+	{
+		if (m_OnGround)
+		{
+
+			m_TopActionState = TopActionState::jumping;
+			m_BotActionState = BottomActionState::jumping;
+			m_Velocity.y = m_JumpSpeed;
+			m_CurrentTopAnimation = Animations::jumping;
+			m_CurrentBotAnimation = Animations::jumping;
+		}
+		
+	}
+
+	if (pStates[SDL_SCANCODE_RIGHT])
+	{
+		// MOVING RIGHT
+		m_Moving = true;
+		m_MovingRight = true;
+		m_Velocity.x = m_NormalSpeed;
+
+		m_CurrentTopAnimation = Animations::movingRight;
+		m_CurrentBotAnimation = Animations::movingRight;
+
+
+		if (m_BotActionState == BottomActionState::jumping && m_OnGround)
+		{
+			// Change animation after jumping
+			m_TopActionState = TopActionState::iddle;
+			m_BotActionState = BottomActionState::iddle;
+			m_CurrentTopAnimation = Animations::iddle;
+			m_CurrentBotAnimation = Animations::iddle;
+
 		}
 
+		if (pStates[SDL_SCANCODE_C])
+		{
+			if (m_OnGround)
+			{
+				m_TopActionState = TopActionState::jumping;
+				m_BotActionState = BottomActionState::jumping;
+				m_CurrentTopAnimation = Animations::jumping;
+				m_CurrentBotAnimation = Animations::jumping;
+				m_Velocity.y = m_JumpSpeed;
 
+			}
+
+		}
 		
 	}
 	else
 	{
-		if (pStates[SDL_SCANCODE_RIGHT])
+		if (pStates[SDL_SCANCODE_LEFT])
 		{
-			if (m_OnGround)
+			// MOVING LEFT
+			m_Moving = true;
+			m_MovingRight = false;
+			m_Velocity.x = -m_NormalSpeed;
+
+			m_CurrentTopAnimation = Animations::movingLeft;
+			m_CurrentBotAnimation = Animations::movingLeft;
+
+			if (m_BotActionState == BottomActionState::jumping && m_OnGround)
 			{
-				// Only change animation when on Ground
-				m_ActionState = ActionState::standing;
-				m_KeyPressed = 4;
+				// Change animation after jumping
+				m_TopActionState = TopActionState::iddle;
+				m_BotActionState = BottomActionState::iddle;
+				m_CurrentTopAnimation = Animations::iddle;
+				m_CurrentBotAnimation = Animations::iddle;
 			}
 
-			m_Velocity.x = m_NormalSpeed;
-			m_Moving = true;		// Moving 
-			m_MovingRight = true;  // and moving Right
-			
-			
-			// Check if Moving + Crawling
-			if (pStates[SDL_SCANCODE_RIGHT] && pStates[SDL_SCANCODE_DOWN])
+			if (pStates[SDL_SCANCODE_C])
 			{
 				if (m_OnGround)
 				{
-					m_ActionState = ActionState::crawling;
-					m_KeyPressed = 5;
-					m_Velocity.x = m_SlowSpeed;
-				}
-				
-			}
+					m_TopActionState = TopActionState::jumping;
+					m_BotActionState = BottomActionState::jumping;
+					m_CurrentTopAnimation = Animations::jumping;
+					m_CurrentBotAnimation = Animations::jumping;
 
-			// Check if Moving + Jumping
-			if (pStates[SDL_SCANCODE_RIGHT] && pStates[SDL_SCANCODE_C])
-			{
-				if (m_OnGround)
-				{
-					m_ActionState = ActionState::jumping;
-					m_KeyPressed = 6;
 					m_Velocity.y = m_JumpSpeed;
-					m_Velocity.x = +m_NormalSpeed;	// Jump increases horizontal speed
 
 				}
 
@@ -422,96 +610,87 @@ void Avatar::HandleInput()
 		}
 		else
 		{
-			if (pStates[SDL_SCANCODE_LEFT])
+			if (m_OnGround)
 			{
-			
-				if (m_OnGround)
-				{
-					m_ActionState = ActionState::standing;
-					m_KeyPressed = 7;
-				}
-
-				m_Velocity.x = -m_NormalSpeed;
-				m_Moving = true;		// Moving 
-				m_MovingRight = false;  // To the left
-			
-
-				if (pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_DOWN])
-				{
-					m_ActionState = ActionState::crawling;
-					m_KeyPressed = 8;
-					m_Velocity.x = -m_SlowSpeed;
-				}
-
-				// Check if Moving + Jumping
-				if (pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_C])
-				{
-					if (m_OnGround)
-					{
-						m_ActionState = ActionState::jumping;
-						m_KeyPressed = 9;
-						m_Velocity.y = m_JumpSpeed;
-						m_Velocity.x = -m_NormalSpeed;
-					}
-
-				}
-			}
-			else
-			{
-				if (pStates[SDL_SCANCODE_C])
-				{
-					if (m_OnGround)
-					{
-						m_ActionState = ActionState::jumping;
-						m_KeyPressed = 10;
-						m_Velocity.y = m_JumpSpeed;
-						
-					}
-
-				}
-				else
-				{
-					if (m_OnGround)  // Keep moving forward until it reaches the ground
-					{
-						// Not Moving
-						m_ActionState = ActionState::standing;
-						m_Moving = false;
-						
-						m_KeyPressed = 11;
-						
-						m_Velocity.x = 0;
-						
-						
-					}
-				}
-				
+				m_Velocity.x = 0;
 			}
 		}
 	}
-
 	
 
-	// Check if player pressed a different key
-	CheckPreviousKey();
+
+	// Avatar shooting
+	if (m_Shooting)
+	{
+		if (m_BotActionState == BottomActionState::crawling)
+		{
+			m_BotActionState = BottomActionState::shooting;
+			m_CurrentBotAnimation = Animations::crawlingShooting;
+		}
+		else
+		{
+			if (m_TopActionState == TopActionState::pointingUp)
+			{
+				m_TopActionState = TopActionState::shootingUp;
+				m_CurrentTopAnimation = Animations::shootingUp;
+			}
+			else
+			{
+				
+				m_TopActionState = TopActionState::shooting;
+				m_CurrentTopAnimation = Animations::shooting;
+			}
+		}
 	
+	}
+
+
+	// Check if an Action State has changed
+	CheckPreviousState();
 
 }
 
-// Check if player pressed a different key
-void Avatar::CheckPreviousKey()
+// Check if Action State has changed from the previous one
+void Avatar::CheckPreviousState()
 {
-	if (m_KeyPressed != m_PreviousKey)
-	{
-		m_PreviousKey = m_KeyPressed;
-		m_ActionStateChanged = true;
 
+	// TOP SPRITE CHECK
+	if (m_CurrentTopAnimation != m_PreviousTopAnimation)
+	{
+		if (m_PreviousTopAnimation == Animations::shooting && m_CurrentTopAnimation == Animations::shootingUp)
+		{
+			m_TopActionState = TopActionState::pointingUp;
+			m_Shooting = false;
+		}
+		else
+		{
+			if (m_PreviousTopAnimation == Animations::shootingUp && m_CurrentTopAnimation == Animations::shooting)
+			{
+				m_TopActionState = TopActionState::iddle;
+				m_Shooting = false;
+			}
+		}
+
+		m_PreviousTopAnimation = m_CurrentTopAnimation;
+		m_TopActionStateChanged = true;
+
+		
 	}
+
+
+	// BOTTOM SPRITE CHECK
+	if (m_CurrentBotAnimation != m_PreviousBotAnimation)
+	{
+		m_PreviousBotAnimation = m_CurrentBotAnimation;
+		m_BotActionStateChanged = true;
+	}
+
 }
 
 // Check if the avatar is stading, crawling or jumping for the sprite drawing
 void Avatar::CheckActionState()
 {   
-	if (m_ActionState == ActionState::standing /* || m_MainActionState == ActionState::jumping */)
+	if (m_TopActionState == TopActionState::iddle)
 	{
 		// Normal speed
 		if (m_MovingRight)
@@ -525,7 +704,7 @@ void Avatar::CheckActionState()
 		
 	}
 
-	if (m_ActionState == ActionState::crawling)
+	if (m_TopActionState == TopActionState::crawling)
 	{
 		// Speed is reduced when crawling
 		if (m_MovingRight)
@@ -562,10 +741,9 @@ void Avatar::Move(float elapsedSec)
 void Avatar::Shoot()
 {
 	m_Shooting = true;
-	m_KeyPressed = 12;
+	m_pTopSprite->ResetAnimationFinish(false);
+	ResetSprite(m_pTopSprite, true);
 
-	// Check if player pressed a different key
-	CheckPreviousKey();
 }
 
 void Avatar::CorrectTopSprite()
