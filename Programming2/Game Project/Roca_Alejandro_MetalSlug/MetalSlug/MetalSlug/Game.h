@@ -4,8 +4,10 @@
 #include "Camera.h"
 
 
+
 class GameObject;
 class Avatar;
+class BulletManager;
 class Game final
 {
 public:
@@ -37,6 +39,10 @@ private:
 	Level* m_Level;
 	Avatar* m_Avatar;
 	Camera* m_Camera;
+
+	// Bullets Player
+	const int m_NrOfBullets;
+	BulletManager* m_pBulletManager;
 	const float m_Scale;
 
 
@@ -47,6 +53,7 @@ private:
 	void Initialize( );
 	void InitAvatar();
 	void InitCamera();
+	void AddBullets();
 
 	void Cleanup( );
 	void ClearBackground( ) const;

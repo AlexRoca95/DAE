@@ -16,9 +16,14 @@ public:
 	virtual void Draw() const = 0;
 	virtual void Update(float elapsedSeconds, const Level* level) = 0;
 
+	virtual bool GetIsActive() const = 0;
+	virtual void SetIsActive(bool active) = 0;
+
 protected:
 	int m_Id;
 	const float m_Scale;				// Scale for all the gameObjects
+	
+	bool m_IsActive;					
 
 	// Sprites needed for the game objects
 	Sprite* m_pTopSprite;

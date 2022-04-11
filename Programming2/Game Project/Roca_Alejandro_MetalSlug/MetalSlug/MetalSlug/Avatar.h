@@ -50,10 +50,15 @@ public:
 
 	virtual void Draw() const override;
 	virtual void Update(float elapsedSeconds, const Level* level);
+	virtual bool GetIsActive() const;
+	virtual void SetIsActive(bool active);
 
 	void Shoot();
 
-	Rectf GetShape() const;
+	Rectf GetBotShape() const;
+	Rectf GetTopShape() const;
+	const bool GetIsMovingRight() const;
+	const Animations GetActiveAnimation() const;
 
 private:
 

@@ -197,7 +197,7 @@ void Sprite::Update( float elapsedSec, const bool repeat )
 
 // Update all the values for the sprite. 
 void Sprite::UpdateValues(const int cols, const int rows, const int frames, const float frameSec, const float width,
-	const float height, const float spriteSheetTop)
+	const float height, const float spriteSheetTop, const float scale)
 {
 
 	m_Frames = frames;
@@ -207,6 +207,7 @@ void Sprite::UpdateValues(const int cols, const int rows, const int frames, cons
 	m_Width = width;
 	m_Height = height;
 	m_SpriteSheetTop = spriteSheetTop;
+	m_Scale = scale;
 
 	SetDstRect(m_Width, m_Height);						// Update size of m_DstRect
 	SetSrcRect(m_SpriteSheetTop, m_Width, m_Height);	// Update the y, widht and height of m_SrcRect
@@ -290,6 +291,12 @@ void Sprite::SetSrcRect( const float y, const float width, const float height )
 	m_SrcRect.height = m_Height;
 	m_SrcRect.bottom = y * (m_ActFrame / m_Cols + 1);
 	
+}
+
+void Sprite::SetSrcRect(const float y)
+{
+	m_SrcRect.bottom = y * (m_ActFrame / m_Cols + 1);
+
 }
 
 

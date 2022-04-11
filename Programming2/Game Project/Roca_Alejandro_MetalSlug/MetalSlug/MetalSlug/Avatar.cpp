@@ -603,9 +603,34 @@ void Avatar::AvatarFalling( float elapsedSec )
 
 }
 
-Rectf Avatar::GetShape() const
+void Avatar::SetIsActive(bool active)
+{
+	m_IsActive = active;
+}
+
+Rectf Avatar::GetTopShape() const
+{
+	return m_pTopSprite->GetDstRect();
+}
+
+Rectf Avatar::GetBotShape() const
 {
 	return m_pBottomSprite->GetDstRect();
+}
+
+const bool Avatar::GetIsMovingRight() const
+{
+	return m_IsMovingRight;
+}
+
+const Avatar::Animations Avatar::GetActiveAnimation() const
+{
+	return m_ActTopAnimation;
+}
+
+bool Avatar::GetIsActive() const
+{
+	return m_IsActive;
 }
 
 

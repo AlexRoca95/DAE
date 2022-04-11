@@ -21,7 +21,7 @@ public:
 	void UpdateBottomSrcRect( );
 	void ResetActFrame( );
 	void UpdateValues(const int cols, const int rows, const int frames, const float frameSec,
-		const float width, const float height, const float spriteSheetTop);
+		const float width, const float height, const float spriteSheetTop, const float scale = 2.7f);
 
 	// Getters
 	float GetFrameWidth( ) const;
@@ -38,6 +38,7 @@ public:
 	void SetLeftDstRect(const float left);
 	void SetBottomDstRect(const float bottom);
 	void SetSrcRect(const float y, const float width, const float height);
+	void SetSrcRect(const float y);
 	void ResetAnimationFinish(const bool reset);
 
 
