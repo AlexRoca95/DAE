@@ -34,7 +34,7 @@ public:
 		shootingUp
 	};
 	// Action State for the Bottom sprite
-	enum class BottomActionState {   
+	enum class BotActionState {   
 		iddle,
 		crawling,		
 		jumping,
@@ -53,7 +53,7 @@ public:
 
 	void Shoot();
 
-	Rectf GetShape();
+	Rectf GetShape() const;
 
 private:
 
@@ -63,11 +63,11 @@ private:
 
 	// Sprite Related
 	TopActionState m_TopActionState;				// Current action state for the Top sprite
-	BottomActionState m_BotActionState;
-	Animations m_CurrentTopAnimation;
-	Animations m_CurrentBotAnimation;
-	Animations m_PreviousTopAnimation;				// To keep track if the animation changed
-	Animations m_PreviousBotAnimation;
+	BotActionState m_BotActionState;
+	Animations m_ActTopAnimation;
+	Animations m_ActBotAnimation;
+	Animations m_PrevTopAnimation;					// To keep track if the animation changed
+	Animations m_PrevBotAnimation;
 	float m_Offset;									// To recolocate the top Sprite when changing sprites
 
 	// Physics variables
@@ -78,14 +78,15 @@ private:
 	const float m_JumpSpeed;
 	
 	// Booleans
-	bool m_MovingRight;								// Moving right or not (for OpenGL)
-	bool m_Moving;									// Indicates if character is moving or not (for sprites)
-	bool m_TopActionStateChanged;					// Indicates if TopActionState has changed or not
-	bool m_BotActionStateChanged;					// Indicates if BotActionState has changed or not
-	bool m_OnGround;								// Avatar is in the ground or not
-	bool m_Shooting;
+	bool m_IsMovingRight;							// Moving right or not (for OpenGL)
+	bool m_IsMoving;								// Indicates if character is moving or not (for sprites)
+	bool m_TopSpriteChanged;						// Indicates if Top sprite was changed from the previous one
+	bool m_BotSpriteChanged;						
+	bool m_IsOnGround;								// Avatar is in the ground or not
+	bool m_IsShooting;
 
 	// PRIVATE functions
+
 	void Initialize();
 
 	// Sprite related
