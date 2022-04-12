@@ -6,7 +6,7 @@
 
 
 Bullet::Bullet(const Point2f& startPos)
-	: GameObject(2)
+	: GameObject( GameObject::Type::Bullet )
 	, m_Position{ startPos }
 	, m_IsInitialized { false }
 	, m_MaxSeconds{ 2.f }

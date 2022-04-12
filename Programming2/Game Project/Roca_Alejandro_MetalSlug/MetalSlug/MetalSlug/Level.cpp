@@ -14,7 +14,7 @@ Level::Level()
 	, m_Vertices{ }
 	, m_pLevelSVG{ }
 	, m_Scale{ 2.7f }
-	, m_NrOfPaths{ 18 }
+	, m_NrOfPaths{ 21 }
 	, m_TransformedVertices{ }
 	, m_Rows{ 8 }
 	, m_UpperBoundary{ }
@@ -66,7 +66,7 @@ void Level::DrawBackground() const
 {
 	m_pLevelTexture->Draw();
 
-	//utils::DrawPolygon(m_TransformedVertices[17]);
+	//utils::DrawPolygon(m_TransformedVertices[20]);
 }
 
 void Level::DrawForeground() const
@@ -93,6 +93,7 @@ void Level::Update(float elapsedSec, const Rectf& ActorShape)
 	m_pLevelTexture->Update(elapsedSec, true);
 	m_pLevelLakeTexture->Update(elapsedSec, true);
 
+	
 }
 
 void Level::HandleCollision(Rectf& actorShape, Vector2f& velocity) const
@@ -137,7 +138,7 @@ void Level::HorizCollision(Rectf& actorShape, Vector2f& velocity) const
 
 	utils::HitInfo hitInfo{};
 
-	if ( utils::Raycast(m_TransformedVertices[17], ray, rayEnd, hitInfo) )
+	if ( utils::Raycast(m_TransformedVertices[20], ray, rayEnd, hitInfo) )
 	{
 		if ( rayEnd.x <= hitInfo.intersectPoint.x )
 		{
@@ -190,6 +191,7 @@ void Level::InitSprites()
 	m_pLevelLakeTexture->SetLeftDstRect(0);
 	m_pLevelLakeTexture->SetBottomDstRect(0);
 	m_pLevelLakeTexture->UpdateLeftSrcRect();
+
 
 }
 

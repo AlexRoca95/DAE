@@ -8,7 +8,7 @@
 int Avatar::m_GameObjectCounter = 0;
 
 Avatar::Avatar()
-	:GameObject(m_GameObjectCounter + 1)
+	: GameObject( GameObject::Type::Avatar )
 	, m_Velocity{ Point2f{ 0.f, 0.f } }
 	, m_Acceleration{ Point2f{ 0.f, -981.f } }
 	, m_NormalSpeed{ 300.f }

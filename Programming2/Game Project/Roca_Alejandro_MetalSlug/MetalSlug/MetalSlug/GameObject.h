@@ -6,7 +6,15 @@ class Level;
 class GameObject
 {
 public:
-	GameObject(const int id);
+
+	enum class Type {
+
+		Avatar,
+		Bullet
+
+	};
+
+	GameObject( GameObject::Type id );
 	virtual ~GameObject() = default;
 	GameObject(const GameObject& gameObject) = delete;
 	GameObject(GameObject&& gameObject) = delete;
@@ -20,7 +28,7 @@ public:
 	virtual void SetIsActive(bool active) = 0;
 
 protected:
-	int m_Id;
+	const Type m_Id;
 	const float m_Scale;				// Scale for all the gameObjects
 	
 	bool m_IsActive;					
