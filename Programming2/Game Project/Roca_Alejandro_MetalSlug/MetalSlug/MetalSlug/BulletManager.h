@@ -20,10 +20,19 @@ public:
 	void AddBullet(Point2f& startPos);
 	void ActivateBullet();
 
+	void CheckHitLevel();
+
+
+	void SetVerticesLevel(std::vector<Point2f> vertices);
+
 
 private:
 
 	std::vector<Bullet*> m_pBullets;
+	std::vector<Point2f> m_VerticesLevel;
+
+	void RandomCollision(int& random);
+	
 
 };
 

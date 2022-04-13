@@ -24,18 +24,27 @@ public:
 
 	
 	void DesactivateBullet();
+	void CheckHitLevel();
+	void Hit();
+
+	Rectf GetShape() const;
 
 private:
+
+	Sprite* m_pCollisionSprite;
+
 
 	Point2f m_Position;
 	bool m_IsInitialized;
 	bool m_IsMovingUp;
+	bool m_IsHit;
 
 	const float m_MaxSeconds;     // Time the bullet is active if it doesn't collide 
 	float m_Seconds;			  // Current Seconds
 	const float m_Speed;
 	Point2f m_Velocity;
 	
+
 
 	void Initialize();
 	void SetStartPos(const Avatar* avatar);

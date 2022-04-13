@@ -26,6 +26,7 @@ void Game::Initialize( )
 {
 	InitAvatar();
 	InitCamera();
+	m_pBulletManager->SetVerticesLevel(m_Level->GetVertices());
 	AddBullets();
 }
 
@@ -79,6 +80,7 @@ void Game::Update( float elapsedSec )
 
 	m_Level->Update(elapsedSec, m_Avatar->GetBotShape());
 	m_Camera->SetLevelBoundaries(m_Level->GetBoundaries());
+
 }
 
 void Game::Draw( ) const

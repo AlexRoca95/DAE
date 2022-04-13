@@ -26,6 +26,7 @@ public:
 
 
 	Rectf GetBoundaries() const;
+	std::vector <Point2f> GetVertices() const;
 
 private:
 

@@ -287,8 +287,8 @@ void Sprite::SetBottomDstRect( const float bottom )
 
 void Sprite::SetSrcRect( const float y, const float width, const float height )
 {
-	m_SrcRect.width = m_Width;
-	m_SrcRect.height = m_Height;
+	m_SrcRect.width = width;
+	m_SrcRect.height = height;
 	m_SrcRect.bottom = y * (m_ActFrame / m_Cols + 1);
 	
 }

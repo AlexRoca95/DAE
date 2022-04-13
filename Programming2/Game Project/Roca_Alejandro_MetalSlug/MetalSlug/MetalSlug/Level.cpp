@@ -207,3 +207,8 @@ Rectf Level::GetBoundaries() const
 {
 	return m_Boundaries;
 }
+
+std::vector <Point2f> Level::GetVertices() const
+{
+	return m_TransformedVertices[20];
+}
