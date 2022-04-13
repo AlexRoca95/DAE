@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 #include "Level.h"
 #include "Camera.h"
 
@@ -8,6 +7,8 @@
 class GameObject;
 class Avatar;
 class BulletManager;
+class EnemiesManager;
+class Enemy;
 class Game final
 {
 public:
@@ -40,12 +41,12 @@ private:
 	Avatar* m_Avatar;
 	Camera* m_Camera;
 
-	// Bullets Player
-	const int m_NrOfBullets;
-	BulletManager* m_pBulletManager;
+
 	const float m_Scale;
 
-
+	// Enemies
+	const int m_NrHelicopters;
+	EnemiesManager* m_pEnemiesManager;
 	
 
 	// FUNCTIONS
@@ -53,7 +54,8 @@ private:
 	void Initialize( );
 	void InitAvatar();
 	void InitCamera();
-	void AddBullets();
+	void InitEnemiesManager();
+
 
 	void Cleanup( );
 	void ClearBackground( ) const;

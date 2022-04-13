@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "Game.h"
 #include "Avatar.h"
+#include "Helicopter.h"
 #include "BulletManager.h"
+#include "EnemiesManager.h"
 #include <iostream>
 
 
@@ -10,9 +12,9 @@ Game::Game( const Window& window )
 	, m_Camera{ new Camera(m_Window.width, m_Window.height) }
 	, m_Level{ new Level }
 	, m_Avatar{ new Avatar }
-	, m_pBulletManager{ new BulletManager }
+	, m_pEnemiesManager { new EnemiesManager }
 	, m_Scale{ 2.7f }
-	, m_NrOfBullets{ 20 }
+	, m_NrHelicopters{ 1 }
 {
 	Initialize( );
 }
@@ -26,14 +28,15 @@ void Game::Initialize( )
 {
 	InitAvatar();
 	InitCamera();
-	m_pBulletManager->SetVerticesLevel(m_Level->GetVertices());
-	AddBullets();
+	InitEnemiesManager();
+
 }
 
 void Game::InitAvatar()
 {
 	
 	m_pGameObjects.push_back(m_Avatar);
+	m_Avatar->SetVerticesLevel(m_Level->GetVertices());
 
 }
 
@@ -43,16 +46,15 @@ void Game::InitCamera()
 
 }
 
-void Game::AddBullets()
+void  Game::InitEnemiesManager()
 {
-	Point2f startPos { m_Avatar->GetBotShape().left , m_Avatar->GetBotShape().bottom };
-
-	for (int i{ }; i < m_NrOfBullets; i++)
+	for (int i{}; i < m_NrHelicopters; i++)
 	{
-		m_pBulletManager->AddBullet( startPos );
+		m_pEnemiesManager->AddEnemy(Point2f{ 2000.f, 400.f }, GameObject::Type::enemyHelicopter);
 	}
-	
 }
+
+
 
 void Game::Cleanup( )
 {
@@ -65,21 +67,25 @@ void Game::Cleanup( )
 
 	delete m_Level;
 	delete m_Camera;
-	delete m_pBulletManager;
+	delete m_pEnemiesManager;
 }
 
 void Game::Update( float elapsedSec )
 {
-	
+	/*
 	for (GameObject* ptr : m_pGameObjects)
 	{
 		ptr->Update(elapsedSec, m_Level);
 	}
-	
-	m_pBulletManager->Update(elapsedSec, m_Avatar);
+	*/
+
+	m_Avatar->Update(elapsedSec, m_Level);
+	m_pEnemiesManager->Update(elapsedSec);
+	m_Avatar->GetBullets()->CheckHitEnemies(m_pEnemiesManager->GetEnemies());
 
 	m_Level->Update(elapsedSec, m_Avatar->GetBotShape());
 	m_Camera->SetLevelBoundaries(m_Level->GetBoundaries());
+
 
 }
 
@@ -93,13 +99,13 @@ void Game::Draw( ) const
 	
 		m_Level->DrawBackground();
 		
+		m_pEnemiesManager->Draw();
+
 		// Draw all game objects
 		for (GameObject* ptr : m_pGameObjects)
 		{
 			ptr->Draw();
 		}
-		
-		m_pBulletManager->Draw();
 		
 		m_Level->DrawForeground();
 
@@ -114,8 +120,6 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 	if (e.keysym.sym == SDLK_x)
 	{
 		m_Avatar->Shoot();
-
-		m_pBulletManager->ActivateBullet();
 	}
 	
 }

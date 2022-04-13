@@ -6,7 +6,7 @@
 
 
 Bullet::Bullet(const Point2f& startPos)
-	: GameObject( GameObject::Type::Bullet )
+	: GameObject( GameObject::Type::bullet )
 	, m_pCollisionSprite { new Sprite ( "Resources/sprites/marco/pistolHit.png" ) }
 	, m_Position{ startPos }
 	, m_IsInitialized { false }
@@ -62,10 +62,6 @@ void Bullet::Draw() const
 	}
 	
 }
-void Bullet::Update(float elapsedSeconds, const Level* level)
-{
-
-}
 
 void Bullet::Update(float elapsedSeconds, const Avatar* avatar)
 {
@@ -88,8 +84,6 @@ void Bullet::Update(float elapsedSeconds, const Avatar* avatar)
 	}
 	else
 	{
-		
-
 		m_pCollisionSprite->Update(elapsedSeconds, false);
 
 		if (m_pCollisionSprite->GetAnimationFinish())
@@ -188,11 +182,6 @@ void Bullet::Move( float elapsedSec )
 	}
 }
 
-void Bullet::CheckHitLevel()
-{
-
-
-}
 
 void Bullet::Hit()
 {
@@ -212,20 +201,11 @@ void Bullet::DesactivateBullet()
 	m_IsHit = false;
 }
 
-void Bullet::SetIsActive(bool active)
+
+bool Bullet::GetIsHit()
 {
-	m_IsActive = active;
+	return m_IsHit;
 }
 
-bool Bullet::GetIsActive() const
-{
-	return m_IsActive;
-}
-
-Rectf Bullet::GetShape() const
-{
-	return Rectf{ m_Position.x, m_Position.y, m_pBottomSprite->GetFrameWidth() * m_Scale,
-		m_pBottomSprite->GetFrameHeight() * m_Scale };
-}
 
 

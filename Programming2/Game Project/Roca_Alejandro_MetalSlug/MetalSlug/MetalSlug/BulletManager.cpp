@@ -2,6 +2,7 @@
 #include "BulletManager.h"
 #include "Bullet.h"
 #include "utils.h"
+#include "Enemy.h"
 #include <iostream>
 
 
@@ -83,8 +84,8 @@ void BulletManager::CheckHitLevel()
 		{
 			RandomCollision(randomHit);
 
-			Point2f ray{ ptr->GetShape().left,  ptr->GetShape().bottom + ptr->GetShape().height / 2};
-			Point2f rayEnd{ ptr->GetShape().left + ptr->GetShape().width + float(randomHit),  ptr->GetShape().bottom + ptr->GetShape().height / 2};
+			Point2f ray{ ptr->GetBotShape().left,  ptr->GetBotShape().bottom + ptr->GetBotShape().height / 2};
+			Point2f rayEnd{ ptr->GetBotShape().left + ptr->GetBotShape().width + float(randomHit),  ptr->GetBotShape().bottom + ptr->GetBotShape().height / 2};
 
 			utils::HitInfo hitInfo{};
 
@@ -98,6 +99,49 @@ void BulletManager::CheckHitLevel()
 		}
 	}
 }
+
+// Check collision of the bullet with the enemies
+void BulletManager::CheckHitEnemies(std::vector<Enemy*> enemies)
+{
+
+	for (Bullet* bulletPtr : m_pBullets)
+	{
+		if (bulletPtr->GetIsActive() && !bulletPtr->GetIsHit())
+		{
+			for (Enemy* enemyPtr : enemies)
+			{
+				if (enemyPtr->GetIsActive())
+				{
+					// X axis
+					if ( ( bulletPtr->GetBotShape().left ) >
+						enemyPtr->GetBotShape().left			&&  
+						bulletPtr->GetBotShape().left < ( enemyPtr->GetBotShape().left + 
+							enemyPtr->GetBotShape().width ) )
+					{
+						
+						// Y axis
+						if (bulletPtr->GetBotShape().bottom  >
+							enemyPtr->GetBotShape().bottom &&
+							bulletPtr->GetBotShape().bottom < (enemyPtr->GetBotShape().bottom +
+								enemyPtr->GetBotShape().height))
+						{
+							bulletPtr->Hit();
+							enemyPtr->Hit();
+							break;
+
+						}
+					}
+
+
+				}
+			}
+		}
+	}
+	
+
+
+}
+
 
 // Calculate a random value for the hit collision of the bullet
 void BulletManager::RandomCollision(int& random)

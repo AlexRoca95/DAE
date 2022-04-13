@@ -34,6 +34,7 @@ Level::Level()
 	TransformSVGVertices();
 
 	InitSprites();
+	
 }
 
 
@@ -41,6 +42,7 @@ Level::~Level()
 {
 	delete m_pLevelTexture;
 	delete m_pLevelLakeTexture;
+	
 }
 
 // Scale the vertices from the SVG file so it matches with the map size
@@ -66,6 +68,7 @@ void Level::DrawBackground() const
 {
 	m_pLevelTexture->Draw();
 
+	
 	//utils::DrawPolygon(m_TransformedVertices[20]);
 }
 

@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "Avatar.h"
 #include "Texture.h"
-#include "utils.h"
 #include "Level.h"
+#include "BulletManager.h"
 #include <iostream>
 
 int Avatar::m_GameObjectCounter = 0;
 
 Avatar::Avatar()
-	: GameObject( GameObject::Type::Avatar )
+	: GameObject( GameObject::Type::avatar )
 	, m_Velocity{ Point2f{ 0.f, 0.f } }
 	, m_Acceleration{ Point2f{ 0.f, -981.f } }
 	, m_NormalSpeed{ 300.f }
@@ -28,6 +28,8 @@ Avatar::Avatar()
 	, m_Offset{ }
 	, m_IsShooting{ false }
 	, m_IsMoving{ false }
+	, m_pBulletManager{ new BulletManager }
+	, m_NrOfBullets { 20 }
 {
 	m_GameObjectCounter++;
 
@@ -41,6 +43,7 @@ Avatar::~Avatar()
 
 	delete m_pBottomSprite;
 	delete m_pTopSprite;
+	delete m_pBulletManager;
 }
 
 
@@ -61,6 +64,20 @@ void Avatar::Initialize()
 	m_pBottomSprite->SetBottomDstRect(m_pTopSprite->GetDstRect().bottom - m_pBottomSprite->GetFrameHeight() );
 
 	m_pBottomSprite->UpdateLeftSrcRect();
+
+	InitBulletManager();
+
+}
+
+void Avatar::InitBulletManager()
+{
+
+	Point2f startPos{ m_pBottomSprite->GetDstRect().left , m_pBottomSprite->GetDstRect().bottom };
+
+	for (int i{ }; i < m_NrOfBullets; i++)
+	{
+		m_pBulletManager->AddBullet(startPos);
+	}
 
 }
 
@@ -88,6 +105,8 @@ void Avatar::Draw() const
 	{
 		DrawAvatar();
 	}
+
+	m_pBulletManager->Draw();
 	
 }
 
@@ -141,6 +160,8 @@ void Avatar::Update( float elapsedSeconds, const Level* level )
 		m_IsMoving = false;
 	}
 
+	m_pBulletManager->Update(elapsedSeconds, this);
+
 }
 
 // Update the Source Rectangle of the Top Sprite
@@ -160,10 +181,14 @@ void Avatar::UpdateTopSrcRect()
 		}
 		else
 		{
+			
 			// Marco Body (Iddle)
 			m_pTopSprite->UpdateValues( 3, 1, 3, 5.f, 33.f, 29.f, 29.f );
 			m_pTopSprite->SetLeftDstRect( m_pBottomSprite->GetDstRect().left );
 			m_Offset = 7;
+			
+
+			
 		}
 
 		break;
@@ -588,6 +613,8 @@ void Avatar::Shoot()
 	m_IsShooting = true;
 	m_pTopSprite->ResetAnimationFinish( false );
 	ResetSprite( m_pTopSprite, true );
+
+	m_pBulletManager->ActivateBullet();
 }
 
 // Correct the top sprite so it draws it correctly
@@ -603,19 +630,9 @@ void Avatar::AvatarFalling( float elapsedSec )
 
 }
 
-void Avatar::SetIsActive(bool active)
+void Avatar::Hit()
 {
-	m_IsActive = active;
-}
 
-Rectf Avatar::GetTopShape() const
-{
-	return m_pTopSprite->GetDstRect();
-}
-
-Rectf Avatar::GetBotShape() const
-{
-	return m_pBottomSprite->GetDstRect();
 }
 
 const bool Avatar::GetIsMovingRight() const
@@ -628,9 +645,13 @@ const Avatar::Animations Avatar::GetActiveAnimation() const
 	return m_ActTopAnimation;
 }
 
-bool Avatar::GetIsActive() const
+BulletManager* Avatar::GetBullets()
 {
-	return m_IsActive;
+	return m_pBulletManager;
 }
 
 
+void Avatar::SetVerticesLevel(std::vector<Point2f> vertices)
+{
+	m_pBulletManager->SetVerticesLevel(vertices);
+}

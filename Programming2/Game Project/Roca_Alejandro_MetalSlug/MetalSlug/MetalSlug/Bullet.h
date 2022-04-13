@@ -16,18 +16,15 @@ public:
 
 
 	virtual void Draw() const override;
-	virtual void Update(float elapsedSeconds, const Level* level);
-	virtual bool GetIsActive() const;
-	virtual void SetIsActive(bool active);
+	virtual void Hit() override;
 
 	void Update(float elapsedSec, const Avatar* avatar);
 
 	
 	void DesactivateBullet();
-	void CheckHitLevel();
-	void Hit();
-
-	Rectf GetShape() const;
+	
+	bool GetIsHit();
+	
 
 private:
 

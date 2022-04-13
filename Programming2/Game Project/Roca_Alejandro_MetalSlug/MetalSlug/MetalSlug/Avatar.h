@@ -5,6 +5,7 @@
 
 class Texture;
 class Level;
+class BulletManager;
 class Avatar final : public GameObject
 {
 public:
@@ -49,22 +50,27 @@ public:
 	~Avatar();
 
 	virtual void Draw() const override;
-	virtual void Update(float elapsedSeconds, const Level* level);
-	virtual bool GetIsActive() const;
-	virtual void SetIsActive(bool active);
+	virtual void Hit() override;
 
 	void Shoot();
+	void Update(float elapsedSeconds, const Level* level);
 
-	Rectf GetBotShape() const;
-	Rectf GetTopShape() const;
 	const bool GetIsMovingRight() const;
 	const Animations GetActiveAnimation() const;
+	BulletManager* GetBullets();
+
+	void SetVerticesLevel(std::vector<Point2f> vertices);
 
 private:
 
 	// General
 	static int m_GameObjectCounter;
 	Point2f m_StartPosition{};
+
+	// BulletManager
+	const int m_NrOfBullets;
+	BulletManager* m_pBulletManager;
+
 
 	// Sprite Related
 	TopActionState m_TopActionState;				// Current action state for the Top sprite
@@ -110,5 +116,8 @@ private:
 	void AvatarFalling(float elapsedSec);
 
 	void DrawAvatar() const;
+
+	void InitBulletManager();
+
 };
 

@@ -4,6 +4,7 @@
 class SVGParser;
 class Texture;
 class Sprite;
+class Avatar;
 class Level final
 {
 public:
@@ -50,6 +51,7 @@ private:
 	std::vector<std::vector<Point2f>> m_TransformedVertices;
 	SVGParser* m_pLevelSVG;
 
+	
 	
 	// PRIVATE FUNCTIONS 
 

@@ -3,6 +3,7 @@
 
 class Bullet;
 class Avatar;
+class Enemy;
 class BulletManager final
 {
 public:
@@ -21,7 +22,7 @@ public:
 	void ActivateBullet();
 
 	void CheckHitLevel();
-
+	void CheckHitEnemies(std::vector<Enemy*> enemies);
 
 	void SetVerticesLevel(std::vector<Point2f> vertices);
 
