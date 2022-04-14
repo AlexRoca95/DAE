@@ -8,14 +8,12 @@
 int Avatar::m_GameObjectCounter = 0;
 
 Avatar::Avatar()
-	: GameObject( GameObject::Type::avatar )
-	, m_Velocity{ Point2f{ 0.f, 0.f } }
+	: GameObject( GameObject::Type::avatar, 300.f )  // Type and velocity
 	, m_Acceleration{ Point2f{ 0.f, -981.f } }
-	, m_NormalSpeed{ 300.f }
 	, m_SlowSpeed{ 80.f }
 	, m_JumpSpeed{ 500.f }
 	, m_IsMovingRight{ true }
-	, m_StartPosition{ 80.f, 300.f }
+	, m_StartPosition{ 300.f, 300.f }
 	, m_TopActionState{ TopActionState::jumping }
 	, m_BotActionState{ BotActionState::jumping }
 	, m_ActTopAnimation{ Animations::jumping }
@@ -30,6 +28,10 @@ Avatar::Avatar()
 	, m_IsMoving{ false }
 	, m_pBulletManager{ new BulletManager }
 	, m_NrOfBullets { 20 }
+	, m_IsDead { false }
+	, m_MaxTimeRespawn { 1.5f }
+	, m_SecondsRespawn {  }
+	, m_CameraPos{ }
 {
 	m_GameObjectCounter++;
 
@@ -50,7 +52,7 @@ Avatar::~Avatar()
 void Avatar::Initialize()
 {
 	// Marco Body (Iddle)
-	m_pTopSprite = new Sprite("Resources/sprites/marco/MarcoBody.png");
+	m_pTopSprite = new Sprite( "Resources/sprites/marco/MarcoBody.png" );
 	m_pTopSprite->UpdateValues(4, 1, 4, 7.f, 33.f, 29.f, 29.f);
 	m_pTopSprite->SetLeftDstRect(m_StartPosition.x);
 	m_pTopSprite->SetBottomDstRect(m_StartPosition.y);
@@ -116,7 +118,7 @@ void Avatar::Draw() const
 void Avatar::DrawAvatar() const
 {
 	
-	if ( m_TopActionState != TopActionState::crawling )
+	if ( m_TopActionState != TopActionState::crawling  && m_TopActionState != TopActionState::death)
 	{
 		// Not Crawling --> Draw both parts of the sprite
 		m_pBottomSprite->Draw();
@@ -125,40 +127,49 @@ void Avatar::DrawAvatar() const
 	}
 	else
 	{
-		// Crawling --> Draw only the bottom sprite
+		// Crawling / Death --> Draw only the bottom sprite
 		m_pBottomSprite->Draw();
 	}
 	
 }
 
-void Avatar::Update( float elapsedSeconds, const Level* level )
+void Avatar::Update( float elapsedSeconds, const Level* level, const Point2f& cameraPos)
 {
 
-	HandleInput();
+	m_CameraPos = cameraPos;
 
+	if (!m_IsDead)
+	{
+		HandleInput();
+	}
+	
 	UpdateFrames(elapsedSeconds);
 	
 	UpdateTopSrcRect();
 	UpdateBotSrcRect();
 
 
-	if ( !level->IsOnGround( m_pBottomSprite->GetDstRect(), m_Velocity ) )
+	if (!m_IsDead)
 	{
-		AvatarFalling( elapsedSeconds );
-		m_IsOnGround = false;
-	}
-	else
-	{
-		m_IsOnGround = true;
-	}
+		if (!level->IsOnGround(m_pBottomSprite->GetDstRect(), m_Velocity))
+		{
+			AvatarFalling(elapsedSeconds);
+			m_IsOnGround = false;
+		}
+		else
+		{
+			m_IsOnGround = true;
+		}
 
-	Move (elapsedSeconds );
-	level->HandleCollision( m_pBottomSprite->GetDstRect(), m_Velocity );
+		Move(elapsedSeconds);
+		level->HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
 
-	if ( m_Velocity.x == 0 )
-	{
-		m_IsMoving = false;
+		if (m_Velocity.x == 0)
+		{
+			m_IsMoving = false;
+		}
 	}
+	
 
 	m_pBulletManager->Update(elapsedSeconds, this);
 
@@ -285,6 +296,9 @@ void Avatar::UpdateBotSrcRect()
 		m_pBottomSprite->UpdateValues( 7, 1, 7, 15.f, 50.f, 28.f, 197.f );
 		break;
 
+	case Avatar::BotActionState::death:
+		m_pBottomSprite->UpdateValues(16, 1, 16, 15.f, 40.f, 40.f, 242.f);
+		break;
 	}
 
 	// Previous Action State different?
@@ -326,6 +340,10 @@ void Avatar::UpdateFrames( float elapsedSeconds )
 		case Avatar::BotActionState::shooting:
 			repeatBot = false;
 			break;
+
+		case Avatar::BotActionState::death:
+			repeatBot = false;
+			break;
 	}
 
 	// Update active frames
@@ -340,6 +358,12 @@ void Avatar::UpdateFrames( float elapsedSeconds )
 		m_IsShooting = false;
 		m_TopActionState = TopActionState::iddle;
 	}
+
+	// Check if death animation has finished
+	if (m_IsDead && m_pBottomSprite->GetAnimationFinish())
+	{
+		Respawn(elapsedSeconds);
+	}
 }
 
 
@@ -348,11 +372,13 @@ void Avatar::ResetSprite( Sprite* sprite, bool topSprite )
 {
 	sprite->ResetActFrame();
 	sprite->UpdateLeftSrcRect();
+	sprite->ResetAnimationFinish(false);
 
 	// Check wich sprite changed
 	if ( topSprite )
 	{
 		m_TopSpriteChanged = false;
+
 	}
 	else
 	{
@@ -587,17 +613,18 @@ void Avatar::CheckCrawling()
 	{
 		if ( m_IsMovingRight )
 		{
-			m_Velocity.x = m_NormalSpeed;
+			m_Velocity.x = m_Speed;
 		}
 		else
 		{
-			m_Velocity.x = -m_NormalSpeed;
+			m_Velocity.x = -m_Speed;
 		}
 	}
 }
 
 void Avatar::Move( float elapsedSec )
 {
+	
 	// Legs
 	m_pBottomSprite->SetLeftDstRect( m_pBottomSprite->GetDstRect().left + m_Velocity.x * elapsedSec );
 	m_pBottomSprite->SetBottomDstRect( m_pBottomSprite->GetDstRect().bottom + m_Velocity.y * elapsedSec );
@@ -605,7 +632,7 @@ void Avatar::Move( float elapsedSec )
 	// Body
 	m_pTopSprite->SetLeftDstRect(m_pTopSprite->GetDstRect().left + m_Velocity.x * elapsedSec);
 	CorrectTopSprite();
-
+	
 }
 
 void Avatar::Shoot()
@@ -629,9 +656,48 @@ void Avatar::AvatarFalling( float elapsedSec )
 	m_Velocity.y += m_Acceleration.y * elapsedSec;
 
 }
-
+// Avatar has been hit
 void Avatar::Hit()
 {
+	
+	if (!m_IsDead)
+	{
+		ResetSprite(m_pBottomSprite, false);
+		m_IsDead = true;
+		m_Velocity = Vector2f{ 0.f, 0.f };
+
+		m_TopActionState = TopActionState::death;
+		m_BotActionState = BotActionState::death;
+		m_ActBotAnimation = Animations::death;
+		m_ActTopAnimation = Animations::death;
+
+	}
+	
+}
+
+// Respaw the player position according with the camera Pos
+void Avatar::Respawn(float elapsedSec)
+{
+	m_SecondsRespawn += elapsedSec;
+
+	if (m_SecondsRespawn >= m_MaxTimeRespawn)
+	{
+		// Respawn player
+		ResetSprite(m_pBottomSprite, false);
+		m_SecondsRespawn = 0.f;
+		m_IsDead = false;
+
+		m_TopActionState = TopActionState::iddle;
+		m_BotActionState = BotActionState::iddle;
+		m_ActBotAnimation = Animations::iddle;
+		m_ActTopAnimation = Animations::iddle;
+
+		Point2f respawnPos{ m_CameraPos.x + 300.f, m_pBottomSprite->GetDstRect().bottom };
+		m_pBottomSprite->SetLeftDstRect(respawnPos.x);
+		m_pTopSprite->SetLeftDstRect(respawnPos.x);
+
+	}
+
 
 }
 

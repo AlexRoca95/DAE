@@ -1,8 +1,8 @@
-#include "GameObject.h"
+#include "projectile.h"
 
 class Avatar;
 #pragma once
-class Bullet final : public GameObject
+class Bullet final : public Projectile
 {
 
 public:
@@ -14,40 +14,17 @@ public:
 	Bullet& operator=(Bullet&& bullet) = delete;
 	~Bullet( );
 
-
-	virtual void Draw() const override;
-	virtual void Hit() override;
-
 	void Update(float elapsedSec, const Avatar* avatar);
+	
 
-	
-	void DesactivateBullet();
-	
-	bool GetIsHit();
-	
 
 private:
 
-	Sprite* m_pCollisionSprite;
-
-
-	Point2f m_Position;
-	bool m_IsInitialized;
 	bool m_IsMovingUp;
-	bool m_IsHit;
-
-	const float m_MaxSeconds;     // Time the bullet is active if it doesn't collide 
-	float m_Seconds;			  // Current Seconds
-	const float m_Speed;
-	Point2f m_Velocity;
-	
-
 
 	void Initialize();
 	void SetStartPos(const Avatar* avatar);
-	void Move(float elapsedSec);
 
-
-
+	virtual void Move(float elapsedSec) override;
 };
 

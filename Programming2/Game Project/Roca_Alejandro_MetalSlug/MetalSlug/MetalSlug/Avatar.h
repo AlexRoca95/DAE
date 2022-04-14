@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameObject.h"
-#include "Vector2f.h"
+
 
 class Texture;
 class Level;
@@ -22,7 +22,9 @@ public:
 		crawlingShooting, 
 		shooting, 
 		pointingUp, 
-		shootingUp
+		shootingUp,
+		death,
+		respawn
 	};
 
 	// Action State for the Top sprite
@@ -32,14 +34,18 @@ public:
 		jumping,
 		shooting,
 		pointingUp,
-		shootingUp
+		shootingUp,
+		death,
+		respawn
 	};
 	// Action State for the Bottom sprite
 	enum class BotActionState {   
 		iddle,
 		crawling,		
 		jumping,
-		shooting		// Only when crawling this state happens
+		shooting,		// Only when crawling this state happens
+		death,
+		respawn
 	};
 
 	Avatar();
@@ -53,7 +59,7 @@ public:
 	virtual void Hit() override;
 
 	void Shoot();
-	void Update(float elapsedSeconds, const Level* level);
+	void Update(float elapsedSeconds, const Level* level, const Point2f& cameraPos);
 
 	const bool GetIsMovingRight() const;
 	const Animations GetActiveAnimation() const;
@@ -66,7 +72,8 @@ private:
 	// General
 	static int m_GameObjectCounter;
 	Point2f m_StartPosition{};
-
+	Point2f m_CameraPos;
+	
 	// BulletManager
 	const int m_NrOfBullets;
 	BulletManager* m_pBulletManager;
@@ -82,9 +89,7 @@ private:
 	float m_Offset;									// To recolocate the top Sprite when changing sprites
 
 	// Physics variables
-	Vector2f m_Velocity;
 	Vector2f m_Acceleration;						// For gravity when jumping
-	const float m_NormalSpeed;
 	const float m_SlowSpeed;
 	const float m_JumpSpeed;
 	
@@ -95,6 +100,12 @@ private:
 	bool m_BotSpriteChanged;						
 	bool m_IsOnGround;								// Avatar is in the ground or not
 	bool m_IsShooting;
+
+
+	// Death
+	bool m_IsDead;
+	const float m_MaxTimeRespawn;
+	float m_SecondsRespawn;
 
 	// PRIVATE functions
 
@@ -109,6 +120,7 @@ private:
 	void CheckPreviousState();
 	void CheckCrawling();
 	void CheckShooting();
+	void Respawn(float elapsedSec);
 
 	// Input and actions
 	void HandleInput();

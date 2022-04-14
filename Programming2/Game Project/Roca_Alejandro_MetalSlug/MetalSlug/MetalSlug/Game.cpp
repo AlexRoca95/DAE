@@ -50,8 +50,10 @@ void  Game::InitEnemiesManager()
 {
 	for (int i{}; i < m_NrHelicopters; i++)
 	{
-		m_pEnemiesManager->AddEnemy(Point2f{ 2000.f, 400.f }, GameObject::Type::enemyHelicopter);
+		m_pEnemiesManager->AddEnemy(Point2f{ 4500.f, 700.f }, GameObject::Type::enemyHelicopter);
 	}
+
+	m_pEnemiesManager->SetVerticesLevel(m_Level->GetVertices());
 }
 
 
@@ -79,11 +81,14 @@ void Game::Update( float elapsedSec )
 	}
 	*/
 
-	m_Avatar->Update(elapsedSec, m_Level);
-	m_pEnemiesManager->Update(elapsedSec);
+	m_Avatar->Update(elapsedSec, m_Level, m_Camera->GetCameraPos());
+
+	m_pEnemiesManager->Update(elapsedSec, m_Avatar);
+
 	m_Avatar->GetBullets()->CheckHitEnemies(m_pEnemiesManager->GetEnemies());
 
 	m_Level->Update(elapsedSec, m_Avatar->GetBotShape());
+
 	m_Camera->SetLevelBoundaries(m_Level->GetBoundaries());
 
 

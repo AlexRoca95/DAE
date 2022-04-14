@@ -6,46 +6,47 @@ Camera::Camera(float width, float height)
 	:m_Width(width)
 	, m_Height(height)
 	, m_LevelBoundaries{ 0, 0, width, height }
+	, m_CameraPos { }
 {
 
 
 }
 
 // Change the camera position to the new position calculated by Clamp and Track
-void Camera::Transform(const Rectf& target) const
+void Camera::Transform(const Rectf& target) 
 {
-	Point2f m_NewCameraPos;
-	m_NewCameraPos = Track(target);
 
-	Clamp(m_NewCameraPos);
+	Track(target);
 
-	glTranslatef(-m_NewCameraPos.x, -m_NewCameraPos.y, 0.f);
+	Clamp();
+
+	glTranslatef(-m_CameraPos.x, -m_CameraPos.y, 0.f);
 }
 
 // Correct camera pos so it doesn't leave the boundaries
-void Camera::Clamp(Point2f& bottomLeftPos) const
+void Camera::Clamp() 
 {
-	if (m_LevelBoundaries.left > bottomLeftPos.x)
+	if (m_LevelBoundaries.left > m_CameraPos.x)
 	{
-		bottomLeftPos.x = 0;
+		m_CameraPos.x = 0;
 	}
 
-	if ( ( m_LevelBoundaries.left + m_LevelBoundaries.width ) < ( bottomLeftPos.x + m_Width ))
+	if ( ( m_LevelBoundaries.left + m_LevelBoundaries.width ) < (m_CameraPos.x + m_Width ))
 	{
-		bottomLeftPos.x = m_LevelBoundaries.width - m_Width;
-	}
-
-
-	if ( (m_LevelBoundaries.bottom + m_LevelBoundaries.height ) < ( bottomLeftPos.y + m_Height ))
-	{
-		bottomLeftPos.y = m_LevelBoundaries.height - m_Height;
+		m_CameraPos.x = m_LevelBoundaries.width - m_Width;
 	}
 
 
-
-	if ( m_LevelBoundaries.bottom > bottomLeftPos.y )
+	if ( (m_LevelBoundaries.bottom + m_LevelBoundaries.height ) < (m_CameraPos.y + m_Height ))
 	{
-		bottomLeftPos.y = m_LevelBoundaries.bottom;
+		m_CameraPos.y = m_LevelBoundaries.height - m_Height;
+	}
+
+
+
+	if ( m_LevelBoundaries.bottom > m_CameraPos.y )
+	{
+		m_CameraPos.y = m_LevelBoundaries.bottom;
 		
 	}
 
@@ -53,18 +54,23 @@ void Camera::Clamp(Point2f& bottomLeftPos) const
 
 // Keep track of the pos of the Avatar
 // Camera is center in X pos but not in Y in order to not exit the boundaries of the level
-Point2f Camera::Track(const Rectf target) const
+void Camera::Track(const Rectf target)
 {
-	Point2f newPos{};
+	
 
-	newPos.x = (target.left + target.width / 2) - (m_Width / 2);
-	newPos.y = (target.bottom + target.height / 2) - (m_Height / 4.5f);
+	m_CameraPos.x = (target.left + target.width / 2) - (m_Width / 2);
+	m_CameraPos.y = (target.bottom + target.height / 2) - (m_Height / 4.5f);
 
-	return newPos;
+	
 }
 
 
 void Camera::SetLevelBoundaries(const Rectf& levelBoundaries)
 {
 	m_LevelBoundaries = levelBoundaries;
+}
+
+const Point2f Camera::GetCameraPos() const
+{
+	return m_CameraPos;
 }

@@ -84,8 +84,8 @@ void BulletManager::CheckHitLevel()
 		{
 			RandomCollision(randomHit);
 
-			Point2f ray{ ptr->GetBotShape().left,  ptr->GetBotShape().bottom + ptr->GetBotShape().height / 2};
-			Point2f rayEnd{ ptr->GetBotShape().left + ptr->GetBotShape().width + float(randomHit),  ptr->GetBotShape().bottom + ptr->GetBotShape().height / 2};
+			Point2f ray{ ptr->GetTopShape().left,  ptr->GetTopShape().bottom + ptr->GetTopShape().height / 2};
+			Point2f rayEnd{ ptr->GetTopShape().left + ptr->GetTopShape().width + float(randomHit),  ptr->GetTopShape().bottom + ptr->GetBotShape().height / 2};
 
 			utils::HitInfo hitInfo{};
 
@@ -113,16 +113,16 @@ void BulletManager::CheckHitEnemies(std::vector<Enemy*> enemies)
 				if (enemyPtr->GetIsActive())
 				{
 					// X axis
-					if ( ( bulletPtr->GetBotShape().left ) >
+					if ( ( bulletPtr->GetTopShape().left ) >
 						enemyPtr->GetBotShape().left			&&  
-						bulletPtr->GetBotShape().left < ( enemyPtr->GetBotShape().left + 
+						bulletPtr->GetTopShape().left < ( enemyPtr->GetBotShape().left +
 							enemyPtr->GetBotShape().width ) )
 					{
 						
 						// Y axis
-						if (bulletPtr->GetBotShape().bottom  >
+						if (bulletPtr->GetTopShape().bottom  >
 							enemyPtr->GetBotShape().bottom &&
-							bulletPtr->GetBotShape().bottom < (enemyPtr->GetBotShape().bottom +
+							bulletPtr->GetTopShape().bottom < (enemyPtr->GetBotShape().bottom +
 								enemyPtr->GetBotShape().height))
 						{
 							bulletPtr->Hit();

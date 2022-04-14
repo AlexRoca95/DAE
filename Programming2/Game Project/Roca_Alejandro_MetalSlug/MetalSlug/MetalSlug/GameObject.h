@@ -2,6 +2,7 @@
 // Abstract class from which all objects from the game will inherit
 #include "Sprite.h"
 #include <vector>
+#include "Vector2f.h"
 
 class Level;
 class GameObject
@@ -12,13 +13,14 @@ public:
 
 		avatar,
 		bullet,
+		bomb,
 		enemyHelicopter,
 		enemySoldier,
 		boss,
 		prisioner
 	};
 
-	GameObject( GameObject::Type id );
+	GameObject( GameObject::Type id, float speed );
 	virtual ~GameObject() = default;
 	GameObject(const GameObject& gameObject) = delete;
 	GameObject(GameObject&& gameObject) = delete;
@@ -49,6 +51,8 @@ protected:
 	Sprite* m_pBottomSprite;
 
 	const float m_Scale;
-	
+
+	Vector2f m_Velocity;
+	const float m_Speed;
 };
 

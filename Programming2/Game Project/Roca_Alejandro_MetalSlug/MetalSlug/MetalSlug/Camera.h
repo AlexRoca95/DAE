@@ -10,16 +10,20 @@ public:
 	Camera& operator=(Camera&& camera) = delete;
 
 	void SetLevelBoundaries(const Rectf& levelBoundaries);
-	void Transform(const Rectf& target) const;
+	void Transform(const Rectf& target) ;
+
+
+	const Point2f GetCameraPos() const;
 
 private:
 
 	float m_Width;
 	float m_Height;
 	Rectf m_LevelBoundaries;
+	Point2f m_CameraPos;
 	
 
-	void Clamp(Point2f& bottomLeftPos) const;
-	Point2f Track(const Rectf target) const;
+	void Clamp();
+	void Track(const Rectf target);
 };
 

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "EnemiesManager.h"
+#include "Avatar.h"
 #include "Helicopter.h"
 
 
@@ -34,14 +35,14 @@ void EnemiesManager::Draw() const
 	}
 
 }
-void EnemiesManager::Update(float elapsedSec)
+void EnemiesManager::Update(float elapsedSec, Avatar* avatar)
 {
 	for (Enemy* ptr : m_pEnemies)
 	{
 
 		if (ptr->GetIsActive())
 		{
-			ptr->Update(elapsedSec);
+			ptr->Update(elapsedSec, avatar, m_VerticesLevel);
 		}
 	}
 }
@@ -64,3 +65,10 @@ std::vector <Enemy*> EnemiesManager::GetEnemies() const
 {
 	return m_pEnemies;
 }
+
+
+void EnemiesManager::SetVerticesLevel(std::vector<Point2f> vertices)
+{
+	m_VerticesLevel = vertices;
+}
+
