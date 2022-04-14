@@ -8,7 +8,16 @@ class Level;
 class GameObject
 {
 public:
-
+	
+	
+	// Stages of the game
+	enum class GameStage {
+		moving,
+		firstHeliFight,
+		secondHeliFight,
+		boss,
+		end
+	};
 	enum class Type {
 
 		avatar,
@@ -20,6 +29,7 @@ public:
 		prisioner
 	};
 
+
 	GameObject( GameObject::Type id, float speed );
 	virtual ~GameObject() = default;
 	GameObject(const GameObject& gameObject) = delete;
@@ -29,14 +39,18 @@ public:
 
 	virtual void Draw() const = 0;
 	virtual void Hit() = 0;
+	virtual void CheckGameState() = 0;
 
 	// Getters
-	virtual bool GetIsActive();
-	virtual Rectf GetTopShape() const;
-	virtual Rectf GetBotShape() const;
+	bool GetIsActive();
+	Rectf GetTopShape() const;
+	Rectf GetBotShape() const;
+	GameStage& GetGameStage() const;
+	Type GetType() const;
 
 	// Setters
-	virtual void SetIsActive(bool active);
+	void SetIsActive(bool active);
+
 
 
 
@@ -54,5 +68,11 @@ protected:
 
 	Vector2f m_Velocity;
 	const float m_Speed;
+	
+	static GameStage m_GameState;
+	static bool m_IsFirstHeliFightStart;
+	static bool m_IsSecondHeliFightStart;
+	static bool m_IsBossFightStart;
 };
+
 

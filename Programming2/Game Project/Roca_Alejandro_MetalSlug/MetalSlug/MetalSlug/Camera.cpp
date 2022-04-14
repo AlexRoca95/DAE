@@ -13,10 +13,10 @@ Camera::Camera(float width, float height)
 }
 
 // Change the camera position to the new position calculated by Clamp and Track
-void Camera::Transform(const Rectf& target) 
+void Camera::Transform(const Rectf& target, const GameObject::GameStage& gameStage) 
 {
-
-	Track(target);
+	
+	Track(target, gameStage);
 
 	Clamp();
 
@@ -54,13 +54,17 @@ void Camera::Clamp()
 
 // Keep track of the pos of the Avatar
 // Camera is center in X pos but not in Y in order to not exit the boundaries of the level
-void Camera::Track(const Rectf target)
+void Camera::Track(const Rectf target, const GameObject::GameStage& gameStage)
 {
 	
+	if (gameStage == GameObject::GameStage::moving)
+	{
+		// Only move camera when State of the game is moving
+		m_CameraPos.x = (target.left + target.width / 2) - (m_Width / 2);
+		m_CameraPos.y = (target.bottom + target.height / 2) - (m_Height / 4.5f);
 
-	m_CameraPos.x = (target.left + target.width / 2) - (m_Width / 2);
-	m_CameraPos.y = (target.bottom + target.height / 2) - (m_Height / 4.5f);
-
+	}
+	
 	
 }
 
@@ -70,7 +74,7 @@ void Camera::SetLevelBoundaries(const Rectf& levelBoundaries)
 	m_LevelBoundaries = levelBoundaries;
 }
 
-const Point2f Camera::GetCameraPos() const
+const Rectf Camera::GetCameraPos() const
 {
-	return m_CameraPos;
+	return Rectf{m_CameraPos.x, m_CameraPos.y, m_Width, m_Height};
 }

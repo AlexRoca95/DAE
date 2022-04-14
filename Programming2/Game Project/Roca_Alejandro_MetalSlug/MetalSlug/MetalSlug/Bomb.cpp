@@ -84,6 +84,11 @@ void Bomb::Move(float elapsedSec)
 
 }
 
+void Bomb::CheckGameState()
+{
+
+}
+
 Sprite* Bomb::GetBotSprite()
 {
 	return m_pBottomSprite;

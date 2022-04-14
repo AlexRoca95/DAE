@@ -20,6 +20,7 @@ public:
 
 	virtual void Draw() const override;
 	virtual void Hit() override;
+	virtual void CheckGameState() override;
 
 	virtual void Update(float elapsedSec, Avatar* avatar, const std::vector<Point2f>& vertices);
 

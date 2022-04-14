@@ -39,12 +39,12 @@ void EnemiesManager::Update(float elapsedSec, Avatar* avatar)
 {
 	for (Enemy* ptr : m_pEnemies)
 	{
-
 		if (ptr->GetIsActive())
 		{
 			ptr->Update(elapsedSec, avatar, m_VerticesLevel);
 		}
 	}
+
 }
 
 void EnemiesManager::AddEnemy( const Point2f& startPos, const GameObject::Type& type )
@@ -54,7 +54,6 @@ void EnemiesManager::AddEnemy( const Point2f& startPos, const GameObject::Type& 
 	{
 		case GameObject::Type::enemyHelicopter:
 			enemy = new Helicopter(startPos);
-			enemy->SetIsActive(true);
 		break;
 	}
 

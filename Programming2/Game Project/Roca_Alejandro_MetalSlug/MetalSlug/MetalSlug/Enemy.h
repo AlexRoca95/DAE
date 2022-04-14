@@ -26,6 +26,7 @@ public:
 
 
 	virtual void Draw() const override = 0;
+	virtual void CheckGameState() = 0;
 	virtual void Update(float elapsedSec, Avatar* avatar, const std::vector<Point2f>& vertices) = 0;
 
 protected:

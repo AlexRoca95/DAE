@@ -156,5 +156,10 @@ void Bullet::Move( float elapsedSec )
 	}
 }
 
+void Bullet::CheckGameState()
+{
+
+}
+
 
 

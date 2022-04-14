@@ -34,6 +34,8 @@ Level::Level()
 	TransformSVGVertices();
 
 	InitSprites();
+
+	
 	
 }
 

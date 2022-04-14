@@ -57,9 +57,10 @@ public:
 
 	virtual void Draw() const override;
 	virtual void Hit() override;
+	virtual void CheckGameState() override;
 
 	void Shoot();
-	void Update(float elapsedSeconds, const Level* level, const Point2f& cameraPos);
+	void Update(float elapsedSeconds, const Level* level, const Rectf& cameraPos);
 
 	const bool GetIsMovingRight() const;
 	const Animations GetActiveAnimation() const;
@@ -72,7 +73,7 @@ private:
 	// General
 	static int m_GameObjectCounter;
 	Point2f m_StartPosition{};
-	Point2f m_CameraPos;
+	Rectf m_CameraPos;
 	
 	// BulletManager
 	const int m_NrOfBullets;
@@ -101,15 +102,23 @@ private:
 	bool m_IsOnGround;								// Avatar is in the ground or not
 	bool m_IsShooting;
 
-
 	// Death
 	bool m_IsDead;
 	const float m_MaxTimeRespawn;
 	float m_SecondsRespawn;
 
+	// GameStages
+
+	const float m_Stage2Pos;
+	const float m_Stage3Pos;
+	const float m_Stage4Pos;
+
 	// PRIVATE functions
 
 	void Initialize();
+	void Respawn(float elapsedSec);
+
+	void CheckCameraBoundaries();
 
 	// Sprite related
 	void UpdateTopSrcRect();
@@ -120,7 +129,7 @@ private:
 	void CheckPreviousState();
 	void CheckCrawling();
 	void CheckShooting();
-	void Respawn(float elapsedSec);
+	
 
 	// Input and actions
 	void HandleInput();

@@ -69,6 +69,7 @@ void Helicopter::Draw() const
 
 void Helicopter::Update(float elapsedSec, Avatar* avatar, const std::vector<Point2f>& vertices)
 {
+	std::cout << int(m_GameState) << std::endl;
 	if (!m_IsDeath)
 	{
 		m_pBottomSprite->Update(elapsedSec, true);
@@ -273,3 +274,7 @@ void Helicopter::CheckBombCollision(Avatar* avatar, const std::vector<Point2f>& 
 	
 }
 
+void Helicopter::CheckGameState() 
+{
+
+}

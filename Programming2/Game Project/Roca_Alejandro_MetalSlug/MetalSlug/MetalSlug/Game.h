@@ -12,6 +12,14 @@ class Enemy;
 class Game final
 {
 public:
+
+	enum class GameState {
+		start,
+		firstHeliFight,
+		secondHeliFight,
+		bossFight
+	};
+
 	explicit Game( const Window& window );
 	Game(const Game& other) = delete;
 	Game& operator=(const Game& other) = delete;
@@ -36,6 +44,8 @@ private:
 	// All GameObjects from the game
 	std::vector <GameObject*> m_pGameObjects;
 
+	GameState m_GameState;
+
 	// Level
 	Level* m_Level;
 	Avatar* m_Avatar;
@@ -55,7 +65,7 @@ private:
 	void InitAvatar();
 	void InitCamera();
 	void InitEnemiesManager();
-
+	void SetGameStage();
 
 	void Cleanup( );
 	void ClearBackground( ) const;

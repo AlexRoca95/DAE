@@ -1,7 +1,10 @@
 #pragma once
+#include "GameObject.h"
+
 class Camera
 {
 public:
+
 	Camera(float width, float height);
 	~Camera() = default;
 	Camera(const Camera& level) = delete;
@@ -10,10 +13,10 @@ public:
 	Camera& operator=(Camera&& camera) = delete;
 
 	void SetLevelBoundaries(const Rectf& levelBoundaries);
-	void Transform(const Rectf& target) ;
+	void Transform(const Rectf& target, const GameObject::GameStage& gameStage) ;
 
 
-	const Point2f GetCameraPos() const;
+	const Rectf GetCameraPos() const;
 
 private:
 
@@ -24,6 +27,6 @@ private:
 	
 
 	void Clamp();
-	void Track(const Rectf target);
+	void Track(const Rectf target, const GameObject::GameStage& gameStage);
 };
 

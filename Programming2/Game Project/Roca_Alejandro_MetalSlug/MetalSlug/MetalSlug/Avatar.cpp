@@ -7,6 +7,8 @@
 
 int Avatar::m_GameObjectCounter = 0;
 
+
+
 Avatar::Avatar()
 	: GameObject( GameObject::Type::avatar, 300.f )  // Type and velocity
 	, m_Acceleration{ Point2f{ 0.f, -981.f } }
@@ -32,11 +34,14 @@ Avatar::Avatar()
 	, m_MaxTimeRespawn { 1.5f }
 	, m_SecondsRespawn {  }
 	, m_CameraPos{ }
+	, m_Stage2Pos{ m_Scale * 1700.f }
+	, m_Stage3Pos { m_Scale * 3000.f }
+	, m_Stage4Pos { m_Scale * 3900.f }
 {
 	m_GameObjectCounter++;
 
 	Initialize();
-	
+
 }
 
 Avatar::~Avatar()
@@ -68,6 +73,7 @@ void Avatar::Initialize()
 	m_pBottomSprite->UpdateLeftSrcRect();
 
 	InitBulletManager();
+
 
 }
 
@@ -133,7 +139,7 @@ void Avatar::DrawAvatar() const
 	
 }
 
-void Avatar::Update( float elapsedSeconds, const Level* level, const Point2f& cameraPos)
+void Avatar::Update( float elapsedSeconds, const Level* level, const Rectf& cameraPos)
 {
 
 	m_CameraPos = cameraPos;
@@ -170,6 +176,7 @@ void Avatar::Update( float elapsedSeconds, const Level* level, const Point2f& ca
 		}
 	}
 	
+	CheckGameState();
 
 	m_pBulletManager->Update(elapsedSeconds, this);
 
@@ -624,7 +631,9 @@ void Avatar::CheckCrawling()
 
 void Avatar::Move( float elapsedSec )
 {
-	
+	// Check if we leave camera boundaries
+	CheckCameraBoundaries();
+
 	// Legs
 	m_pBottomSprite->SetLeftDstRect( m_pBottomSprite->GetDstRect().left + m_Velocity.x * elapsedSec );
 	m_pBottomSprite->SetBottomDstRect( m_pBottomSprite->GetDstRect().bottom + m_Velocity.y * elapsedSec );
@@ -635,6 +644,24 @@ void Avatar::Move( float elapsedSec )
 	
 }
 
+// Check if we exit the camera boundaries. Stop movement if true
+void Avatar::CheckCameraBoundaries()
+{
+	// Left boundarie
+	if (!m_IsMovingRight && (m_pBottomSprite->GetDstRect().left - m_pBottomSprite->GetFrameWidth() < m_CameraPos.left))
+	{
+		m_Velocity.x = 0.f;
+
+	}
+
+	// Right boundarie
+	if (m_IsMovingRight && (m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetFrameWidth() >= 
+		m_CameraPos.left + m_CameraPos.width - m_pBottomSprite->GetFrameWidth()) )
+	{
+		m_Velocity.x = 0.f;
+	}
+}
+
 void Avatar::Shoot()
 {
 	m_IsShooting = true;
@@ -642,6 +669,7 @@ void Avatar::Shoot()
 	ResetSprite( m_pTopSprite, true );
 
 	m_pBulletManager->ActivateBullet();
+
 }
 
 // Correct the top sprite so it draws it correctly
@@ -656,10 +684,10 @@ void Avatar::AvatarFalling( float elapsedSec )
 	m_Velocity.y += m_Acceleration.y * elapsedSec;
 
 }
-// Avatar has been hit
+
+// Avatar has been hit = Death
 void Avatar::Hit()
 {
-	
 	if (!m_IsDead)
 	{
 		ResetSprite(m_pBottomSprite, false);
@@ -672,7 +700,6 @@ void Avatar::Hit()
 		m_ActTopAnimation = Animations::death;
 
 	}
-	
 }
 
 // Respaw the player position according with the camera Pos
@@ -692,11 +719,59 @@ void Avatar::Respawn(float elapsedSec)
 		m_ActBotAnimation = Animations::iddle;
 		m_ActTopAnimation = Animations::iddle;
 
-		Point2f respawnPos{ m_CameraPos.x + 300.f, m_pBottomSprite->GetDstRect().bottom };
+		Point2f respawnPos{ m_CameraPos.left + 300.f, m_pBottomSprite->GetDstRect().bottom };
 		m_pBottomSprite->SetLeftDstRect(respawnPos.x);
 		m_pTopSprite->SetLeftDstRect(respawnPos.x);
 
 	}
+
+
+}
+
+
+// CHeck the position of the avatar and change the stage of the game if he has reached
+// to one of the stages position
+void Avatar::CheckGameState()
+{
+	if (!m_IsFirstHeliFightStart)
+	{
+		if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > m_Stage2Pos)
+		{
+			// Second Stage of the GAME --> First fight with the helicopter
+			m_GameState = GameStage::firstHeliFight;
+			m_IsFirstHeliFightStart = true;
+			
+		}
+	}
+	else
+	{
+		if (!m_IsSecondHeliFightStart)
+		{
+			if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > m_Stage3Pos )
+			{
+				// Third Stage of the GAME --> Second fight with the helicopter
+				m_GameState = GameStage::secondHeliFight;
+				m_IsSecondHeliFightStart = true;
+			}
+		}
+		else
+		{
+			if (!m_IsBossFightStart)
+			{
+				if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > m_Stage4Pos )
+				{
+
+					m_GameState = GameStage::boss;
+					m_IsBossFightStart = true;
+
+				}
+			}
+		}
+	}
+
+
+	
+	
 
 
 }

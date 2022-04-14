@@ -14,6 +14,8 @@ public:
 	Bullet& operator=(Bullet&& bullet) = delete;
 	~Bullet( );
 
+	virtual void CheckGameState() override;
+
 	void Update(float elapsedSec, const Avatar* avatar);
 	
 

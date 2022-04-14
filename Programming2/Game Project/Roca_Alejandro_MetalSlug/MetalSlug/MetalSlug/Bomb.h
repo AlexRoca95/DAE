@@ -15,6 +15,7 @@ public:
 	Bomb& operator=( const Bomb& bomb ) = delete;
 	Bomb& operator=( Bomb&& bomb ) = delete;
 
+	virtual void CheckGameState() override;
 
 	void Update(float elapsedSec, const Rectf& actorShape);
 

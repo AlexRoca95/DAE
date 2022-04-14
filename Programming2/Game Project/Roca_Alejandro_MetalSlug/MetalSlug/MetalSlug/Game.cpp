@@ -7,6 +7,7 @@
 #include <iostream>
 
 
+
 Game::Game( const Window& window ) 
 	:m_Window{ window }
 	, m_Camera{ new Camera(m_Window.width, m_Window.height) }
@@ -15,8 +16,10 @@ Game::Game( const Window& window )
 	, m_pEnemiesManager { new EnemiesManager }
 	, m_Scale{ 2.7f }
 	, m_NrHelicopters{ 1 }
+	, m_GameState { GameState::start }
 {
 	Initialize( );
+
 }
 
 Game::~Game( )
@@ -48,10 +51,9 @@ void Game::InitCamera()
 
 void  Game::InitEnemiesManager()
 {
-	for (int i{}; i < m_NrHelicopters; i++)
-	{
-		m_pEnemiesManager->AddEnemy(Point2f{ 4500.f, 700.f }, GameObject::Type::enemyHelicopter);
-	}
+	
+	m_pEnemiesManager->AddEnemy(Point2f{ 4400.f, 700.f }, GameObject::Type::enemyHelicopter);
+	m_pEnemiesManager->AddEnemy(Point2f{ 8200.f, 700.f }, GameObject::Type::enemyHelicopter);
 
 	m_pEnemiesManager->SetVerticesLevel(m_Level->GetVertices());
 }
@@ -83,6 +85,7 @@ void Game::Update( float elapsedSec )
 
 	m_Avatar->Update(elapsedSec, m_Level, m_Camera->GetCameraPos());
 
+
 	m_pEnemiesManager->Update(elapsedSec, m_Avatar);
 
 	m_Avatar->GetBullets()->CheckHitEnemies(m_pEnemiesManager->GetEnemies());
@@ -94,13 +97,14 @@ void Game::Update( float elapsedSec )
 
 }
 
+
 void Game::Draw( ) const
 {
 	ClearBackground( );
 
 	glPushMatrix();
 	
-		m_Camera->Transform(m_Avatar->GetBotShape());
+		m_Camera->Transform(m_Avatar->GetBotShape(), m_Avatar->GetGameStage() );
 	
 		m_Level->DrawBackground();
 		

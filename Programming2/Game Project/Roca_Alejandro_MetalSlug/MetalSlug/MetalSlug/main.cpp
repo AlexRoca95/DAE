@@ -2,6 +2,9 @@
 #include "Core.h"
 #include <ctime>
 
+
+
+
 void StartHeapControl();
 void DumpMemoryLeaks();
 

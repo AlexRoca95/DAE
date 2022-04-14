@@ -14,10 +14,12 @@ public:
 	Projectile& operator=(const Projectile & projectile) = delete;
 	Projectile& operator=(Projectile && projectile) = delete;
 
-	virtual void Draw() const;
-	virtual void Hit();
-	virtual void DesactivateProjectile();
-	virtual bool GetIsHit();
+	virtual void CheckGameState() = 0;
+
+	void Draw() const;
+	void Hit();
+	void DesactivateProjectile();
+	bool GetIsHit();
 
 protected:
 
