@@ -14,7 +14,6 @@ Game::Game( const Window& window )
 	, m_Level{ new Level }
 	, m_Avatar{ new Avatar }
 	, m_pEnemiesManager { new EnemiesManager }
-	, m_Scale{ 2.7f }
 	, m_NrHelicopters{ 1 }
 	, m_GameState { GameState::start }
 {
@@ -52,8 +51,8 @@ void Game::InitCamera()
 void  Game::InitEnemiesManager()
 {
 	
-	m_pEnemiesManager->AddEnemy(Point2f{ 4400.f, 700.f }, GameObject::Type::enemyHelicopter);
-	m_pEnemiesManager->AddEnemy(Point2f{ 8200.f, 700.f }, GameObject::Type::enemyHelicopter);
+	m_pEnemiesManager->AddEnemy(Point2f{ g_Stage2Pos * g_Scale, 700.f }, GameObject::Type::enemyHelicopter);
+	m_pEnemiesManager->AddEnemy(Point2f{ g_Stage3Pos * g_Scale, 700.f }, GameObject::Type::enemyHelicopter);
 
 	m_pEnemiesManager->SetVerticesLevel(m_Level->GetVertices());
 }

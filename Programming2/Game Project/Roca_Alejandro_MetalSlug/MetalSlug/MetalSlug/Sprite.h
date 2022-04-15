@@ -7,7 +7,7 @@ class Sprite final
 {
 public:
 
-	Sprite( const std::string& filename, int nrCols = 1, int nrRows = 1, float frameSec = 0, float scale = 2.7f );
+	Sprite( const std::string& filename, int nrCols = 1, int nrRows = 1, float frameSec = 0, float scale = g_Scale );
 	Sprite(const Sprite& spr1);
 	Sprite(Sprite&& spr1);
 	~Sprite( );

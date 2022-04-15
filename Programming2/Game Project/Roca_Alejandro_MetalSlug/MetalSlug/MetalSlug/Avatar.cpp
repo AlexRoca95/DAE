@@ -30,13 +30,9 @@ Avatar::Avatar()
 	, m_IsMoving{ false }
 	, m_pBulletManager{ new BulletManager }
 	, m_NrOfBullets { 20 }
-	, m_IsDead { false }
 	, m_MaxTimeRespawn { 1.5f }
 	, m_SecondsRespawn {  }
 	, m_CameraPos{ }
-	, m_Stage2Pos{ m_Scale * 1700.f }
-	, m_Stage3Pos { m_Scale * 3000.f }
-	, m_Stage4Pos { m_Scale * 3900.f }
 {
 	m_GameObjectCounter++;
 
@@ -735,11 +731,12 @@ void Avatar::CheckGameState()
 {
 	if (!m_IsFirstHeliFightStart)
 	{
-		if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > m_Stage2Pos)
+		if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > g_Stage2Pos * g_Scale)
 		{
 			// Second Stage of the GAME --> First fight with the helicopter
 			m_GameState = GameStage::firstHeliFight;
 			m_IsFirstHeliFightStart = true;
+			m_IsStageChanged = true;
 			
 		}
 	}
@@ -747,22 +744,24 @@ void Avatar::CheckGameState()
 	{
 		if (!m_IsSecondHeliFightStart)
 		{
-			if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > m_Stage3Pos )
+			if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > g_Stage3Pos * g_Scale )
 			{
 				// Third Stage of the GAME --> Second fight with the helicopter
 				m_GameState = GameStage::secondHeliFight;
 				m_IsSecondHeliFightStart = true;
+				m_IsStageChanged = true;
 			}
 		}
 		else
 		{
 			if (!m_IsBossFightStart)
 			{
-				if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > m_Stage4Pos )
+				if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > g_Stage4Pos * g_Scale )
 				{
 
 					m_GameState = GameStage::boss;
 					m_IsBossFightStart = true;
+					m_IsStageChanged = true;
 
 				}
 			}

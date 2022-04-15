@@ -36,7 +36,6 @@ private:
 	Sprite* m_pLevelTexture;
 	
 	// Sprites and drawing
-	const float m_Scale;						// Scale for the vertices
 	const int m_NrOfPaths;					// Total number of paths from the SVG File
 	const int m_Rows;
 

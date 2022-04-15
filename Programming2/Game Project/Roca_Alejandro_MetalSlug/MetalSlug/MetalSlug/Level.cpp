@@ -13,7 +13,6 @@ Level::Level()
 	, m_pLevelLakeTexture{ new Sprite("Resources/sprites/level/levelRight.png") }
 	, m_Vertices{ }
 	, m_pLevelSVG{ }
-	, m_Scale{ 2.7f }
 	, m_NrOfPaths{ 21 }
 	, m_TransformedVertices{ }
 	, m_Rows{ 8 }
@@ -21,12 +20,12 @@ Level::Level()
 	, m_UpperBoundaryValue{ 130.f }
 	, m_BotBoundary{ }
 	, m_Boundaries{ }
-	, m_BoundariesChangePos{ 3340.f * m_Scale }
+	, m_BoundariesChangePos{ 3340.f * g_Scale }
 
 {
 
 	m_Boundaries.left = 0.f;
-	m_Boundaries.width = m_pLevelTexture->GetTexture()->GetWidth() * m_Scale;
+	m_Boundaries.width = m_pLevelTexture->GetTexture()->GetWidth() * g_Scale;
 
 	UpdateLevelBoundaries();
 
@@ -53,7 +52,7 @@ void Level::TransformSVGVertices()
 	Matrix2x3 matScale; // Scale matrix
 	Matrix2x3 matWorld;  // Resulting matrix
 
-	matScale.SetAsScale(m_Scale);
+	matScale.SetAsScale(g_Scale);
 	
 	// TRS Transformation
 	matWorld = matScale;
@@ -204,7 +203,7 @@ void Level::InitSprites()
 void Level::UpdateLevelBoundaries()
 {
 	m_Boundaries.bottom = m_BotBoundary;
-	m_Boundaries.height = ( (m_pLevelTexture->GetTexture()->GetHeight() / m_Rows) - m_UpperBoundary ) * m_Scale;
+	m_Boundaries.height = ( (m_pLevelTexture->GetTexture()->GetHeight() / m_Rows) - m_UpperBoundary ) * g_Scale;
 
 }
 

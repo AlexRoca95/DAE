@@ -51,9 +51,6 @@ private:
 	Avatar* m_Avatar;
 	Camera* m_Camera;
 
-
-	const float m_Scale;
-
 	// Enemies
 	const int m_NrHelicopters;
 	EnemiesManager* m_pEnemiesManager;

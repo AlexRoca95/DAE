@@ -103,15 +103,9 @@ private:
 	bool m_IsShooting;
 
 	// Death
-	bool m_IsDead;
 	const float m_MaxTimeRespawn;
 	float m_SecondsRespawn;
 
-	// GameStages
-
-	const float m_Stage2Pos;
-	const float m_Stage3Pos;
-	const float m_Stage4Pos;
 
 	// PRIVATE functions
 

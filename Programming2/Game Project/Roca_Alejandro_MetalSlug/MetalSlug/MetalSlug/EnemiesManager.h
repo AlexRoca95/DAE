@@ -29,8 +29,13 @@ private:
 
 	std::vector <Enemy*> m_pEnemies;
 	std::vector<Point2f> m_VerticesLevel;			// For collisions with the level
-	//const int m_NrHelicopters;
+	int m_TotalNrHelicopters;
 	//const int m_NrSoldiers;
+
+
+	void ActivateHelicopter();
+	void RemoveEnemy();
+	
 
 
 };

@@ -4,6 +4,7 @@
 #include <vector>
 #include "Vector2f.h"
 
+
 class Level;
 class GameObject
 {
@@ -42,14 +43,17 @@ public:
 	virtual void CheckGameState() = 0;
 
 	// Getters
-	bool GetIsActive();
+	bool GetIsActive() const;
+	bool GetIsDead() const;
 	Rectf GetTopShape() const;
 	Rectf GetBotShape() const;
 	GameStage& GetGameStage() const;
+	bool GetGameStageChanged() const;
 	Type GetType() const;
 
 	// Setters
 	void SetIsActive(bool active);
+	void SetGameStageChanged(bool stageChanged);
 
 
 
@@ -58,21 +62,27 @@ protected:
 	const Type m_Id;
 				
 	bool m_IsActive;			// GameObject activated or not
-	bool m_IsDeath;				// GameObject is dead or not (for death animation)
+	bool m_IsDead;				// GameObject is dead or not (for death animation)
+	bool m_IsDying;
 
 	// Sprites needed for the game objects
 	Sprite* m_pTopSprite;
 	Sprite* m_pBottomSprite;
 
-	const float m_Scale;
-
 	Vector2f m_Velocity;
 	const float m_Speed;
 	
-	static GameStage m_GameState;
+
+	// GameStages
+	static GameStage m_GameState;					// Current stage of the game
+
+	// To know if a stage has started or not
 	static bool m_IsFirstHeliFightStart;
 	static bool m_IsSecondHeliFightStart;
 	static bool m_IsBossFightStart;
+
+	static bool m_IsStageChanged;					// To know if we have change from moving to another stage
+
 };
 
 

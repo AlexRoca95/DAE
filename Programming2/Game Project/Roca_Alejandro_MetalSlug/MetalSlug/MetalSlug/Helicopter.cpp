@@ -3,7 +3,7 @@
 #include "Avatar.h"
 #include "Bomb.h"
 #include "utils.h"
-#include <iostream>
+
 
 
 Helicopter::Helicopter(const Point2f& startPos)
@@ -69,8 +69,8 @@ void Helicopter::Draw() const
 
 void Helicopter::Update(float elapsedSec, Avatar* avatar, const std::vector<Point2f>& vertices)
 {
-	std::cout << int(m_GameState) << std::endl;
-	if (!m_IsDeath)
+	//std::cout << int(m_GameState) << std::endl;
+	if (!m_IsDying)
 	{
 		m_pBottomSprite->Update(elapsedSec, true);
 
@@ -100,6 +100,13 @@ void Helicopter::Update(float elapsedSec, Avatar* avatar, const std::vector<Poin
 	else
 	{
 		DestroyHelicopter(elapsedSec);
+
+		if (m_IsThrowingBombs)
+		{
+			// Throw 3 bombs
+			ThrowBombs(elapsedSec, this->GetBotShape());
+			CheckBombCollision(avatar, vertices);
+		}
 	}
 
 }
@@ -110,9 +117,13 @@ void Helicopter::DestroyHelicopter(float elapsedSec)
 
 	if (m_pBottomSprite->GetAnimationFinish())
 	{
+		m_IsDead = true;
+
 		m_pBottomSprite->ResetAnimationFinish(false);
 		m_pBottomSprite->ResetActFrame();
 		m_IsActive = false;
+
+		m_GameState = GameObject::GameStage::moving;   // Stage finished --> Moving stage again
 	}
 }
 
@@ -123,7 +134,7 @@ void Helicopter::Hit()
 	
 	if (m_Health == 0)
 	{
-		m_IsDeath = true;
+		m_IsDying = true;
 		m_pBottomSprite->UpdateValues(7, 1, 7, 12.f, 100.f, 72.f, 232.f);  // Change death animation
 	}
 
