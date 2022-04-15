@@ -3,6 +3,7 @@
 
 #pragma once
 class Avatar;
+class Level;
 class Enemy : public GameObject
 {
 
@@ -27,13 +28,17 @@ public:
 
 	virtual void Draw() const override = 0;
 	virtual void CheckGameState() = 0;
-	virtual void Update(float elapsedSec, Avatar* avatar, const std::vector<Point2f>& vertices) = 0;
+	virtual void Update(float elapsedSec, Avatar* avatar, const Level* level) = 0;
 
 protected:
 
 	ActionState m_ActionState;
+	ActionState m_PreviousAction;
 	const Point2f m_StartPos;
 	int m_Health;
+
+
+	
 
 };
 

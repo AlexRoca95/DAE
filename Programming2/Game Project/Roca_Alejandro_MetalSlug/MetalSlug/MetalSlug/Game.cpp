@@ -4,6 +4,7 @@
 #include "Helicopter.h"
 #include "BulletManager.h"
 #include "EnemiesManager.h"
+#include "Soldier.h"
 #include <iostream>
 
 
@@ -32,6 +33,8 @@ void Game::Initialize( )
 	InitCamera();
 	InitEnemiesManager();
 
+	soldier = new Soldier(Point2f{ 1335 * g_Scale, 200.f });
+
 }
 
 void Game::InitAvatar()
@@ -51,10 +54,9 @@ void Game::InitCamera()
 void  Game::InitEnemiesManager()
 {
 	
-	m_pEnemiesManager->AddEnemy(Point2f{ g_Stage2Pos * g_Scale, 700.f }, GameObject::Type::enemyHelicopter);
-	m_pEnemiesManager->AddEnemy(Point2f{ g_Stage3Pos * g_Scale, 700.f }, GameObject::Type::enemyHelicopter);
+	m_pEnemiesManager->AddEnemy(Point2f{ g_Stage2Pos * g_Scale, 700.f }, GameObject::Type::helicopter);
+	m_pEnemiesManager->AddEnemy(Point2f{ g_Stage3Pos * g_Scale, 700.f }, GameObject::Type::helicopter);
 
-	m_pEnemiesManager->SetVerticesLevel(m_Level->GetVertices());
 }
 
 
@@ -71,6 +73,7 @@ void Game::Cleanup( )
 	delete m_Level;
 	delete m_Camera;
 	delete m_pEnemiesManager;
+	delete soldier;
 }
 
 void Game::Update( float elapsedSec )
@@ -85,7 +88,8 @@ void Game::Update( float elapsedSec )
 	m_Avatar->Update(elapsedSec, m_Level, m_Camera->GetCameraPos());
 
 
-	m_pEnemiesManager->Update(elapsedSec, m_Avatar);
+	m_pEnemiesManager->Update(elapsedSec, m_Avatar, m_Level);
+	soldier->Update(elapsedSec, m_Avatar, m_Level);
 
 	m_Avatar->GetBullets()->CheckHitEnemies(m_pEnemiesManager->GetEnemies());
 
@@ -108,6 +112,7 @@ void Game::Draw( ) const
 		m_Level->DrawBackground();
 		
 		m_pEnemiesManager->Draw();
+		soldier->Draw();
 
 		// Draw all game objects
 		for (GameObject* ptr : m_pGameObjects)

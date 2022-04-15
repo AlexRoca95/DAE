@@ -9,6 +9,7 @@ class Avatar;
 class BulletManager;
 class EnemiesManager;
 class Enemy;
+class Soldier;
 class Game final
 {
 public:
@@ -54,6 +55,7 @@ private:
 	// Enemies
 	const int m_NrHelicopters;
 	EnemiesManager* m_pEnemiesManager;
+	Soldier* soldier;
 	
 
 	// FUNCTIONS
@@ -62,7 +64,6 @@ private:
 	void InitAvatar();
 	void InitCamera();
 	void InitEnemiesManager();
-	void SetGameStage();
 
 	void Cleanup( );
 	void ClearBackground( ) const;

@@ -90,15 +90,13 @@ private:
 	float m_Offset;									// To recolocate the top Sprite when changing sprites
 
 	// Physics variables
-	Vector2f m_Acceleration;						// For gravity when jumping
+						
 	const float m_SlowSpeed;
 	const float m_JumpSpeed;
 	
 	// Booleans
 	bool m_IsMovingRight;							// Moving right or not (for OpenGL)
-	bool m_IsMoving;								// Indicates if character is moving or not (for sprites)
-	bool m_TopSpriteChanged;						// Indicates if Top sprite was changed from the previous one
-	bool m_BotSpriteChanged;						
+	bool m_IsMoving;								// Indicates if character is moving or not (for sprites)				
 	bool m_IsOnGround;								// Avatar is in the ground or not
 	bool m_IsShooting;
 

@@ -2,6 +2,7 @@
 #include "Enemy.h"
 
 class Enemy;
+class level;
 class EnemiesManager
 {
 
@@ -15,15 +16,13 @@ public:
 	EnemiesManager& operator=(EnemiesManager&& enemiesManager) = delete;
 
 	void Draw() const;
-	void Update(float elapsedSec, Avatar* avatar);
+	void Update(float elapsedSec, Avatar* avatar, const Level* level);
 
 	void AddEnemy(const Point2f& startPos, const GameObject::Type& type);
 
 
 	std::vector <Enemy*> GetEnemies() const;
 
-
-	void SetVerticesLevel(std::vector<Point2f> vertices);
 
 private:
 

@@ -5,7 +5,6 @@
 
 Bomb::Bomb()
 	: Projectile( GameObject::Type::bomb, 200.f)
-	, m_Gravity { -300.f}
 	, m_Velocity { -50.f }
 {
 	Initialize();
@@ -21,6 +20,8 @@ Bomb::~Bomb()
 
 void Bomb::Initialize()
 {
+	m_Acceleration.y = -300.f;
+
 	// Bomb sprite
 	m_pTopSprite = new Sprite("Resources/sprites/enemies/BomHeli.png");
 	m_pTopSprite->UpdateValues(7, 1, 7, 15.f, 25.f, 26.f, 26.f, 2.7f);
@@ -78,7 +79,7 @@ void Bomb::SetStartPos(const Rectf& helicopter)
 
 void Bomb::Move(float elapsedSec)
 {
-	m_Velocity += m_Gravity * elapsedSec;
+	m_Velocity += m_Acceleration.y * elapsedSec;
 	m_Position.y += m_Velocity * elapsedSec;
 	m_pTopSprite->SetBottomDstRect(m_Position.y);
 

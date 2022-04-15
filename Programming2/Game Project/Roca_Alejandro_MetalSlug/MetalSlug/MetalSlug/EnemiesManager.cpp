@@ -2,6 +2,7 @@
 #include "EnemiesManager.h"
 #include "Avatar.h"
 #include "Helicopter.h"
+#include "Level.h"
 #include <iostream>
 
 
@@ -42,7 +43,7 @@ void EnemiesManager::Draw() const
 	
 
 }
-void EnemiesManager::Update(float elapsedSec, Avatar* avatar)
+void EnemiesManager::Update(float elapsedSec, Avatar* avatar, const Level* level)
 {
 	if (!m_pEnemies.empty())
 	{
@@ -50,7 +51,7 @@ void EnemiesManager::Update(float elapsedSec, Avatar* avatar)
 		{
 			if (ptr->GetIsActive())
 			{
-				ptr->Update(elapsedSec, avatar, m_VerticesLevel);
+				ptr->Update(elapsedSec, avatar, level);
 			}
 		}
 
@@ -72,12 +73,12 @@ void EnemiesManager::AddEnemy( const Point2f& startPos, const GameObject::Type& 
 	Enemy* enemy{ };
 	switch (type)
 	{
-		case GameObject::Type::enemyHelicopter:
+		case GameObject::Type::helicopter:
 			enemy = new Helicopter(startPos);
 			m_TotalNrHelicopters++;
 		break;
 
-		case GameObject::Type::enemySoldier:
+		case GameObject::Type::soldier:
 		break;
 	}
 
@@ -106,7 +107,7 @@ void EnemiesManager::ActivateHelicopter()
 		{
 			for (Enemy* ptr : m_pEnemies)
 			{
-				if (ptr->GetType() == GameObject::Type::enemyHelicopter)
+				if (ptr->GetType() == GameObject::Type::helicopter)
 				{
 					// Activate the helicopter
 					ptr->SetIsActive(true);
@@ -123,9 +124,4 @@ std::vector <Enemy*> EnemiesManager::GetEnemies() const
 	return m_pEnemies;
 }
 
-
-void EnemiesManager::SetVerticesLevel(std::vector<Point2f> vertices)
-{
-	m_VerticesLevel = vertices;
-}
 

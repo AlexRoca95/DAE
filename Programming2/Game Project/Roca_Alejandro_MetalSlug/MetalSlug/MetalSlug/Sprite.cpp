@@ -219,6 +219,16 @@ void Sprite::Draw( ) const
 	m_pTexture->Draw(m_DstRect, m_SrcRect);
 }
 
+// Flip the sprite to the oposite side using OpenGL
+void Sprite::FlipSprite() const
+{
+	glTranslatef( m_DstRect.left + m_Width, m_DstRect.bottom + m_Height, 0.f );
+
+	glScalef(-1, 1, 1.f);
+
+	glTranslatef(-(m_DstRect.left + m_Width ), -( m_DstRect.bottom + m_Height ), 0.f );
+}
+
 void Sprite::ResetActFrame( )
 {
 	m_ActFrame = 0;

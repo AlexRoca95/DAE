@@ -16,6 +16,9 @@ GameObject::GameObject( GameObject::Type id, float speed )
 	, m_IsDying { false }
 	, m_Velocity{ }
 	, m_Speed{ speed }
+	, m_Acceleration{ Point2f{ 0.f, -981.f } }
+	, m_BotSpriteChanged { false }
+	, m_TopSpriteChanged { false }
 {
 	
 }

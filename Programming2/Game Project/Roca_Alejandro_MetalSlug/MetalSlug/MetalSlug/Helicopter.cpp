@@ -2,12 +2,13 @@
 #include "Helicopter.h"
 #include "Avatar.h"
 #include "Bomb.h"
+#include "Level.h"
 #include "utils.h"
 
 
 
 Helicopter::Helicopter(const Point2f& startPos)
-	: Enemy( GameObject::Type::enemyHelicopter, startPos, 15, 200.f ) // Type, startPos, health and velocity
+	: Enemy( GameObject::Type::helicopter, startPos, 15, 200.f ) // Type, startPos, health and velocity
 	, m_MaxHeight{ 400.f }
 	, m_MaxTimerBombs { 3.f }
 	, m_TimerBombs {  }
@@ -67,7 +68,7 @@ void Helicopter::Draw() const
 	
 }
 
-void Helicopter::Update(float elapsedSec, Avatar* avatar, const std::vector<Point2f>& vertices)
+void Helicopter::Update(float elapsedSec, Avatar* avatar, const Level* level)
 {
 	//std::cout << int(m_GameState) << std::endl;
 	if (!m_IsDying)
@@ -93,7 +94,7 @@ void Helicopter::Update(float elapsedSec, Avatar* avatar, const std::vector<Poin
 		{	
  			// Throw 3 bombs
 			ThrowBombs(elapsedSec, this->GetBotShape());
-			CheckBombCollision(avatar, vertices);
+			CheckBombCollision(avatar, level->GetVertices());
 		}
 
 	}
@@ -105,7 +106,7 @@ void Helicopter::Update(float elapsedSec, Avatar* avatar, const std::vector<Poin
 		{
 			// Throw 3 bombs
 			ThrowBombs(elapsedSec, this->GetBotShape());
-			CheckBombCollision(avatar, vertices);
+			CheckBombCollision(avatar, level->GetVertices());
 		}
 	}
 
@@ -136,6 +137,7 @@ void Helicopter::Hit()
 	{
 		m_IsDying = true;
 		m_pBottomSprite->UpdateValues(7, 1, 7, 12.f, 100.f, 72.f, 232.f);  // Change death animation
+		m_pBottomSprite->ResetActFrame();
 	}
 
 }

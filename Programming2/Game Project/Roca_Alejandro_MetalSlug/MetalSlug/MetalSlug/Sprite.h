@@ -23,6 +23,8 @@ public:
 	void UpdateValues(const int cols, const int rows, const int frames, const float frameSec,
 		const float width, const float height, const float spriteSheetTop, const float scale = 2.7f);
 
+	void FlipSprite() const;
+
 	// Getters
 	float GetFrameWidth( ) const;
 	float GetFrameHeight( ) const;

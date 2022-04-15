@@ -11,19 +11,16 @@ int Avatar::m_GameObjectCounter = 0;
 
 Avatar::Avatar()
 	: GameObject( GameObject::Type::avatar, 300.f )  // Type and velocity
-	, m_Acceleration{ Point2f{ 0.f, -981.f } }
 	, m_SlowSpeed{ 80.f }
 	, m_JumpSpeed{ 500.f }
 	, m_IsMovingRight{ true }
-	, m_StartPosition{ 300.f, 300.f }
+	, m_StartPosition{ 1200.f * g_Scale, 300.f }
 	, m_TopActionState{ TopActionState::jumping }
 	, m_BotActionState{ BotActionState::jumping }
 	, m_ActTopAnimation{ Animations::jumping }
 	, m_ActBotAnimation{ Animations::jumping }
 	, m_PrevTopAnimation{ m_ActTopAnimation }
 	, m_PrevBotAnimation{ m_ActBotAnimation }
-	, m_TopSpriteChanged{ }
-	, m_BotSpriteChanged{ }
 	, m_IsOnGround{ }
 	, m_Offset{ }
 	, m_IsShooting{ false }
@@ -52,6 +49,7 @@ Avatar::~Avatar()
 
 void Avatar::Initialize()
 {
+	
 	// Marco Body (Iddle)
 	m_pTopSprite = new Sprite( "Resources/sprites/marco/MarcoBody.png" );
 	m_pTopSprite->UpdateValues(4, 1, 4, 7.f, 33.f, 29.f, 29.f);
@@ -93,13 +91,7 @@ void Avatar::Draw() const
 		// Moving left --> Flip sprite to the left
 		glPushMatrix();
 
-			glTranslatef( m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetFrameWidth() / 2, 
-				m_pBottomSprite->GetDstRect().bottom + m_pBottomSprite->GetFrameHeight() / 2 / 2, 0.f );
-
-			glScalef( -1, 1, 1.f );
-
-			glTranslatef( -( m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetFrameWidth() / 2 ),
-				- ( m_pBottomSprite->GetDstRect().bottom + m_pBottomSprite->GetFrameHeight() / 2 ), 0.f );
+			m_pBottomSprite->FlipSprite();
 	
 			DrawAvatar();
 

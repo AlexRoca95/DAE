@@ -24,8 +24,8 @@ public:
 		avatar,
 		bullet,
 		bomb,
-		enemyHelicopter,
-		enemySoldier,
+		helicopter,
+		soldier,
 		boss,
 		prisioner
 	};
@@ -65,11 +65,15 @@ protected:
 	bool m_IsDead;				// GameObject is dead or not (for death animation)
 	bool m_IsDying;
 
-	// Sprites needed for the game objects
+
+	// Sprite related
 	Sprite* m_pTopSprite;
 	Sprite* m_pBottomSprite;
+	bool m_TopSpriteChanged;		// Indicates if Top sprite was changed from the previous one
+	bool m_BotSpriteChanged;
 
 	Vector2f m_Velocity;
+	Vector2f m_Acceleration;
 	const float m_Speed;
 	
 

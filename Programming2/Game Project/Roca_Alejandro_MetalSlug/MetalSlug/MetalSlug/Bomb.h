@@ -24,7 +24,6 @@ public:
 
 private:
 
-	const float m_Gravity;
 	float m_Velocity;
 
 	void Initialize();

@@ -22,7 +22,7 @@ public:
 	virtual void Hit() override;
 	virtual void CheckGameState() override;
 
-	virtual void Update(float elapsedSec, Avatar* avatar, const std::vector<Point2f>& vertices);
+	virtual void Update(float elapsedSec, Avatar* avatar, const Level* level) override;
 
 
 private:
