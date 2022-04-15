@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemy.h"
 
+class Grenade;
 class Soldier final : public Enemy
 {
 
@@ -28,9 +29,11 @@ private:
 	const float m_ThrowGrenadeDist;
 	bool m_FacingRight;
 
-
+	// Time the soldier runs Away from avatar
 	const float m_MaxTimeRunAway;
 	float m_Seconds;
+
+	Grenade* m_pGrenade;
 
 	void Initialize();
 	void Move(float elapsedSec);
@@ -43,6 +46,9 @@ private:
 	void CheckPreviousAction();
 
 	void CheckFacingRight(Avatar* avatar);
+
+
+	void KillSoldier(float elapsedSec);
 
 };
 

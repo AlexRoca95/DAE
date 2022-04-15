@@ -90,6 +90,9 @@
     <ClCompile Include="Soldier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Grenade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -162,6 +165,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Soldier.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Grenade.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -283,6 +283,11 @@ float utils::GetDistance(float x1, float y1, float x2, float y2)
 	return (sqrtf((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
 }
 
+float utils::GetDistanceX(float x1, float x2)
+{
+	return (sqrtf((x2 - x1) * (x2 - x1)));
+}
+
 float utils::GetDistance(const Point2f& p1, const Point2f& p2)
 {
 	return GetDistance(p1.x, p1.y, p2.x, p2.y);

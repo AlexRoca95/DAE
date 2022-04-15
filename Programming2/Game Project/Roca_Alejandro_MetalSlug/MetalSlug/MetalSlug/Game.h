@@ -55,7 +55,6 @@ private:
 	// Enemies
 	const int m_NrHelicopters;
 	EnemiesManager* m_pEnemiesManager;
-	Soldier* soldier;
 	
 
 	// FUNCTIONS

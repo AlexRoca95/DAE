@@ -2,26 +2,30 @@
 #include "Soldier.h"
 #include "Level.h"
 #include "Avatar.h"
+#include "Grenade.h"
 #include <iostream>
 
 
 
 Soldier::Soldier(const Point2f& startPos)
-	:Enemy(GameObject::Type::soldier, startPos, 1, 150.f)
-	, m_RunSpeed { 250.f }
+	:Enemy(GameObject::Type::soldier, startPos, 1, 150.f)   // Type, starting position, health and speed
+	, m_RunSpeed { 200.f }
 	, m_FacingRight { false }
 	, m_RunAwayDist { 200.f }
 	, m_ThrowGrenadeDist { 300.f }
 	, m_MaxTimeRunAway { 3.f }
 	, m_Seconds { -1.f }
+	, m_pGrenade { new Grenade }
 {
 	Initialize();
+	m_IsActive = true;
 }
 
 
 Soldier::~Soldier()
 {
 	delete m_pBottomSprite;
+	delete m_pGrenade;
 }
 
 
@@ -47,6 +51,8 @@ void Soldier::Draw() const
 		}
 		break;
 	case Enemy::ActionState::state3:
+	case Enemy::ActionState::state1:
+	case Enemy::ActionState::state4:
 		if (m_FacingRight)
 		{
 			// Flip to the left
@@ -68,10 +74,13 @@ void Soldier::Draw() const
 		break;
 	}
 
+	m_pGrenade->Draw();
+
 }
 
 void Soldier::Update(float elapsedSec, Avatar* avatar, const Level* level)
 {
+	//std::cout << "Hola" << std::endl;
 	CheckPreviousAction();
 
 	if (!m_IsDying)
@@ -94,8 +103,9 @@ void Soldier::Update(float elapsedSec, Avatar* avatar, const Level* level)
 	}
 	else
 	{
-
+		KillSoldier(elapsedSec);
 	}
+
 
 	UpdateFrames(elapsedSec);
 	Falling(elapsedSec, level);
@@ -103,7 +113,7 @@ void Soldier::Update(float elapsedSec, Avatar* avatar, const Level* level)
 	level->HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
 
 
-
+	m_pGrenade->Update(elapsedSec, this);
 }
 
 
@@ -123,7 +133,7 @@ void Soldier::UpdateFrames(float elapsedSec)
 
 	if (m_ActionState == ActionState::state2 || m_IsDying)
 	{
-		repeat = true;
+		repeat = false;
 	}
 
 	m_pBottomSprite->Update(elapsedSec, repeat);
@@ -151,18 +161,18 @@ void Soldier::DoWalkingState(float elapsedSec, Avatar* avatar)
 
 	}
 	
-	Point2f avatarPos{ avatar->GetBotShape().left, avatar->GetBotShape().bottom };
-	Point2f soldierPos{ m_pBottomSprite->GetDstRect().left, m_pBottomSprite->GetDstRect().bottom };
+	float avatarPos{ avatar->GetBotShape().left };
+	float soldierPos{ m_pBottomSprite->GetDstRect().left };
 
 
-	if (utils::GetDistance(avatarPos, soldierPos) <= m_RunAwayDist)
+	if (utils::GetDistanceX(avatarPos, soldierPos) <= m_RunAwayDist)
 	{
 		// Run Away
 		m_ActionState = ActionState::state3;
 	}
 	else
 	{
-		if (utils::GetDistance(avatarPos, soldierPos) <= m_ThrowGrenadeDist)
+		if (utils::GetDistanceX(avatarPos, soldierPos) <= m_ThrowGrenadeDist)
 		{
 			// Throw Grenade
 			m_ActionState = ActionState::state2;
@@ -170,9 +180,20 @@ void Soldier::DoWalkingState(float elapsedSec, Avatar* avatar)
 		}
 		else
 		{
-			// Keep walking forward
-			m_Velocity.x = -m_Speed;
+			m_ActionState = ActionState::state1;
 		}
+		
+	}
+
+	CheckFacingRight(avatar);
+
+	if (m_FacingRight)
+	{
+		m_Velocity.x = m_Speed;
+	}
+	else
+	{
+		m_Velocity.x = -m_Speed;
 	}
 	
 }
@@ -187,27 +208,30 @@ void Soldier::DoAttackState(float elapsedSec, Avatar* avatar)
 		m_BotSpriteChanged = false;
 	}
 
-	Point2f avatarPos{ avatar->GetBotShape().left, avatar->GetBotShape().bottom };
-	Point2f soldierPos{ m_pBottomSprite->GetDstRect().left, m_pBottomSprite->GetDstRect().bottom };
+	float avatarPos{ avatar->GetBotShape().left };
+	float soldierPos{ m_pBottomSprite->GetDstRect().left };
 
-	if (utils::GetDistance(avatarPos, soldierPos) <= m_RunAwayDist)
+	if (utils::GetDistanceX(avatarPos, soldierPos) <= m_RunAwayDist)
 	{
 		// Run Away
 		m_ActionState = ActionState::state3;
 	}
 	else
 	{
-		if (utils::GetDistance(avatarPos, soldierPos) <= m_ThrowGrenadeDist)
+		if (utils::GetDistanceX(avatarPos, soldierPos) <= m_ThrowGrenadeDist)
 		{
 			// Throw Grenade
 			m_ActionState = ActionState::state2;
 			m_Velocity.x = 0.f;
 		}
+		else
+		{
+			// Follow player
+			m_ActionState = ActionState::state1;
+		}
 	}
 	
 	CheckFacingRight(avatar);
-
-	//std::cout << m_MovingRight << std::endl;
 
 }
 
@@ -222,23 +246,31 @@ void Soldier::DoRunAwayState(float elapsedSec, Avatar* avatar)
 
 	}
 
-	Point2f avatarPos{ avatar->GetBotShape().left, avatar->GetBotShape().bottom };
-	Point2f soldierPos{ m_pBottomSprite->GetDstRect().left, m_pBottomSprite->GetDstRect().bottom };
+	m_Seconds += elapsedSec;
 
-	if (m_Seconds >= m_MaxTimeRunAway || m_Seconds < 0.f)
+	float avatarPos{ avatar->GetBotShape().left };
+	float soldierPos{ m_pBottomSprite->GetDstRect().left };
+
+	if ( m_Seconds >= m_MaxTimeRunAway )
 	{
-		if (utils::GetDistance(avatarPos, soldierPos) <= m_RunAwayDist)
+		m_Seconds = 0.f;
+
+		if (utils::GetDistanceX(avatarPos, soldierPos) <= m_RunAwayDist)
 		{
 			// Run Away
 			m_ActionState = ActionState::state3;
 		}
 		else
 		{
-			if (utils::GetDistance(avatarPos, soldierPos) <= m_ThrowGrenadeDist)
+			if (utils::GetDistanceX(avatarPos, soldierPos) <= m_ThrowGrenadeDist)
 			{
 				// Throw Grenade
 				m_ActionState = ActionState::state2;
 				m_Velocity.x = 0.f;
+			}
+			else
+			{
+				m_ActionState = ActionState::state1;
 			}
 		}
 	}
@@ -282,6 +314,35 @@ void Soldier::CheckFacingRight(Avatar* avatar)
 
 void Soldier::Hit()
 {
+	m_Health--;
+
+	if (m_Health == 0)
+	{
+		m_IsDying = true;
+		m_Velocity.x = 0.f;
+		m_pBottomSprite->UpdateValues(11, 1, 11, 5.f, 60.f, 44.f, 357.f);  // Change death animation
+		m_pBottomSprite->ResetActFrame();
+		m_pBottomSprite->UpdateLeftSrcRect();
+		m_ActionState = ActionState::state4;  // Death state
+	}
+
+}
+
+
+void Soldier::KillSoldier(float elapsedSec)
+{
+	m_pBottomSprite->Update(elapsedSec, false);
+
+	if (m_pBottomSprite->GetAnimationFinish())
+	{
+		m_IsDead = true;
+
+		m_pBottomSprite->ResetAnimationFinish(false);
+		m_pBottomSprite->ResetActFrame();
+		m_IsActive = false;
+
+	}
+
 
 }
 
@@ -299,4 +360,6 @@ void Soldier::Initialize()
 	m_pBottomSprite->SetBottomDstRect(m_StartPos.y);
 	m_pBottomSprite->UpdateLeftSrcRect();
 
+
+	
 }

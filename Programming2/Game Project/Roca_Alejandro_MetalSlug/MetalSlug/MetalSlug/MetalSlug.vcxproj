@@ -161,6 +161,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Helicopter.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Grenade.h" />
     <ClInclude Include="Helicopter.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Matrix2x3.h" />

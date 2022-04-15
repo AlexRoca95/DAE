@@ -24,6 +24,7 @@ public:
 		avatar,
 		bullet,
 		bomb,
+		grenade,
 		helicopter,
 		soldier,
 		boss,

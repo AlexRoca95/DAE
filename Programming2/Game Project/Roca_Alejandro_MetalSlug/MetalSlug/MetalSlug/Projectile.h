@@ -16,7 +16,7 @@ public:
 
 	virtual void CheckGameState() = 0;
 
-	void Draw() const;
+	virtual void Draw() const;
 	void Hit();
 	void DesactivateProjectile();
 	bool GetIsHit();
@@ -33,5 +33,6 @@ protected:
 	float m_Seconds;			  // Current Seconds
 
 	virtual void Move(float elapsedSec) = 0;
+
 };
 

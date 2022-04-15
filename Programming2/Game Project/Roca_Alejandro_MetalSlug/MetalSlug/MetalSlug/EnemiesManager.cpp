@@ -2,6 +2,7 @@
 #include "EnemiesManager.h"
 #include "Avatar.h"
 #include "Helicopter.h"
+#include "Soldier.h"
 #include "Level.h"
 #include <iostream>
 
@@ -79,6 +80,7 @@ void EnemiesManager::AddEnemy( const Point2f& startPos, const GameObject::Type& 
 		break;
 
 		case GameObject::Type::soldier:
+			enemy = new Soldier(startPos);
 		break;
 	}
 

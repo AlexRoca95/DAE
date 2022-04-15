@@ -58,6 +58,7 @@ namespace utils
 	};
 
 	float GetDistance(float x1, float y1, float x2, float y2);
+	float GetDistanceX(float x1, float x2);
 	float GetDistance(const Point2f& p1, const Point2f& p2);
 
 	bool IsPointInRect(const Point2f& p, const Rectf& r);

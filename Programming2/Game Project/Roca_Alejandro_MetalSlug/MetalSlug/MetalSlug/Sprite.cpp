@@ -229,6 +229,20 @@ void Sprite::FlipSprite() const
 	glTranslatef(-(m_DstRect.left + m_Width ), -( m_DstRect.bottom + m_Height ), 0.f );
 }
 
+// Rotate the sprite around his own center
+//  1º : Translate to the center of the sprite
+//  2º : Rotate certain angle
+//  3º : Translate back to original position
+void Sprite::RotateSprite(float angle) const
+{
+	glTranslatef(m_DstRect.left + m_DstRect.width / 2, m_DstRect.bottom + m_DstRect.height / 2, 0.f);
+
+	glRotatef(angle, 0.f, 0.f, 1.f);
+
+	glTranslatef( - ( m_DstRect.left + m_DstRect.width / 2), - ( m_DstRect.bottom + m_DstRect.height / 2 ), 0.f);
+
+}
+
 void Sprite::ResetActFrame( )
 {
 	m_ActFrame = 0;

@@ -25,8 +25,6 @@ void Projectile::Draw() const
 		// Draw projectile 
 		m_pTopSprite->Draw();
 
-		utils::DrawRect(Rectf{ m_pTopSprite->GetDstRect().left + m_pTopSprite->GetDstRect().width/3, m_pTopSprite->GetDstRect().bottom , m_pTopSprite->GetDstRect().width/3,
-			m_pTopSprite->GetDstRect().height });
 	}
 }
 
