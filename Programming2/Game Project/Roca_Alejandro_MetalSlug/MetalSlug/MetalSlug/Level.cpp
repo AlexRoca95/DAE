@@ -111,7 +111,7 @@ void Level::VerticalCollision(Rectf& actorShape, Vector2f& velocity) const
 {
 	// Ray from the middle of the sprite to the bottom
 	Point2f ray{ actorShape.left + actorShape.width / 2, actorShape.bottom + actorShape.height/2 };
-	Point2f rayBottom{ actorShape.left + actorShape.width / 2, actorShape.bottom + 1 };
+	Point2f rayBottom{ actorShape.left + actorShape.width / 2, actorShape.bottom  };
 
 	utils::HitInfo hitInfo{}; // Info about the intersection point
 

@@ -144,28 +144,29 @@ void Avatar::Update( float elapsedSeconds, const Level* level, const Rectf& came
 	UpdateBotSrcRect();
 
 
-	if (!m_IsDead)
+	
+	if (!level->IsOnGround(m_pBottomSprite->GetDstRect(), m_Velocity))
 	{
-		if (!level->IsOnGround(m_pBottomSprite->GetDstRect(), m_Velocity))
-		{
-			AvatarFalling(elapsedSeconds);
-			m_IsOnGround = false;
-		}
-		else
-		{
-			m_IsOnGround = true;
-		}
+		AvatarFalling(elapsedSeconds);
+		m_IsOnGround = false;
+	}
+	else
+	{
+		m_IsOnGround = true;
+	}
 
-		Move(elapsedSeconds);
-		level->HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
+	Move(elapsedSeconds);
+	level->HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
 
-		if (m_Velocity.x == 0)
-		{
-			m_IsMoving = false;
-		}
+	if (m_Velocity.x == 0)
+	{
+		m_IsMoving = false;
 	}
 	
-	CheckGameState();
+	if (!m_IsDead)
+	{
+		CheckGameState();
+	}
 
 	m_pBulletManager->Update(elapsedSeconds, this);
 
