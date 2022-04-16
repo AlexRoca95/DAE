@@ -427,7 +427,7 @@ void Soldier::CheckGameState()
 
 void Soldier::Initialize()
 {
-	m_pBottomSprite = new Sprite("Resources/sprites/enemies/soldierv2.png");
+	m_pBottomSprite = new Sprite("Resources/sprites/enemies/rebelSoldier.png");
 	m_pBottomSprite->UpdateValues(12, 1, 12, 10.f, 34.f, 40.f, 40.f); // Walking Soldier
 	m_pBottomSprite->SetLeftDstRect(m_StartPos.x);
 	m_pBottomSprite->SetBottomDstRect(m_StartPos.y);

@@ -28,7 +28,7 @@ public:
 		helicopter,
 		soldier,
 		boss,
-		prisioner
+		prisoner
 	};
 
 

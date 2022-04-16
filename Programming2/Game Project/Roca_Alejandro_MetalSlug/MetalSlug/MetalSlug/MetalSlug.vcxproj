@@ -157,10 +157,10 @@
     <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Core.cpp" />
-    <ClCompile Include="EnemiesManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Helicopter.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -172,6 +172,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Prisoner.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Soldier.cpp" />
     <ClCompile Include="SoundEffect.cpp" />
@@ -190,15 +191,16 @@
     <ClInclude Include="BulletManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Core.h" />
-    <ClInclude Include="EnemiesManager.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="Helicopter.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Prisoner.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Soldier.h" />
     <ClInclude Include="SoundEffect.h" />

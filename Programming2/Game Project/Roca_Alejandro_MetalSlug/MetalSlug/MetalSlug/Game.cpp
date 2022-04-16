@@ -3,7 +3,7 @@
 #include "Avatar.h"
 #include "Helicopter.h"
 #include "BulletManager.h"
-#include "EnemiesManager.h"
+#include "GameObjectManager.h"
 #include "Soldier.h"
 #include <iostream>
 
@@ -14,7 +14,7 @@ Game::Game( const Window& window )
 	, m_Camera{ new Camera(m_Window.width, m_Window.height) }
 	, m_Level{ new Level }
 	, m_Avatar{ new Avatar }
-	, m_pEnemiesManager { new EnemiesManager }
+	, m_pGameObjectManager{ new GameObjectManager }
 	, m_NrHelicopters{ 1 }
 	, m_GameState { GameState::start }
 {
@@ -31,7 +31,7 @@ void Game::Initialize( )
 {
 	InitAvatar();
 	InitCamera();
-	InitEnemiesManager();
+	AddGameObjects();
 
 }
 
@@ -49,13 +49,17 @@ void Game::InitCamera()
 
 }
 
-void  Game::InitEnemiesManager()
+void  Game::AddGameObjects()
 {
-	
-	m_pEnemiesManager->AddEnemy(Point2f{ g_Stage2Pos * g_Scale, 700.f }, GameObject::Type::helicopter);
-	m_pEnemiesManager->AddEnemy(Point2f{ g_Stage3Pos * g_Scale, 700.f }, GameObject::Type::helicopter);
-	m_pEnemiesManager->AddEnemy(Point2f{ 1335 * g_Scale, 200.f }, GameObject::Type::soldier);
+	// Helicoperts
+	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage2Pos * g_Scale, 700.f }, GameObject::Type::helicopter);
+	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage3Pos * g_Scale, 700.f }, GameObject::Type::helicopter);
 
+	// Soldiers
+	m_pGameObjectManager->AddGameObject(Point2f{ 1335 * g_Scale, 200.f }, GameObject::Type::soldier);
+
+	// Prisoners
+	m_pGameObjectManager->AddGameObject(Point2f{ 1000 * g_Scale, 280.f}, GameObject::Type::prisoner);
 }
 
 
@@ -71,7 +75,7 @@ void Game::Cleanup( )
 
 	delete m_Level;
 	delete m_Camera;
-	delete m_pEnemiesManager;
+	delete m_pGameObjectManager;
 
 }
 
@@ -87,10 +91,10 @@ void Game::Update( float elapsedSec )
 	m_Avatar->Update(elapsedSec, m_Level, m_Camera->GetCameraPos());
 
 
-	m_pEnemiesManager->Update(elapsedSec, m_Avatar, m_Level);
+	
+	m_pGameObjectManager->Update(elapsedSec, m_Avatar, m_Level);
 
-
-	m_Avatar->GetBullets()->CheckHitEnemies(m_pEnemiesManager->GetEnemies());
+	m_Avatar->GetBullets()->CheckHitGameObjects(m_pGameObjectManager->GetGameObjects());
 
 	m_Level->Update(elapsedSec, m_Avatar->GetBotShape());
 
@@ -110,7 +114,7 @@ void Game::Draw( ) const
 	
 		m_Level->DrawBackground();
 		
-		m_pEnemiesManager->Draw();
+		m_pGameObjectManager->Draw();
 
 		// Draw all game objects
 		for (GameObject* ptr : m_pGameObjects)

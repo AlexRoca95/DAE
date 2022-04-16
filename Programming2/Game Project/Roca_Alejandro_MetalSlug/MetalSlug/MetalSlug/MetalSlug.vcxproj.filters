@@ -78,9 +78,6 @@
     <ClCompile Include="Helicopter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnemiesManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Bomb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -91,6 +88,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Grenade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Prisoner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -155,9 +158,6 @@
     <ClInclude Include="Helicopter.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnemiesManager.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Bomb.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -168,6 +168,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Grenade.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Prisoner.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

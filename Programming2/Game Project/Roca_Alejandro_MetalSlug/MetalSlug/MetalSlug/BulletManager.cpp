@@ -2,6 +2,7 @@
 #include "BulletManager.h"
 #include "Bullet.h"
 #include "utils.h"
+#include "GameObject.h"
 #include "Enemy.h"
 #include <iostream>
 
@@ -101,14 +102,14 @@ void BulletManager::CheckHitLevel()
 }
 
 // Check collision of the bullet with the enemies
-void BulletManager::CheckHitEnemies(std::vector<Enemy*> enemies)
+void BulletManager::CheckHitGameObjects(std::vector<GameObject*> gameObjects)
 {
 
 	for (Bullet* bulletPtr : m_pBullets)
 	{
 		if (bulletPtr->GetIsActive() && !bulletPtr->GetIsHit())
 		{
-			for (Enemy* enemyPtr : enemies)
+			for (GameObject* enemyPtr : gameObjects)
 			{
 				if (enemyPtr->GetIsActive())
 				{
