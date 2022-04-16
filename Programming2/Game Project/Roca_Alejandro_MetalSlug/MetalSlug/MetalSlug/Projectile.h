@@ -7,7 +7,7 @@ class Projectile : public GameObject
 public:
 
 
-	Projectile(GameObject::Type, float speed);
+	Projectile(GameObject::Type, const Point2f& speed, const Point2f& acceleration);
 	virtual ~Projectile() = default;
 	Projectile(const Projectile & projectile) = delete;
 	Projectile(Projectile && projectile) = delete;

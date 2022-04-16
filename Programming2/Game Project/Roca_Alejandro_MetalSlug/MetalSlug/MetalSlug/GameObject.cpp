@@ -7,7 +7,7 @@ bool GameObject::m_IsSecondHeliFightStart = false;
 bool GameObject::m_IsBossFightStart = false;
 bool GameObject::m_IsStageChanged = false;
 
-GameObject::GameObject( GameObject::Type id, float speed )
+GameObject::GameObject( GameObject::Type id, const Point2f& speed, const Point2f& acceleration)
 	: m_Id{ id }
 	, m_pTopSprite{ }
 	, m_pBottomSprite{ }
@@ -15,8 +15,8 @@ GameObject::GameObject( GameObject::Type id, float speed )
 	, m_IsDead { false }
 	, m_IsDying { false }
 	, m_Velocity{ }
-	, m_Speed{ speed }
-	, m_Acceleration{ Point2f{ 0.f, -981.f } }
+	, m_Acceleration{ acceleration }
+	, m_Speed { speed }
 	, m_BotSpriteChanged { false }
 	, m_TopSpriteChanged { false }
 {

@@ -10,9 +10,10 @@ int Avatar::m_GameObjectCounter = 0;
 
 
 Avatar::Avatar()
-	: GameObject( GameObject::Type::avatar, 300.f )  // Type and velocity
+	: GameObject(GameObject::Type::avatar, Point2f{m_NormalSpeed, m_JumpSpeed}, Point2f{ 0.f, g_Gravity })  // Type, speed and acceleration
 	, m_SlowSpeed{ 80.f }
 	, m_JumpSpeed{ 500.f }
+	, m_NormalSpeed { 300.f }
 	, m_IsMovingRight{ true }
 	, m_StartPosition{ 1200.f * g_Scale, 300.f }
 	, m_TopActionState{ TopActionState::jumping }
@@ -197,6 +198,11 @@ void Avatar::UpdateTopSrcRect()
 			
 		}
 
+		break;
+
+	case Avatar::TopActionState::crawling:
+		// Crawling + Not Moving
+		m_pTopSprite->UpdateValues(4, 1, 4, 5.f, 36.f, 24.f, 144.f);
 		break;
 
 	case Avatar::TopActionState::jumping:
@@ -608,11 +614,11 @@ void Avatar::CheckCrawling()
 	{
 		if ( m_IsMovingRight )
 		{
-			m_Velocity.x = m_Speed;
+			m_Velocity.x = m_NormalSpeed;
 		}
 		else
 		{
-			m_Velocity.x = -m_Speed;
+			m_Velocity.x = -m_NormalSpeed;
 		}
 	}
 }

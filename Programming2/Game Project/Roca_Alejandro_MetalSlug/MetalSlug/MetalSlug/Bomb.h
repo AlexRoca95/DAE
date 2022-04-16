@@ -24,8 +24,6 @@ public:
 
 private:
 
-	float m_Velocity;
-
 	void Initialize();
 	void SetStartPos(const Rectf& helicopter);
 	virtual void Move(float elapsedSec) override;

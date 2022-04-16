@@ -4,8 +4,7 @@
 
 
 Bomb::Bomb()
-	: Projectile( GameObject::Type::bomb, 200.f)
-	, m_Velocity { -50.f }
+	: Projectile(GameObject::Type::bomb, Point2f{ 0.f, -50.f }, Point2f{0.f, -300.f})
 {
 	Initialize();
 }
@@ -56,7 +55,7 @@ void Bomb::Update(float elapsedSec, const Rectf& actorShape)
 			m_pBottomSprite->ResetAnimationFinish(false);
 			m_pBottomSprite->ResetActFrame();
 			DesactivateProjectile();
-			m_Velocity = -50.f;
+			m_Velocity.y = m_Speed.y;
 		}
 	}
 	
@@ -79,8 +78,8 @@ void Bomb::SetStartPos(const Rectf& helicopter)
 
 void Bomb::Move(float elapsedSec)
 {
-	m_Velocity += m_Acceleration.y * elapsedSec;
-	m_Position.y += m_Velocity * elapsedSec;
+	m_Velocity.y += m_Acceleration.y * elapsedSec;
+	m_Position.y += m_Velocity.y * elapsedSec;
 	m_pTopSprite->SetBottomDstRect(m_Position.y);
 
 }

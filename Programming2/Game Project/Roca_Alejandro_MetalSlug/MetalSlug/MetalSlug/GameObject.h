@@ -32,7 +32,7 @@ public:
 	};
 
 
-	GameObject( GameObject::Type id, float speed );
+	GameObject( GameObject::Type id, const Point2f& speed, const Point2f& acceleration);
 	virtual ~GameObject() = default;
 	GameObject(const GameObject& gameObject) = delete;
 	GameObject(GameObject&& gameObject) = delete;
@@ -75,7 +75,7 @@ protected:
 
 	Vector2f m_Velocity;
 	Vector2f m_Acceleration;
-	const float m_Speed;
+	const Point2f m_Speed;
 	
 
 	// GameStages

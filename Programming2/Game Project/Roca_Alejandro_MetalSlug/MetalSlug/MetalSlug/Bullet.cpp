@@ -6,7 +6,7 @@
 
 
 Bullet::Bullet(const Point2f& startPos)
-	: Projectile( GameObject::Type::bullet, 1000.f )
+	: Projectile(GameObject::Type::bullet, Point2f{ 1000.f, 0.f }, Point2f{ })
 {
 	Initialize();
 }
@@ -96,14 +96,14 @@ void Bullet::SetStartPos( const Avatar* avatar )
 				startPos.x = ( avatar->GetTopShape().left + avatar->GetTopShape().width ) 
 					- m_pTopSprite->GetFrameWidth() * 2;
 
-				m_Velocity.x = m_Speed;
+				m_Velocity.x = m_Speed.x;
 			}
 			else
 			{
 				startPos.x = avatar->GetTopShape().left - avatar->GetTopShape().width
 					+ m_pTopSprite->GetFrameWidth() * 5;
 
-				m_Velocity.x = - m_Speed;
+				m_Velocity.x = - m_Speed.x;
 			}
 
 		break;
@@ -113,7 +113,7 @@ void Bullet::SetStartPos( const Avatar* avatar )
 			m_pTopSprite->SetSrcRect( 18.f, 7.f, 11.f);  // Change Bullet sprite
 			m_pTopSprite->SetDstRect(7.f, 11.f);
 			m_IsMovingUp = true;
-			m_Velocity.y = m_Speed;
+			m_Velocity.y = m_Speed.x;
 
 			startPos.y = (avatar->GetTopShape().bottom + avatar->GetTopShape().height)
 				- m_pTopSprite->GetFrameHeight();

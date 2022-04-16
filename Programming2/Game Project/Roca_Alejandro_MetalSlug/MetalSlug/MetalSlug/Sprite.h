@@ -19,12 +19,13 @@ public:
 
 	void UpdateLeftSrcRect( );
 	void UpdateBottomSrcRect( );
-	void ResetActFrame( );
 	void UpdateValues(const int cols, const int rows, const int frames, const float frameSec,
 		const float width, const float height, const float spriteSheetTop, const float scale = 2.7f);
 
 	void FlipSprite() const;
 	void RotateSprite(float angle) const;
+	void ResetActFrame();
+	void ResetSprite();
 
 	// Getters
 	float GetFrameWidth( ) const;
@@ -32,6 +33,7 @@ public:
 	Rectf GetSrcRect( ) const;
 	Rectf& GetDstRect( );
 	int GetActFrame( ) const;
+	int GetTotalFrames() const;
 	Texture* GetTexture( ) const;
 	bool GetAnimationFinish( ) const;
 

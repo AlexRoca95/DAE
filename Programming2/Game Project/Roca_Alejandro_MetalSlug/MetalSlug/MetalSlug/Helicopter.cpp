@@ -8,7 +8,7 @@
 
 
 Helicopter::Helicopter(const Point2f& startPos)
-	: Enemy( GameObject::Type::helicopter, startPos, 15, 200.f ) // Type, startPos, health and velocity
+	: Enemy( GameObject::Type::helicopter, startPos, 15, Point2f{ 200.f, 200.f }, Point2f{ }) // Type, startPos, health, speed and acceleration
 	, m_MaxHeight{ 400.f }
 	, m_MaxTimerBombs { 3.f }
 	, m_TimerBombs {  }
@@ -186,7 +186,7 @@ void Helicopter::ColocateInPos(float elapsedSec)
 	// Helicopter appears from the top outside window
 	if ( m_pBottomSprite->GetDstRect().bottom  > m_MaxHeight)
 	{
-		m_Velocity.y = - m_Speed;
+		m_Velocity.y = - m_Speed.y;
 
 		m_pBottomSprite->SetBottomDstRect( m_pBottomSprite->GetDstRect().bottom + (m_Velocity.y * elapsedSec) );
 	}
@@ -204,11 +204,11 @@ void Helicopter::Move(float elapsedSec, const Avatar* avatar)
 	if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width / 2 )
 			< avatar->GetTopShape().left + avatar->GetTopShape().width)
 	{
-			m_Velocity.x = m_Speed;
+			m_Velocity.x = m_Speed.x;
 	}
 	else
 	{
-		m_Velocity.x = -m_Speed;
+		m_Velocity.x = -m_Speed.x;
 	}
 
 	m_pBottomSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left + (m_Velocity.x * elapsedSec));

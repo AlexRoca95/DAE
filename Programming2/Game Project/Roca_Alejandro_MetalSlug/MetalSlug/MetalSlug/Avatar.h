@@ -93,6 +93,7 @@ private:
 						
 	const float m_SlowSpeed;
 	const float m_JumpSpeed;
+	const float m_NormalSpeed;
 	
 	// Booleans
 	bool m_IsMovingRight;							// Moving right or not (for OpenGL)

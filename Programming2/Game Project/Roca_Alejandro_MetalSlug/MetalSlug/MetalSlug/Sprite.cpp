@@ -248,6 +248,13 @@ void Sprite::ResetActFrame( )
 	m_ActFrame = 0;
 }
 
+void Sprite::ResetSprite()
+{
+	m_ActFrame = 0;
+	m_IsFinish = false;
+	UpdateLeftSrcRect();
+}
+
 float Sprite::GetFrameWidth( ) const
 {
 	return m_Width;
@@ -264,6 +271,12 @@ int Sprite::GetActFrame( ) const
 	return m_ActFrame;
 
 }
+
+int Sprite::GetTotalFrames() const
+{
+	return m_Frames;
+}
+
 Rectf Sprite::GetSrcRect( ) const
 {
 	return m_SrcRect;

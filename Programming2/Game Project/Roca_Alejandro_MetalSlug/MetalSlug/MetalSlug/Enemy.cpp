@@ -2,8 +2,8 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(GameObject::Type id, const Point2f& startPos, int health, float speed)
-	: GameObject(id, speed)
+Enemy::Enemy(GameObject::Type id, const Point2f& startPos, int health, const Point2f& speed, const Point2f& acceleration)
+	: GameObject(id, speed, acceleration)
 	, m_StartPos{ startPos }
 	, m_Health { health }
 	, m_ActionState { Enemy::ActionState::state1 }

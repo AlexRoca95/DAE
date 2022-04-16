@@ -2,6 +2,7 @@
 #include "Projectile.h"
 
 class Soldier;
+class Avatar;
 class Grenade final : public Projectile
 {
 
@@ -17,17 +18,20 @@ public:
 	virtual void CheckGameState() override;
 	virtual void Draw() const;
 
-	void Update(float elapsedSec, const Soldier* soldier);
+	void Update(float elapsedSec, Avatar* avatar, const Soldier* soldier, const std::vector<Point2f>& vertices);
+	void SetStartPos(const Point2f& soldierPos);
 
 
 private:
 
-	float m_Angle{ };
+	float m_Angle;
+	bool m_IsMovingRight;
 
 	void Initialize();
-	void SetStartPos(const Soldier* soldier);
-
+	void CheckHitLevel(const std::vector<Point2f>& vertices);
+	void CheckHitAvatar(Avatar* avatar);
 	virtual void Move(float elapsedSec) override;
+
 	
 
 };

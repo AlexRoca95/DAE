@@ -14,11 +14,12 @@ public:
 		state1,
 		state2,
 		state3,
-		state4
+		state4,
+		state5
 
 	};
 
-	Enemy(GameObject::Type id, const Point2f& startPos, int health, float speed);
+	Enemy(GameObject::Type id, const Point2f& startPos, int health, const Point2f& speed, const Point2f& acceleration);
 	virtual ~Enemy() = default;
 	Enemy(const Enemy & enemy) = delete;
 	Enemy(Enemy && enemy) = delete;
