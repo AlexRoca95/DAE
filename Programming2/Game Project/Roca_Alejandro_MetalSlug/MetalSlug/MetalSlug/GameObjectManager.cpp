@@ -5,6 +5,7 @@
 #include "Prisoner.h"
 #include "Avatar.h"
 #include "Item.h"
+#include "utils.h"
 #include <iostream>
 
 
@@ -13,6 +14,7 @@ GameObjectManager::GameObjectManager()
 	, m_TotalNrHelicopters{ }
 	, m_TotalNrPrisoners{ }
 	, m_TotalNrItems{ }
+	, m_ActivateGameObjectDist { 40.f }
 {
 
 }
@@ -49,10 +51,13 @@ void GameObjectManager::Draw() const
 
 }
 
-void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* level)
+void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* level, const Rectf& cameraPos)
 {
+	
 	if (!m_pGameObjects.empty())
 	{
+		CheckPosCamera(cameraPos);
+
 		for (GameObject* pGameObject : m_pGameObjects)
 		{
 			if (pGameObject->GetIsActive())
@@ -103,13 +108,68 @@ void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* le
 
 		// Erase enemy from the vector if is Dead
 		RemoveGameObject();
-
-
 	}
 
 }
 
-void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject::Type& type)
+
+// Activate the gameObject if avatar is nearby to it (thanks to the cameraPos)
+void GameObjectManager::CheckPosCamera(const Rectf& cameraPos)
+{
+	//utils::GetDistanceX(pGameObject->GetBotShape().left, cameraPos.left + cameraPos.width)
+
+	for (GameObject* pGameObject : m_pGameObjects)
+	{
+		if (pGameObject->GetType() != GameObject::Type::item
+				&& pGameObject->GetType() != GameObject::Type::helicopter)
+		{
+			if (!pGameObject->GetIsActive())  // Not activated yet
+			{
+				if (pGameObject->GetIsComingFromRight())
+				{
+					// GameObject appears from the right of the window
+					if (utils::GetDistanceX(pGameObject->GetBotShape().left, cameraPos.left + cameraPos.width)
+						< m_ActivateGameObjectDist)
+					{
+						// Activate GameObject
+						pGameObject->SetIsActive(true);
+					}
+					else
+					{
+						if (pGameObject->GetBotShape().left > cameraPos.left &&
+							pGameObject->GetBotShape().left < cameraPos.left + cameraPos.width)
+						{
+							// GameObject already inside window 
+							pGameObject->SetIsActive(true);
+						}
+					}
+				}
+				else
+				{
+					//std::cout << "Enemy pos " << pGameObject->GetBotShape().left << std::endl;
+					//std::cout << "Camera pos " << cameraPos.left << std::endl;
+					// GameObject appears from the left of the window
+					if (pGameObject->GetBotShape().left < cameraPos.left)
+					{
+						if (utils::GetDistanceX(pGameObject->GetBotShape().left, cameraPos.left)
+							> m_ActivateGameObjectDist)
+						{
+							
+							// Activate GameObject
+							pGameObject->SetIsActive(true);
+						}
+					}
+				}
+				
+			}
+		}
+
+	}
+
+
+}
+
+void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject::Type& type, bool comingFromRight)
 {
 	GameObject* gameObject{ };
 	GameObject* item{ };
@@ -122,7 +182,7 @@ void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject:
 		break;
 
 	case GameObject::Type::soldier:
-		gameObject = new Soldier(startPos);
+		gameObject = new Soldier(startPos, comingFromRight);
 		break;
 
 	case GameObject::Type::prisoner:
@@ -261,6 +321,7 @@ Point2f GameObjectManager::SetStartPosItem(const Rectf& prisonerShape)
 
 	starPos.x = prisonerShape.left - prisonerShape.width / 2.f;
 	starPos.y = prisonerShape.bottom + prisonerShape.height / 3.f;
+
 	return starPos;
 
 }

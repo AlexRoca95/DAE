@@ -52,16 +52,31 @@ void Game::InitCamera()
 void  Game::AddGameObjects()
 {
 	// Helicoperts
-	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage2Pos * g_Scale, 700.f }, GameObject::Type::helicopter);
-	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage3Pos * g_Scale, 700.f }, GameObject::Type::helicopter);
+	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage2Pos * g_Scale, 700.f }, GameObject::Type::helicopter, false);
+	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage3Pos * g_Scale, 700.f }, GameObject::Type::helicopter, false);
 
 	// Soldiers
-	m_pGameObjectManager->AddGameObject(Point2f{ 1135 * g_Scale, 200.f }, GameObject::Type::soldier);
-	m_pGameObjectManager->AddGameObject(Point2f{ 1335 * g_Scale, 200.f }, GameObject::Type::soldier);
+	m_pGameObjectManager->AddGameObject(Point2f{ 800.f * g_Scale, 160.f }, GameObject::Type::soldier, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 980.f * g_Scale, 280.f }, GameObject::Type::soldier, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 1400 * g_Scale, 160.f }, GameObject::Type::soldier, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 1450 * g_Scale, 280.f }, GameObject::Type::soldier, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 1480 * g_Scale, 160.f }, GameObject::Type::soldier, false);
+	m_pGameObjectManager->AddGameObject(Point2f{ 1700 * g_Scale, 160.f }, GameObject::Type::soldier, false);
+	m_pGameObjectManager->AddGameObject(Point2f{ 2110 * g_Scale, 300.f }, GameObject::Type::soldier, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 2150 * g_Scale, 160.f }, GameObject::Type::soldier, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 2500 * g_Scale, 160.f }, GameObject::Type::soldier, false);
+	m_pGameObjectManager->AddGameObject(Point2f{ 2600 * g_Scale, 160.f }, GameObject::Type::soldier, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 2620 * g_Scale, 160.f }, GameObject::Type::soldier, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 3550 * g_Scale, 300.f }, GameObject::Type::soldier, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 3480 * g_Scale, 280.f }, GameObject::Type::soldier, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 3650 * g_Scale, 455.f }, GameObject::Type::soldier, true);
 
 	// Prisoners
-	m_pGameObjectManager->AddGameObject(Point2f{ 1000 * g_Scale, 280.f}, GameObject::Type::prisoner);
-	m_pGameObjectManager->AddGameObject(Point2f{ 1400 * g_Scale, 280.f }, GameObject::Type::prisoner);
+	m_pGameObjectManager->AddGameObject(Point2f{ 450.f * g_Scale, 156.f }, GameObject::Type::prisoner, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 1430.f * g_Scale, 280.f}, GameObject::Type::prisoner, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 1125.f * g_Scale, 170.f }, GameObject::Type::prisoner, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 2450.f * g_Scale, 390.f }, GameObject::Type::prisoner, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 3970.f * g_Scale, 690.f }, GameObject::Type::prisoner, true);
 
 }
 
@@ -93,9 +108,7 @@ void Game::Update( float elapsedSec )
 
 	m_Avatar->Update(elapsedSec, m_Level, m_Camera->GetCameraPos());
 
-
-	
-	m_pGameObjectManager->Update(elapsedSec, m_Avatar, m_Level);
+	m_pGameObjectManager->Update(elapsedSec, m_Avatar, m_Level, m_Camera->GetCameraPos());
 
 	m_Avatar->GetBullets()->CheckHitGameObjects(m_pGameObjectManager->GetGameObjects());
 

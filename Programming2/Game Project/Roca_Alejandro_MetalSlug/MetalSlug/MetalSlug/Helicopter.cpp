@@ -9,7 +9,8 @@
 
 
 Helicopter::Helicopter(const Point2f& startPos)
-	: Enemy( GameObject::Type::helicopter, startPos, 40, Point2f{ 220.f, 230.f }, Point2f{ }) // Type, startPos, health, speed and acceleration
+	: Enemy( GameObject::Type::helicopter, startPos, 40, Point2f{ 220.f, 230.f }, 
+		false, Point2f{ }) // Type, startPos, health, speed and acceleration
 	, m_MaxHeight{ 400.f }
 	, m_MaxTimerBombs { 0.5f }
 	, m_TimerBombs {  }

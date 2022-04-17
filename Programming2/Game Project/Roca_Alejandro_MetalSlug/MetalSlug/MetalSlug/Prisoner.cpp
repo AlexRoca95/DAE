@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "Prisoner.h"
 #include "Level.h"
+#include <iostream>
 
 
 Prisoner::Prisoner(const Point2f& startPos)
-	:Enemy(GameObject::Type::prisoner, startPos, 1, Point2f{ }, Point2f{ 0.f, -981.f}) // Type, startPos, health, speed and acceleration
+	:Enemy(GameObject::Type::prisoner, startPos, 1, Point2f{ }, 
+		true, Point2f{ 0.f, -981.f}) // Type, startPos, health, speed and acceleration
 	, m_IsReleased { false }
 	, m_MaxTimeWait { 1.5f }
 	, m_SecondsWait { }
@@ -13,7 +15,6 @@ Prisoner::Prisoner(const Point2f& startPos)
 
 {
 	Initialize();
-	m_IsActive = true;
 }
 
 
@@ -42,6 +43,7 @@ void Prisoner::Initialize()
 
 void Prisoner::Draw() const
 {
+	//std::cout << "Prisoner activated" << std::endl;
 
 	if (!m_IsDying && !m_IsReleased)
 	{
@@ -72,6 +74,7 @@ void Prisoner::Draw() const
 void Prisoner::Update(float elapsedSec, Avatar* avatar, const Level* level)
 {
 
+	
 	if (!m_IsDying && !m_IsReleased)
 	{
 		// Prisoner not released yet (Captured animation)

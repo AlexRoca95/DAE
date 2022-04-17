@@ -10,8 +10,8 @@ int Avatar::m_GameObjectCounter = 0;
 
 
 Avatar::Avatar()
-	: GameObject(GameObject::Type::avatar, Point2f{ 1100.f * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
-		, Point2f{ 0.f, g_Gravity + g_Gravity/2 })  // Type, startPos, speed and acceleration
+	: GameObject(GameObject::Type::avatar, Point2f{ 100.f * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
+		, false , Point2f{ 0.f, g_Gravity + g_Gravity/2 })  // Type, startPos, speed and acceleration
 	, m_SlowSpeed{ 90.f }
 	, m_JumpSpeed{ 650.f }
 	, m_NormalSpeed { 260.f }
@@ -99,7 +99,11 @@ void Avatar::Draw() const
 	}
 	else
 	{
-		CheckFlipSprite();
+		if (m_IsImmortal && m_IsBlink)  // Player Immortal
+		{
+			CheckFlipSprite();
+		}
+		
 	}
 	
 	m_pBulletManager->Draw();
@@ -149,8 +153,7 @@ void Avatar::DrawAvatar() const
 void Avatar::Update( float elapsedSeconds, const Level* level, const Rectf& cameraPos)
 {
 
-	
-
+	//std::cout << m_pBottomSprite->GetDstRect().bottom << std::endl;
 	m_CameraPos = cameraPos;
 
 	if (!m_IsDead)

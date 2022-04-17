@@ -6,7 +6,7 @@
 
 
 Bullet::Bullet(const Point2f& startPos)
-	: Projectile(GameObject::Type::bullet, startPos, Point2f{ 1000.f, 0.f }, Point2f{ })
+	: Projectile(GameObject::Type::bullet, startPos, Point2f{ 1100.f, 0.f }, Point2f{ })
 {
 	Initialize();
 }

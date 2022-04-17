@@ -33,7 +33,8 @@ public:
 	};
 
 
-	GameObject( GameObject::Type id, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration = Point2f{0.f, g_Gravity});
+	GameObject( GameObject::Type id, const Point2f& startPos, const Point2f& speed, bool comingFromRight ,
+		const Point2f& acceleration = Point2f{0.f, g_Gravity} );
 	virtual ~GameObject() = default;
 	GameObject(const GameObject& gameObject) = delete;
 	GameObject(GameObject&& gameObject) = delete;
@@ -53,6 +54,7 @@ public:
 	bool GetGameStageChanged() const;
 	Type GetType() const;
 	bool GetIsDying() const;
+	bool GetIsComingFromRight() const;
 
 	// Setters
 	void SetIsActive(bool active);
@@ -68,7 +70,7 @@ protected:
 	bool m_IsActive;			// GameObject activated or not
 	bool m_IsDead;				// GameObject is dead or not (for death animation)
 	bool m_IsDying;
-
+	bool m_IsComingFromRight;	// GameObject appears from right of the window of not
 
 	// Sprite related
 	Sprite* m_pTopSprite;

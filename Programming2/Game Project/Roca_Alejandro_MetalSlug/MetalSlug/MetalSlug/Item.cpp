@@ -7,7 +7,7 @@
 
 
 Item::Item(const Point2f& startPos)
-	:GameObject(GameObject::Type::item, startPos, Point2f{})
+	:GameObject(GameObject::Type::item, startPos, Point2f{}, false)
 {
 	Initialize();
 }

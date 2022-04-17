@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "Projectile.h"
 #include "utils.h"
+#include <iostream>
 
 Projectile::Projectile(GameObject::Type type, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration)
-	:GameObject(type, startPos, speed, acceleration)
-	, m_MaxSeconds { 2.f }
+	:GameObject(type, startPos, speed, false, acceleration)
+	, m_MaxSeconds { 0.7f }
 	, m_Seconds { }
 	, m_IsHit{ false }
 	, m_IsInitialized { false }
@@ -26,14 +27,6 @@ void Projectile::Draw() const
 		m_pTopSprite->Draw();
 
 	}
-
-	Rectf shape;
-
-	shape.left = m_pTopSprite->GetDstRect().left;
-	shape.bottom = m_pTopSprite->GetDstRect().bottom;
-	shape.width = m_pTopSprite->GetDstRect().width;
-	shape.height = m_pTopSprite->GetDstRect().height ;
-
 
 	//utils::DrawRect(shape);
 }

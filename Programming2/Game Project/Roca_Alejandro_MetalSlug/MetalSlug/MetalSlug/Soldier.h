@@ -7,7 +7,7 @@ class Soldier final : public Enemy
 
 public:
 
-	Soldier(const Point2f& startPos);
+	Soldier(const Point2f& startPos, bool comingFromRight);
 	virtual ~Soldier();
 	Soldier(const Soldier& soldier) = delete;
 	Soldier(Soldier&& soldier) = delete;

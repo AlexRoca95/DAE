@@ -7,8 +7,9 @@
 
 
 
-Soldier::Soldier(const Point2f& startPos)
-	:Enemy(GameObject::Type::soldier, startPos, 1, Point2f{ 150.f, 0.f }, Point2f{0.f, g_Gravity})   // Type, starting position, health, speed and accelerat
+Soldier::Soldier(const Point2f& startPos, bool comingFromRight)
+	:Enemy(GameObject::Type::soldier, startPos, 1, Point2f{ 150.f, 0.f }, 
+		comingFromRight, Point2f{0.f, g_Gravity})   // Type, starting position, health, speed and accelerat
 	, m_RunSpeed { 200.f }
 	, m_FacingRight { false }
 	, m_RunAwayDist { 200.f }
@@ -23,7 +24,6 @@ Soldier::Soldier(const Point2f& startPos)
 	, m_IsReset { false }
 {
 	Initialize();
-	m_IsActive = true;
 }
 
 
@@ -379,7 +379,7 @@ void Soldier::Hit()
 		// Soldier is dead 
 		m_IsDying = true;
 		m_Velocity.x = 0.f;
-		m_pBottomSprite->UpdateValues(11, 1, 11, 5.f, 60.f, 44.f, 357.f);  // Change death animation
+		m_pBottomSprite->UpdateValues(11, 1, 11, 8.f, 60.f, 44.f, 357.f);  // Change death animation
 		m_pBottomSprite->ResetSprite();
 		m_ActionState = ActionState::state4;  // Death state
 	}
