@@ -58,6 +58,15 @@ void Grenade::Draw() const
 		glPopMatrix();
 	
 	}
+
+	Rectf shape;
+
+	shape.left = m_pTopSprite->GetDstRect().left;
+	shape.bottom = m_pTopSprite->GetDstRect().bottom;
+	shape.width = m_pTopSprite->GetDstRect().width;
+	shape.height = m_pTopSprite->GetDstRect().height;
+
+	//utils::DrawRect(shape);
 }
 
 void Grenade::Update(float elapsedSec, Avatar* avatar, const Soldier* soldier, const std::vector<Point2f>& vertices)
@@ -150,7 +159,7 @@ void Grenade::CheckHitAvatar(Avatar* avatar)
 {
 	if (!avatar->GetIsDead())
 	{
-		if (utils::IsOverlapping(avatar->GetTopShape(), m_pTopSprite->GetDstRect()))
+		if (utils::IsOverlapping(avatar->GetHitBox(), m_pTopSprite->GetDstRect()))
 		{
 			Hit();
 			avatar->Hit();  // Kill avatar

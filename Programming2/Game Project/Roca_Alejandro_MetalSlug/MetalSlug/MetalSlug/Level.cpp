@@ -70,7 +70,7 @@ void Level::DrawBackground() const
 	m_pLevelTexture->Draw();
 
 	
-	//utils::DrawPolygon(m_TransformedVertices[20]);
+	utils::DrawPolygon(m_TransformedVertices[20]);
 }
 
 void Level::DrawForeground() const
@@ -104,6 +104,7 @@ void Level::HandleCollision(Rectf& actorShape, Vector2f& velocity) const
 {
 	VerticalCollision(actorShape, velocity);
 	HorizCollision(actorShape, velocity);  
+
 }
 
 
@@ -147,6 +148,23 @@ void Level::HorizCollision(Rectf& actorShape, Vector2f& velocity) const
 		if ( rayEnd.x <= hitInfo.intersectPoint.x )
 		{
 			actorShape.left = hitInfo.intersectPoint.x;
+			velocity.x = 0.f;
+		}
+	}
+
+
+	// Check Collision to the right
+	ray.x = actorShape.left;
+	ray.y = actorShape.bottom + actorShape.height; 
+	rayEnd.x = actorShape.left + actorShape.width;
+	rayEnd.y = actorShape.bottom + actorShape.height; 
+
+	if (utils::Raycast(m_TransformedVertices[20], ray, rayEnd, hitInfo))
+	{
+
+		if (rayEnd.x >= hitInfo.intersectPoint.x)
+		{
+			actorShape.left = hitInfo.intersectPoint.x - actorShape.width;
 			velocity.x = 0.f;
 		}
 	}

@@ -260,10 +260,10 @@ void Helicopter::CheckBombCollision(Avatar* avatar, const std::vector<Point2f>& 
 	// Check collision with Avatar	
 	for (int i{}; i < m_pBombs.size(); i++)
 	{
-		if (m_pBombs[i]->GetIsActive())
+		if (m_pBombs[i]->GetIsActive() && !m_pBombs[i]->GetIsHit())
 		{
-			//std::cout << m_pBombs[i]->GetTopSprite()->GetDstRect().bottom << std::endl;
-			if (utils::IsOverlapping(m_pBombs[i]->GetTopSprite()->GetDstRect(), avatar->GetTopShape()))
+			// Only check collision when bomb is active and didn't explode yet
+			if (utils::IsOverlapping(m_pBombs[i]->GetTopSprite()->GetDstRect(), avatar->GetHitBox()))
 			{
 				m_pBombs[i]->Hit();
 				m_ExplosionCounter = i + 1;

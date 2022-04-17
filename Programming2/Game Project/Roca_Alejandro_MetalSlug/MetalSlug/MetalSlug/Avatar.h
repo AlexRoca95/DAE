@@ -68,6 +68,7 @@ public:
 	const bool GetIsMovingRight() const;
 	const Animations GetActiveAnimation() const;
 	BulletManager* GetBullets();
+	Rectf GetHitBox() const;
 
 	void SetVerticesLevel(std::vector<Point2f> vertices);
 

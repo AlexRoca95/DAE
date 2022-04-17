@@ -92,7 +92,7 @@ void Item::Hit()
 void Item::GrabItem(Avatar* avatar)
 {
 
-	if ( utils::IsOverlapping( m_pBottomSprite->GetDstRect(), avatar->GetBotShape() ) )
+	if ( utils::IsOverlapping( m_pBottomSprite->GetDstRect(), avatar->GetHitBox() ) )
 	{
 
 		if (m_ItemType == Item::ItemType::card)

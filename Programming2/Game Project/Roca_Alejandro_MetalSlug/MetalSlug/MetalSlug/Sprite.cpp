@@ -291,6 +291,19 @@ Texture* Sprite::GetTexture( ) const
 	return m_pTexture;
 }
 
+// Reduce the bounding boxes of the avatar for a better collision handling
+Rectf Sprite::GetHitBox() const
+{
+	Rectf shape;
+
+	shape.left = m_DstRect.left;
+	shape.bottom = m_DstRect.bottom;
+	shape.width = m_DstRect.width / 1.5f;
+	shape.height = m_DstRect.height / 1.5f;
+
+	return shape;
+}
+
 bool Sprite::GetAnimationFinish( ) const
 {
 	return m_IsFinish;

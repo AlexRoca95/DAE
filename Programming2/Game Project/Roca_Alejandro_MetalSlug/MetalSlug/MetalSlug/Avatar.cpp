@@ -105,7 +105,16 @@ void Avatar::Draw() const
 	}
 
 	m_pBulletManager->Draw();
-	
+
+	Rectf shape;
+
+	shape.left = m_pTopSprite->GetDstRect().left;
+	shape.bottom = m_pTopSprite->GetDstRect().bottom;
+	shape.width = m_pTopSprite->GetDstRect().width/1.5f;
+	shape.height = m_pTopSprite->GetDstRect().height/1.5f;
+
+
+	//utils::DrawRect(shape);
 }
 
 
@@ -805,6 +814,11 @@ BulletManager* Avatar::GetBullets()
 	return m_pBulletManager;
 }
 
+// Get hitbox of the avatar for collisions
+Rectf Avatar::GetHitBox() const
+{
+	return m_pTopSprite->GetHitBox();
+}
 
 void Avatar::SetVerticesLevel(std::vector<Point2f> vertices)
 {

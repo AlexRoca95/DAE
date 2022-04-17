@@ -26,6 +26,16 @@ void Projectile::Draw() const
 		m_pTopSprite->Draw();
 
 	}
+
+	Rectf shape;
+
+	shape.left = m_pTopSprite->GetDstRect().left;
+	shape.bottom = m_pTopSprite->GetDstRect().bottom;
+	shape.width = m_pTopSprite->GetDstRect().width;
+	shape.height = m_pTopSprite->GetDstRect().height ;
+
+
+	//utils::DrawRect(shape);
 }
 
 void Projectile::Hit()

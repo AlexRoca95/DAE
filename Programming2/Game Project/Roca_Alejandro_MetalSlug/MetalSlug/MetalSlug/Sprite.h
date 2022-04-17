@@ -32,10 +32,12 @@ public:
 	float GetFrameHeight( ) const;
 	Rectf GetSrcRect( ) const;
 	Rectf& GetDstRect( );
+	Rectf GetHitBox() const;
 	int GetActFrame( ) const;
 	int GetTotalFrames() const;
 	Texture* GetTexture( ) const;
 	bool GetAnimationFinish( ) const;
+
 
 	// Setters
 	void SetDstRect(const float x, const float y, const float width, const float height);

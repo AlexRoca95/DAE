@@ -93,7 +93,7 @@ void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* le
 
 		if (m_TotalNrPrisoners > 0)   // Still prisoners left
 		{
-			AvatarReleasePrisoner(avatar->GetBotShape());
+			AvatarReleasePrisoner(avatar->GetHitBox());
 		}
 
 		if (m_TotalNrItems > 0)
