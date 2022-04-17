@@ -10,13 +10,12 @@ int Avatar::m_GameObjectCounter = 0;
 
 
 Avatar::Avatar()
-	: GameObject(GameObject::Type::avatar, Point2f{ 1200.f * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
-		, Point2f{ 0.f, g_Gravity })  // Type, startPos, speed and acceleration
-	, m_SlowSpeed{ 80.f }
-	, m_JumpSpeed{ 500.f }
-	, m_NormalSpeed { 300.f }
+	: GameObject(GameObject::Type::avatar, Point2f{ 100.f * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
+		, Point2f{ 0.f, g_Gravity + g_Gravity/2 })  // Type, startPos, speed and acceleration
+	, m_SlowSpeed{ 90.f }
+	, m_JumpSpeed{ 650.f }
+	, m_NormalSpeed { 260.f }
 	, m_IsMovingRight{ true }
-	, m_StartPosition{ 1200.f * g_Scale, 300.f }
 	, m_TopActionState{ TopActionState::jumping }
 	, m_BotActionState{ BotActionState::jumping }
 	, m_ActTopAnimation{ Animations::jumping }
@@ -180,6 +179,8 @@ void Avatar::Update( float elapsedSeconds, const Level* level, const Rectf& came
 
 	m_pBulletManager->Update(elapsedSeconds, this);
 
+
+	//std::cout << m_pBottomSprite->GetActFrame() << std::endl;
 }
 
 // Update the Source Rectangle of the Top Sprite
@@ -194,14 +195,14 @@ void Avatar::UpdateTopSrcRect()
 		if ( m_IsMoving )
 		{
 			// Marco Body (Moving)
-			m_pTopSprite->UpdateValues( 12, 1, 12, 20.f, 40.f, 29.f, 87.f );
+			m_pTopSprite->UpdateValues( 12, 1, 12, 25.f, 40.f, 29.f, 87.f );
 			m_Offset = 10;
 		}
 		else
 		{
 			
 			// Marco Body (Iddle)
-			m_pTopSprite->UpdateValues( 3, 1, 3, 5.f, 33.f, 29.f, 29.f );
+			m_pTopSprite->UpdateValues( 3, 1, 3, 6.f, 33.f, 29.f, 29.f );
 			m_pTopSprite->SetLeftDstRect( m_pBottomSprite->GetDstRect().left );
 			m_Offset = 7;
 			
@@ -219,7 +220,7 @@ void Avatar::UpdateTopSrcRect()
 	case Avatar::TopActionState::jumping:
 
 		// Marco Body (JUMPING)
-		m_pTopSprite->UpdateValues(5, 1, 5, 11.f, 32.f, 25.f, 54.f);
+		m_pTopSprite->UpdateValues(5, 1, 5, 15.f, 32.f, 25.f, 54.f);
 		m_pTopSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left - 18);
 		m_Offset = 35;
 		break;
@@ -274,7 +275,7 @@ void Avatar::UpdateBotSrcRect()
 		if ( m_IsMoving )
 		{
 			// Marco Legs (Moving)
-			m_pBottomSprite->UpdateValues( 12, 1, 12, 20.f, 30.f, 19.f, 44.f );
+			m_pBottomSprite->UpdateValues( 12, 1, 12, 23.f, 30.f, 19.f, 44.f );
 			m_pTopSprite->SetLeftDstRect( m_pBottomSprite->GetDstRect().left ); // (correct the position of the sprite)
 		}
 		else
@@ -288,19 +289,19 @@ void Avatar::UpdateBotSrcRect()
 
 		if ( m_IsMoving )
 		{
-			// Crawling + IDDLE
-			m_pBottomSprite->UpdateValues( 7, 1, 7, 5.f, 36.f, 24.f, 168.f );
+			// Crawling + Moving
+			m_pBottomSprite->UpdateValues( 7, 1, 7, 15.f, 36.f, 24.f, 168.f );
 		}
 		else
 		{
 			// Crawling + Not Moving
-			m_pBottomSprite->UpdateValues( 4, 1, 4, 5.f, 36.f, 24.f, 144.f );
+			m_pBottomSprite->UpdateValues( 4, 1, 4, 6.f, 36.f, 24.f, 144.f );
 		}
 		break;
 
 	case Avatar::BotActionState::jumping:
 
-		m_pBottomSprite->UpdateValues( 6, 1, 6, 11.f, 25.f, 25.f, 100.f );
+		m_pBottomSprite->UpdateValues( 6, 1, 6, 15.f, 25.f, 25.f, 100.f );
 		break;
 
 	case Avatar::BotActionState::shooting:  // Crawling Shooting
@@ -366,9 +367,15 @@ void Avatar::UpdateFrames( float elapsedSeconds )
 	// Check if the shooting animation has finished
 	if( m_IsShooting && m_pTopSprite->GetAnimationFinish() )
 	{
-		ResetSprite( m_pTopSprite, true );
-		m_IsShooting = false;
-		m_TopActionState = TopActionState::iddle;
+		if (m_IsOnGround)
+		{
+			// Only reset shoot animation when we are On the ground
+			ResetSprite(m_pTopSprite, true);
+			m_IsShooting = false;
+			m_TopActionState = TopActionState::iddle;
+		}
+		
+		
 	}
 
 	// Check if death animation has finished
@@ -426,6 +433,7 @@ void Avatar::HandleInput()
 			m_ActTopAnimation = Animations::jumping;
 			m_ActBotAnimation = Animations::jumping;
 			m_Velocity.y = m_JumpSpeed;
+			
 		}
 
 	}
@@ -462,12 +470,18 @@ void Avatar::HandleInput()
 		m_IsMovingRight = true;
 		CheckCrawling();
 
-		m_ActTopAnimation = Animations::movingRight;
-		m_ActBotAnimation = Animations::movingRight;
+		if ( m_TopActionState != TopActionState::crawling)
+		{
+		
+			m_ActTopAnimation = Animations::movingRight;
+			m_ActBotAnimation = Animations::movingRight;
+		}
+		
 
 
 		if ( ( m_BotActionState == BotActionState::jumping ) && m_IsOnGround )
 		{
+			
 			// Only change the sprite when avatar is on ground after jumping
 			m_TopActionState = TopActionState::iddle;
 			m_BotActionState = BotActionState::iddle;
@@ -481,6 +495,7 @@ void Avatar::HandleInput()
 			// JUMP + MOVE RIGHT
 			if ( m_IsOnGround )
 			{
+				
 				m_TopActionState = TopActionState::jumping;
 				m_BotActionState = BotActionState::jumping;
 				m_ActTopAnimation = Animations::jumping;
@@ -500,9 +515,11 @@ void Avatar::HandleInput()
 			m_IsMoving = true;
 			m_IsMovingRight = false;
 			CheckCrawling();
-
-			m_ActTopAnimation = Animations::movingLeft;
-			m_ActBotAnimation = Animations::movingLeft;
+			if (m_TopActionState != TopActionState::crawling)
+			{
+				m_ActTopAnimation = Animations::movingLeft;
+				m_ActBotAnimation = Animations::movingLeft;
+			}
 
 			if ( ( m_BotActionState == BotActionState::jumping ) && m_IsOnGround)
 			{
@@ -537,6 +554,8 @@ void Avatar::HandleInput()
 		}
 	}
 	
+
+
 	// Check if shooting
 	CheckShooting();
 
@@ -588,6 +607,7 @@ void Avatar::CheckPreviousState( )
 		{
 			if ( (m_PrevTopAnimation == Animations::shootingUp ) && ( m_ActTopAnimation == Animations::shooting ) )
 			{
+				
 				m_TopActionState = TopActionState::iddle;
 				m_IsShooting = false;
 			}

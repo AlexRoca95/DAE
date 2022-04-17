@@ -47,6 +47,7 @@ public:
 	void SetSrcRect(const float y, const float width, const float height);
 	void SetSrcRect(const float y);
 	void ResetAnimationFinish(const bool reset);
+	void SetActFrame(int frame);
 
 
 private:

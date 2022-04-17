@@ -349,6 +349,10 @@ void Sprite::SetSrcRect(const float y)
 
 }
 
+void Sprite::SetActFrame(int frame)
+{
+	m_ActFrame = frame;
+}
 
 
 // Set the correct left sprite pos of the spritesheet 

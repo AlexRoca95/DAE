@@ -76,7 +76,6 @@ private:
 
 	// General
 	static int m_GameObjectCounter;
-	Point2f m_StartPosition{};
 	Rectf m_CameraPos;
 	
 	// BulletManager
