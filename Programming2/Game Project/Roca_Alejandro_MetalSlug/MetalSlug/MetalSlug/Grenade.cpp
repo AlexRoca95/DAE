@@ -8,7 +8,7 @@
 
 
 Grenade::Grenade()
-	:Projectile(GameObject::Type::grenade, Point2f{ 400.f, 300.f }, Point2f{100.f, g_Gravity})
+	:Projectile(GameObject::Type::grenade, Point2f{}, Point2f{ 400.f, 300.f }, Point2f{ 100.f, g_Gravity })
 	, m_Angle { }
 	, m_IsMovingRight { false }
 {
@@ -89,6 +89,7 @@ void Grenade::Update(float elapsedSec, Avatar* avatar, const Soldier* soldier, c
 			DesactivateProjectile();
 			m_Velocity.x = m_Speed.x;
 			m_Velocity.y = m_Speed.y;
+			m_Angle = 0.f;
 		}
 	}
 

@@ -56,11 +56,13 @@ private:
 	GameObjectManager* m_pGameObjectManager;
 
 	// FUNCTIONS
-
 	void Initialize( );
 	void InitAvatar();
 	void InitCamera();
 	void AddGameObjects();
+
+
+	void DisplayControlsInfo();
 
 	void Cleanup( );
 	void ClearBackground( ) const;

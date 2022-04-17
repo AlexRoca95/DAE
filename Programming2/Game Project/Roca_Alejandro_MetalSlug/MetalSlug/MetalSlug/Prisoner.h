@@ -20,6 +20,11 @@ public:
 
 	void CheckAvatarRelease(const Rectf& avatarShape);
 
+
+	bool GetDropItem() const;
+
+	void ItemDropped();
+
 private:
 
 	// Time waiting after giving object
@@ -27,6 +32,8 @@ private:
 	float m_SecondsWait;
 
 	bool m_IsReleased;
+	bool m_DropItem;
+	bool m_IsItemDropped;
 
 	void Initialize();
 

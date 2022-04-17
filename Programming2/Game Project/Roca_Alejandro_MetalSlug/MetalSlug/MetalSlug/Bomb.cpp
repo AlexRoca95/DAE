@@ -4,7 +4,7 @@
 
 
 Bomb::Bomb()
-	: Projectile(GameObject::Type::bomb, Point2f{ 0.f, -50.f }, Point2f{0.f, -300.f})
+	: Projectile(GameObject::Type::bomb, Point2f{}, Point2f{ 0.f, -50.f }, Point2f{ 0.f, -300.f })
 {
 	Initialize();
 }

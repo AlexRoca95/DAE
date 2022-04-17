@@ -6,7 +6,7 @@
 
 
 Bullet::Bullet(const Point2f& startPos)
-	: Projectile(GameObject::Type::bullet, Point2f{ 1000.f, 0.f }, Point2f{ })
+	: Projectile(GameObject::Type::bullet, startPos, Point2f{ 1000.f, 0.f }, Point2f{ })
 {
 	Initialize();
 }
@@ -78,8 +78,6 @@ void Bullet::Update(float elapsedSeconds, const Avatar* avatar)
 // Change the Bullet pos to the correct start position according with the pos of the Avatar
 void Bullet::SetStartPos( const Avatar* avatar )
 {
-	Point2f startPos{ };
-
 	switch ( avatar->GetActiveAnimation() )
 	{
 		case Avatar::Animations::shooting:  // Pointing Horizontally
@@ -88,19 +86,19 @@ void Bullet::SetStartPos( const Avatar* avatar )
 			m_pTopSprite->SetDstRect(11.f, 7.f);
 			m_IsMovingUp = false;
 
-			startPos.y = ( avatar->GetTopShape().bottom + avatar->GetTopShape().height/2 ) 
+			m_StartPosition.y = ( avatar->GetTopShape().bottom + avatar->GetTopShape().height/2 ) 
 				- m_pTopSprite->GetFrameHeight()/3;
 
 			if (avatar->GetIsMovingRight())
 			{
-				startPos.x = ( avatar->GetTopShape().left + avatar->GetTopShape().width ) 
+				m_StartPosition.x = ( avatar->GetTopShape().left + avatar->GetTopShape().width ) 
 					- m_pTopSprite->GetFrameWidth() * 2;
 
 				m_Velocity.x = m_Speed.x;
 			}
 			else
 			{
-				startPos.x = avatar->GetTopShape().left - avatar->GetTopShape().width
+				m_StartPosition.x = avatar->GetTopShape().left - avatar->GetTopShape().width
 					+ m_pTopSprite->GetFrameWidth() * 5;
 
 				m_Velocity.x = - m_Speed.x;
@@ -115,28 +113,21 @@ void Bullet::SetStartPos( const Avatar* avatar )
 			m_IsMovingUp = true;
 			m_Velocity.y = m_Speed.x;
 
-			startPos.y = (avatar->GetTopShape().bottom + avatar->GetTopShape().height)
+			m_StartPosition.y = (avatar->GetTopShape().bottom + avatar->GetTopShape().height)
 				- m_pTopSprite->GetFrameHeight();
 
-			if (avatar->GetIsMovingRight())
-			{
-				startPos.x = (avatar->GetTopShape().left + avatar->GetTopShape().width / 2)
+			m_StartPosition.x = (avatar->GetTopShape().left + avatar->GetTopShape().width / 2)
 					- m_pTopSprite->GetFrameWidth() * 2;
-			}
-			else
-			{
-				startPos.x = avatar->GetTopShape().left;
-			}
-
+			
 		break;
 	}
 
 	// Position from the bullet start moving
-	m_Position = startPos;
+	m_Position = m_StartPosition;
 	m_IsInitialized = true;
 
-	m_pTopSprite->SetLeftDstRect(startPos.x);
-	m_pTopSprite->SetBottomDstRect(startPos.y);
+	m_pTopSprite->SetLeftDstRect(m_StartPosition.x);
+	m_pTopSprite->SetBottomDstRect(m_StartPosition.y);
 	
 }
 

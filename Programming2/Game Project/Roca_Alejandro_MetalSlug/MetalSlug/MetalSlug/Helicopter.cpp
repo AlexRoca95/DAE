@@ -40,8 +40,8 @@ void Helicopter::Initialize()
 {
 	m_pBottomSprite = new Sprite("Resources/sprites/enemies/helicopterv2.png");
 	m_pBottomSprite->UpdateValues(5, 1, 5, 11.f, 100.f, 67.f, 67.f); // Iddle Helicopter
-	m_pBottomSprite->SetLeftDstRect(m_StartPos.x);
-	m_pBottomSprite->SetBottomDstRect(m_StartPos.y);
+	m_pBottomSprite->SetLeftDstRect(m_StartPosition.x);
+	m_pBottomSprite->SetBottomDstRect(m_StartPosition.y);
 	m_pBottomSprite->UpdateLeftSrcRect();
 
 	// Add 3 bombs 

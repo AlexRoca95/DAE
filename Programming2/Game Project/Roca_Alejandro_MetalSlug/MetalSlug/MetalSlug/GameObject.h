@@ -28,11 +28,12 @@ public:
 		helicopter,
 		soldier,
 		boss,
-		prisoner
+		prisoner,
+		item
 	};
 
 
-	GameObject( GameObject::Type id, const Point2f& speed, const Point2f& acceleration);
+	GameObject( GameObject::Type id, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration = Point2f{0.f, g_Gravity});
 	virtual ~GameObject() = default;
 	GameObject(const GameObject& gameObject) = delete;
 	GameObject(GameObject&& gameObject) = delete;
@@ -61,6 +62,7 @@ public:
 
 protected:
 	const Type m_Id;
+	Point2f m_StartPosition;
 				
 	bool m_IsActive;			// GameObject activated or not
 	bool m_IsDead;				// GameObject is dead or not (for death animation)

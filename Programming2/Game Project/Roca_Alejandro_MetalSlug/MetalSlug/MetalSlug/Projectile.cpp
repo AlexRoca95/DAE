@@ -2,8 +2,8 @@
 #include "Projectile.h"
 #include "utils.h"
 
-Projectile::Projectile(GameObject::Type type, const Point2f& speed, const Point2f& acceleration)
-	:GameObject(type, speed, acceleration)
+Projectile::Projectile(GameObject::Type type, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration)
+	:GameObject(type, startPos, speed, acceleration)
 	, m_MaxSeconds { 2.f }
 	, m_Seconds { }
 	, m_IsHit{ false }

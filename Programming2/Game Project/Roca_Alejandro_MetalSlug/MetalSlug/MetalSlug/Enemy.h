@@ -35,7 +35,6 @@ protected:
 
 	ActionState m_ActionState;
 	ActionState m_PreviousAction;
-	const Point2f m_StartPos;
 	int m_Health;
 
 

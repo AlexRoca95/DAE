@@ -10,7 +10,8 @@ int Avatar::m_GameObjectCounter = 0;
 
 
 Avatar::Avatar()
-	: GameObject(GameObject::Type::avatar, Point2f{m_NormalSpeed, m_JumpSpeed}, Point2f{ 0.f, g_Gravity })  // Type, speed and acceleration
+	: GameObject(GameObject::Type::avatar, Point2f{ 1200.f * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
+		, Point2f{ 0.f, g_Gravity })  // Type, startPos, speed and acceleration
 	, m_SlowSpeed{ 80.f }
 	, m_JumpSpeed{ 500.f }
 	, m_NormalSpeed { 300.f }
@@ -772,6 +773,21 @@ void Avatar::CheckGameState()
 	
 
 
+}
+
+// Check what item has been grabbed
+void Avatar::GrabItem(Item::ItemType itemType)
+{
+	switch (itemType)
+	{
+	case Item::ItemType::ammo:
+		// Give ammo to avatar
+		break;
+	case Item::ItemType::card:
+		// Give points 
+		break;
+
+	}
 }
 
 const bool Avatar::GetIsMovingRight() const

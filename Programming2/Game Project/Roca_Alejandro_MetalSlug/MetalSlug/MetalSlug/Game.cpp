@@ -56,10 +56,13 @@ void  Game::AddGameObjects()
 	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage3Pos * g_Scale, 700.f }, GameObject::Type::helicopter);
 
 	// Soldiers
+	m_pGameObjectManager->AddGameObject(Point2f{ 1135 * g_Scale, 200.f }, GameObject::Type::soldier);
 	m_pGameObjectManager->AddGameObject(Point2f{ 1335 * g_Scale, 200.f }, GameObject::Type::soldier);
 
 	// Prisoners
 	m_pGameObjectManager->AddGameObject(Point2f{ 1000 * g_Scale, 280.f}, GameObject::Type::prisoner);
+	m_pGameObjectManager->AddGameObject(Point2f{ 1400 * g_Scale, 280.f }, GameObject::Type::prisoner);
+
 }
 
 
@@ -136,6 +139,11 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 	{
 		m_Avatar->Shoot();
 	}
+
+	if (e.keysym.sym == SDLK_i)
+	{
+		DisplayControlsInfo();
+	}
 	
 }
 
@@ -196,6 +204,19 @@ void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 	//	std::cout << " middle button " << std::endl;
 	//	break;
 	//}
+}
+
+// Show in the console all the information about the game control keys
+void Game::DisplayControlsInfo()
+{
+	std::cout << std::endl;
+	std::cout << "-- METAL SLUG GAME CONTROLS INFO -- " << std::endl;
+	std::cout << std::endl;
+	std::cout << " - Use the left, Right and Up Arrow Keys to move the avatar throw the level." << std::endl;
+	std::cout << " - Down Arrow key --> Avatar starts crawling. " << std::endl;
+	std::cout << " - C key --> Jump." << std::endl;
+	std::cout << " - X key --> Shoot." << std::endl;
+
 }
 
 void Game::ClearBackground( ) const

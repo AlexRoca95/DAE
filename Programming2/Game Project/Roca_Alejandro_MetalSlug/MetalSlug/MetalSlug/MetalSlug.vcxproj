@@ -163,6 +163,7 @@
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Helicopter.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix2x3.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="Helicopter.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Matrix2x3.h" />
     <ClInclude Include="pch.h" />

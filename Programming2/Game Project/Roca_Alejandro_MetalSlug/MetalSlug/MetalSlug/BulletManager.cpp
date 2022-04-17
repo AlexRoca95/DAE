@@ -109,25 +109,25 @@ void BulletManager::CheckHitGameObjects(std::vector<GameObject*> gameObjects)
 	{
 		if (bulletPtr->GetIsActive() && !bulletPtr->GetIsHit())
 		{
-			for (GameObject* enemyPtr : gameObjects)
+			for (GameObject* pGameObject : gameObjects)
 			{
-				if (enemyPtr->GetIsActive())
+				if (pGameObject->GetIsActive())
 				{
 					// X axis
 					if ( ( bulletPtr->GetTopShape().left ) >
-						enemyPtr->GetBotShape().left			&&  
-						bulletPtr->GetTopShape().left < ( enemyPtr->GetBotShape().left +
-							enemyPtr->GetBotShape().width ) )
+						pGameObject->GetBotShape().left			&&  
+						bulletPtr->GetTopShape().left < ( pGameObject->GetBotShape().left +
+							pGameObject->GetBotShape().width ) )
 					{
 						
 						// Y axis
 						if (bulletPtr->GetTopShape().bottom  >
-							enemyPtr->GetBotShape().bottom &&
-							bulletPtr->GetTopShape().bottom < (enemyPtr->GetBotShape().bottom +
-								enemyPtr->GetBotShape().height))
+							pGameObject->GetBotShape().bottom &&
+							bulletPtr->GetTopShape().bottom < (pGameObject->GetBotShape().bottom +
+								pGameObject->GetBotShape().height))
 						{
 							bulletPtr->Hit();
-							enemyPtr->Hit();
+							pGameObject->Hit();
 							break;
 
 						}

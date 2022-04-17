@@ -2,10 +2,12 @@
 
 #include "GameObject.h"
 
+#include "Item.h"
 
 class Texture;
 class Level;
 class BulletManager;
+class Item;
 class Avatar final : public GameObject
 {
 public:
@@ -61,6 +63,7 @@ public:
 
 	void Shoot();
 	void Update(float elapsedSeconds, const Level* level, const Rectf& cameraPos);
+	void GrabItem(Item::ItemType itemType);
 
 	const bool GetIsMovingRight() const;
 	const Animations GetActiveAnimation() const;

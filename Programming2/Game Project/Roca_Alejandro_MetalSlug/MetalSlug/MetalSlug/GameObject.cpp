@@ -7,8 +7,9 @@ bool GameObject::m_IsSecondHeliFightStart = false;
 bool GameObject::m_IsBossFightStart = false;
 bool GameObject::m_IsStageChanged = false;
 
-GameObject::GameObject( GameObject::Type id, const Point2f& speed, const Point2f& acceleration)
+GameObject::GameObject( GameObject::Type id, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration)
 	: m_Id{ id }
+	, m_StartPosition { startPos }
 	, m_pTopSprite{ }
 	, m_pBottomSprite{ }
 	, m_IsActive{ false }

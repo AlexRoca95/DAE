@@ -30,12 +30,16 @@ private:
 	std::vector <GameObject*> m_pGameObjects;
 	int m_TotalNrHelicopters;
 	int m_TotalNrPrisoners;
+	int m_TotalNrItems;
 
 
 	void ActivateHelicopter();
 	void RemoveGameObject();
 	void DecrementTotalNrGameObject(const GameObject::Type& type);
 	void AvatarReleasePrisoner(const Rectf& avatarShape);
+	void GrabItem(Avatar* avatar);
+	Point2f SetStartPosItem(const Rectf& prisonerShape);
+	//void DropItem();
 
 
 };
