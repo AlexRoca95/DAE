@@ -26,11 +26,16 @@ Avatar::Avatar()
 	, m_Offset{ }
 	, m_IsShooting{ false }
 	, m_IsMoving{ false }
+	, m_IsImmortal { false }
+	, m_IsBlink { false }
 	, m_pBulletManager{ new BulletManager }
 	, m_NrOfBullets { 20 }
 	, m_MaxTimeRespawn { 1.5f }
+	, m_MaxTimeImmortal { 2.f }
+	, m_SecondsImmortal { }
 	, m_SecondsRespawn {  }
 	, m_CameraPos{ }
+	, m_CountNrFrames { }
 {
 	m_GameObjectCounter++;
 
@@ -87,14 +92,30 @@ void Avatar::InitBulletManager()
 
 void Avatar::Draw() const
 {
+
+	if (!m_IsImmortal)  // Player not immortal
+	{
+		CheckFlipSprite();
+	}
+	else
+	{
+		CheckFlipSprite();
+	}
+	
+	m_pBulletManager->Draw();
+
+}
+
+void Avatar::CheckFlipSprite() const
+{
 	if (!m_IsMovingRight)
 	{
 		// Moving left --> Flip sprite to the left
 		glPushMatrix();
 
-			m_pBottomSprite->FlipSprite();
-	
-			DrawAvatar();
+		m_pBottomSprite->FlipSprite();
+
+		DrawAvatar();
 
 		glPopMatrix();
 	}
@@ -102,18 +123,6 @@ void Avatar::Draw() const
 	{
 		DrawAvatar();
 	}
-
-	m_pBulletManager->Draw();
-
-	Rectf shape;
-
-	shape.left = m_pTopSprite->GetDstRect().left;
-	shape.bottom = m_pTopSprite->GetDstRect().bottom;
-	shape.width = m_pTopSprite->GetDstRect().width/1.5f;
-	shape.height = m_pTopSprite->GetDstRect().height/1.5f;
-
-
-	//utils::DrawRect(shape);
 }
 
 
@@ -140,6 +149,8 @@ void Avatar::DrawAvatar() const
 void Avatar::Update( float elapsedSeconds, const Level* level, const Rectf& cameraPos)
 {
 
+	
+
 	m_CameraPos = cameraPos;
 
 	if (!m_IsDead)
@@ -147,6 +158,12 @@ void Avatar::Update( float elapsedSeconds, const Level* level, const Rectf& came
 		HandleInput();
 	}
 	
+	if (m_IsImmortal)
+	{
+		AvoidDamage(elapsedSeconds);
+
+	}
+
 	UpdateFrames(elapsedSeconds);
 	
 	UpdateTopSrcRect();
@@ -713,7 +730,7 @@ void Avatar::AvatarFalling( float elapsedSec )
 // Avatar has been hit = Death
 void Avatar::Hit()
 {
-	if (!m_IsDead)
+	if (!m_IsDead && !m_IsImmortal)
 	{
 		ResetSprite(m_pBottomSprite, false);
 		m_IsDead = true;
@@ -744,13 +761,32 @@ void Avatar::Respawn(float elapsedSec)
 		m_ActBotAnimation = Animations::iddle;
 		m_ActTopAnimation = Animations::iddle;
 
-		Point2f respawnPos{ m_CameraPos.left + 300.f, m_pBottomSprite->GetDstRect().bottom };
+		// Spawn at the middle of the window
+		Point2f respawnPos{ m_CameraPos.left + m_CameraPos.width/2, m_pBottomSprite->GetDstRect().bottom };
 		m_pBottomSprite->SetLeftDstRect(respawnPos.x);
 		m_pTopSprite->SetLeftDstRect(respawnPos.x);
+
+		m_IsImmortal = true;
 
 	}
 
 
+}
+
+// Avoid all damage for a few seconds after respawning
+void Avatar::AvoidDamage(float elapsedSec)
+{
+	m_SecondsImmortal += elapsedSec;
+
+	if (m_SecondsImmortal >= m_MaxTimeImmortal)
+	{
+		m_IsImmortal = false;
+		m_CountNrFrames = false;
+		m_SecondsImmortal = 0.f;
+	}
+
+	DoBlink(elapsedSec);
+		
 }
 
 
@@ -802,6 +838,28 @@ void Avatar::CheckGameState()
 	
 
 
+}
+
+// Stop drawing the sprite every 15 frames
+void Avatar::DoBlink(float elapsedSec)
+{
+	if (m_CountNrFrames >= 20)
+	{
+		if (m_IsBlink)
+		{
+			m_IsBlink = false;
+		}
+		else
+		{
+			m_IsBlink = true;
+		}
+
+		m_CountNrFrames = 0;
+	}
+	else
+	{
+		m_CountNrFrames++;
+	}
 }
 
 // Check what item has been grabbed

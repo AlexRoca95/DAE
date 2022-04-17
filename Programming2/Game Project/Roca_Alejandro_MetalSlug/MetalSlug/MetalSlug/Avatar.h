@@ -103,16 +103,24 @@ private:
 	bool m_IsMoving;								// Indicates if character is moving or not (for sprites)				
 	bool m_IsOnGround;								// Avatar is in the ground or not
 	bool m_IsShooting;
+	
 
 	// Death
+	bool m_IsImmortal;								// To know if the avatar should avoid all damage
+	bool m_IsBlink;									// Drawing of the avatar needs to blink when Immortal
 	const float m_MaxTimeRespawn;
+	const float m_MaxTimeImmortal;
 	float m_SecondsRespawn;
-
+	float m_SecondsImmortal;
+	int m_CountNrFrames;								//  Every certain number of frames we do a blink in drawing
+	
 
 	// PRIVATE functions
 
 	void Initialize();
 	void Respawn(float elapsedSec);
+	void AvoidDamage(float elapsedSec);
+	void DoBlink(float elapsedSec);
 
 	void CheckCameraBoundaries();
 
@@ -122,9 +130,12 @@ private:
 	void UpdateFrames(float elapsedSeconds);
 	void ResetSprite(Sprite* sprite, bool topSprite);
 	void CorrectTopSprite();
+
+	// Checkers
 	void CheckPreviousState();
 	void CheckCrawling();
 	void CheckShooting();
+	void CheckFlipSprite() const;
 	
 
 	// Input and actions
