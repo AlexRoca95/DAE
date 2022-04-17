@@ -70,7 +70,7 @@ void Level::DrawBackground() const
 	m_pLevelTexture->Draw();
 
 	
-	utils::DrawPolygon(m_TransformedVertices[20]);
+	//utils::DrawPolygon(m_TransformedVertices[20]);
 }
 
 void Level::DrawForeground() const

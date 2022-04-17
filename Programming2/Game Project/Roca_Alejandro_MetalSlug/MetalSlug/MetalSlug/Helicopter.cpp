@@ -4,17 +4,18 @@
 #include "Bomb.h"
 #include "Level.h"
 #include "utils.h"
+#include <iostream>
 
 
 
 Helicopter::Helicopter(const Point2f& startPos)
-	: Enemy( GameObject::Type::helicopter, startPos, 15, Point2f{ 200.f, 200.f }, Point2f{ }) // Type, startPos, health, speed and acceleration
+	: Enemy( GameObject::Type::helicopter, startPos, 40, Point2f{ 220.f, 230.f }, Point2f{ }) // Type, startPos, health, speed and acceleration
 	, m_MaxHeight{ 400.f }
-	, m_MaxTimerBombs { 3.f }
+	, m_MaxTimerBombs { 0.5f }
 	, m_TimerBombs {  }
 	, m_pBombs{ }
 	, m_IsThrowingBombs{ false }
-	, m_TimeThrowBomb { 0.3f}
+	, m_TimeThrowBomb { 0.2f }
 	, m_Seconds{ m_TimeThrowBomb }
 	, m_ExplosionCounter { 0 }
 	, m_NewBombs { false }
@@ -129,10 +130,10 @@ void Helicopter::DestroyHelicopter(float elapsedSec)
 }
 
 
-void Helicopter::Hit() 
+void Helicopter::Hit()
 {
-	m_Health --;
-	
+	m_Health--;
+
 	if (m_Health == 0)
 	{
 		m_IsDying = true;
@@ -169,26 +170,26 @@ void Helicopter::ThrowBombs(float elapsedSec, const Rectf& actorShape)
 			}
 
 		}
-		
-	}
-		for (Bomb* ptr : m_pBombs)
-		{	
-			if (ptr->GetIsActive())
-			{
-				ptr->Update(elapsedSec, actorShape);
 
-			}
+	}
+	for (Bomb* ptr : m_pBombs)
+	{
+		if (ptr->GetIsActive())
+		{
+			ptr->Update(elapsedSec, actorShape);
+
 		}
+	}
 }
 
 void Helicopter::ColocateInPos(float elapsedSec)
 {
 	// Helicopter appears from the top outside window
-	if ( m_pBottomSprite->GetDstRect().bottom  > m_MaxHeight)
+	if (m_pBottomSprite->GetDstRect().bottom > m_MaxHeight)
 	{
-		m_Velocity.y = - m_Speed.y;
+		m_Velocity.y = -m_Speed.y;
 
-		m_pBottomSprite->SetBottomDstRect( m_pBottomSprite->GetDstRect().bottom + (m_Velocity.y * elapsedSec) );
+		m_pBottomSprite->SetBottomDstRect(m_pBottomSprite->GetDstRect().bottom + (m_Velocity.y * elapsedSec));
 	}
 	else
 	{
@@ -200,16 +201,24 @@ void Helicopter::ColocateInPos(float elapsedSec)
 
 void Helicopter::Move(float elapsedSec, const Avatar* avatar)
 {
+
+
+	//std::cout << utils::GetDistanceDirect(m_pBottomSprite->GetDstRect().left, avatar->GetTopShape().left) << std::endl;
+
 	
-	if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width / 2 )
-			< avatar->GetTopShape().left + avatar->GetTopShape().width)
+
+	if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width / 2)
+		< avatar->GetTopShape().left + avatar->GetTopShape().width/2)
 	{
-			m_Velocity.x = m_Speed.x;
+		m_Velocity.x = m_Speed.x;
 	}
 	else
 	{
 		m_Velocity.x = -m_Speed.x;
 	}
+	
+		
+	
 
 	m_pBottomSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left + (m_Velocity.x * elapsedSec));
 	
@@ -219,6 +228,7 @@ void Helicopter::CheckTimerBombs(float elapsedSec)
 {
 	m_TimerBombs += elapsedSec;
 
+	
 	if (m_TimerBombs >= m_MaxTimerBombs  && !m_IsThrowingBombs)
 	{
 	
@@ -268,6 +278,14 @@ void Helicopter::CheckBombCollision(Avatar* avatar, const std::vector<Point2f>& 
 				m_pBombs[i]->Hit();
 				m_ExplosionCounter = i + 1;
 				avatar->Hit();
+
+				if (m_ExplosionCounter == m_pBombs.size())
+				{
+					// Last bombb hit
+					m_IsThrowingBombs = false;
+					m_NewBombs = true;
+					m_ExplosionCounter = 0;
+				}
 			}
 		}
 	}
@@ -284,6 +302,8 @@ void Helicopter::CheckBombCollision(Avatar* avatar, const std::vector<Point2f>& 
 		}
 		
 	}
+
+	
 	
 }
 

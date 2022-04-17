@@ -24,6 +24,7 @@ public:
 
 private:
 
+	const float m_FallingAcc;
 	void Initialize();
 	void SetStartPos(const Rectf& helicopter);
 	virtual void Move(float elapsedSec) override;

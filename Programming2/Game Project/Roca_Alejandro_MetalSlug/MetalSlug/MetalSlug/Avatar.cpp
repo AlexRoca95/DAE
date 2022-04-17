@@ -10,7 +10,7 @@ int Avatar::m_GameObjectCounter = 0;
 
 
 Avatar::Avatar()
-	: GameObject(GameObject::Type::avatar, Point2f{ 100.f * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
+	: GameObject(GameObject::Type::avatar, Point2f{ 1100.f * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
 		, Point2f{ 0.f, g_Gravity + g_Gravity/2 })  // Type, startPos, speed and acceleration
 	, m_SlowSpeed{ 90.f }
 	, m_JumpSpeed{ 650.f }

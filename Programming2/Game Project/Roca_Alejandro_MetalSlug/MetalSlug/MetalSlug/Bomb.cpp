@@ -4,7 +4,8 @@
 
 
 Bomb::Bomb()
-	: Projectile(GameObject::Type::bomb, Point2f{}, Point2f{ 0.f, -50.f }, Point2f{ 0.f, -300.f })
+	: Projectile(GameObject::Type::bomb, Point2f{}, Point2f{ 0.f, 20.f }, Point2f{ 0.f, -600.f })
+	, m_FallingAcc{ -600.f }
 {
 	Initialize();
 }
@@ -19,7 +20,7 @@ Bomb::~Bomb()
 
 void Bomb::Initialize()
 {
-	m_Acceleration.y = -300.f;
+	m_Acceleration.y = m_FallingAcc;
 
 	// Bomb sprite
 	m_pTopSprite = new Sprite("Resources/sprites/enemies/BomHeli.png");
@@ -56,6 +57,7 @@ void Bomb::Update(float elapsedSec, const Rectf& actorShape)
 			m_pBottomSprite->ResetActFrame();
 			DesactivateProjectile();
 			m_Velocity.y = m_Speed.y;
+			m_Acceleration.y = m_FallingAcc;
 		}
 	}
 	
@@ -65,7 +67,7 @@ void Bomb::SetStartPos(const Rectf& helicopter)
 {
 	Point2f startPos{ };
 
-	startPos.y = helicopter.bottom;
+	startPos.y = helicopter.bottom + m_pTopSprite->GetFrameWidth() / 2;
 	startPos.x = helicopter.left + helicopter.width / 3;
 
 	// Position from the bullet start moving

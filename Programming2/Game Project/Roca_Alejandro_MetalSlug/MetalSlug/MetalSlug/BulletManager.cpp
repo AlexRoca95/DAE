@@ -111,7 +111,8 @@ void BulletManager::CheckHitGameObjects(std::vector<GameObject*> gameObjects)
 		{
 			for (GameObject* pGameObject : gameObjects)
 			{
-				if (pGameObject->GetIsActive())
+				if ( pGameObject->GetIsActive() && !pGameObject->GetIsDying() &&
+					pGameObject->GetType() != GameObject::Type::item)  // Object active, not dying and not an item
 				{
 					// X axis
 					if ( ( bulletPtr->GetTopShape().left ) >
@@ -119,7 +120,6 @@ void BulletManager::CheckHitGameObjects(std::vector<GameObject*> gameObjects)
 						bulletPtr->GetTopShape().left < ( pGameObject->GetBotShape().left +
 							pGameObject->GetBotShape().width ) )
 					{
-						
 						// Y axis
 						if (bulletPtr->GetTopShape().bottom  >
 							pGameObject->GetBotShape().bottom &&
@@ -129,7 +129,6 @@ void BulletManager::CheckHitGameObjects(std::vector<GameObject*> gameObjects)
 							bulletPtr->Hit();
 							pGameObject->Hit();
 							break;
-
 						}
 					}
 

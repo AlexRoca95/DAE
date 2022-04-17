@@ -52,6 +52,7 @@ public:
 	GameStage& GetGameStage() const;
 	bool GetGameStageChanged() const;
 	Type GetType() const;
+	bool GetIsDying() const;
 
 	// Setters
 	void SetIsActive(bool active);

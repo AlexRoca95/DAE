@@ -28,12 +28,12 @@ public:
 private:
 
 	const float m_MaxHeight;						// Maximum height at which the helicopter flies
-	const float m_MaxTimerBombs;					// Time between throwing 3 bombs
+	const float m_MaxTimerBombs;					// Time between throwing next 3 bombs
 	bool m_IsThrowingBombs;							// Throwing bombs or not
 	bool m_NewBombs;								// New round of bombs needs to be throw or not
 	float m_TimerBombs;								// Time needed to start throwing the next 3 bombs
 	std::vector <Bomb*> m_pBombs;					
-	const float m_TimeThrowBomb;					// Time needed to throw the next bomb 
+	const float m_TimeThrowBomb;					// Time needed to throw the next bomb (between single bombs)
 	float m_Seconds;
 	int m_ExplosionCounter;
 

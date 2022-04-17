@@ -70,3 +70,8 @@ GameObject::Type GameObject::GetType() const
 {
 	return m_Id;
 }
+
+bool GameObject::GetIsDying() const
+{
+	return m_IsDying;
+}
