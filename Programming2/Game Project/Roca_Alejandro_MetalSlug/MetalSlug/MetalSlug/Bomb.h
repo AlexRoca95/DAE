@@ -9,7 +9,7 @@ class Bomb final : public Projectile
 
 public:
 	Bomb( );
-	virtual ~Bomb();
+	~Bomb();
 	Bomb( const Bomb& bomb ) = delete;
 	Bomb(Bomb&& bomb) = delete;
 	Bomb& operator=( const Bomb& bomb ) = delete;
@@ -19,12 +19,13 @@ public:
 
 	void Update(float elapsedSec, const Rectf& actorShape);
 
-	Sprite* GetBotSprite();
-	Sprite* GetTopSprite();
+	Sprite* GetBotSprite() const;
+	Sprite* GetTopSprite() const;
 
 private:
 
 	const float m_FallingAcc;
+
 	void Initialize();
 	void SetStartPos(const Rectf& helicopter);
 	virtual void Move(float elapsedSec) override;

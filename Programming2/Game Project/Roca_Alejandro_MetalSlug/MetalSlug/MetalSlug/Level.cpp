@@ -4,7 +4,6 @@
 #include "SVGParser.h"
 #include "Matrix2x3.h"
 #include "Sprite.h"
-#include <iostream>
 
 
 
@@ -69,7 +68,6 @@ void Level::DrawBackground() const
 {
 	m_pLevelTexture->Draw();
 
-	
 	//utils::DrawPolygon(m_TransformedVertices[20]);
 }
 

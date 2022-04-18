@@ -6,8 +6,7 @@ class Projectile : public GameObject
 
 public:
 
-
-	Projectile(GameObject::Type, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration);
+	Projectile(const GameObject::Type& type, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration);
 	virtual ~Projectile() = default;
 	Projectile(const Projectile & projectile) = delete;
 	Projectile(Projectile && projectile) = delete;
@@ -16,13 +15,14 @@ public:
 
 	virtual void CheckGameState() = 0;
 
-	virtual void Draw() const;
+	virtual void Draw() const override;
+
 	void Hit();
 	void DesactivateProjectile();
+
 	bool GetIsHit();
 
 protected:
-
 
 	Point2f m_Position;
 

@@ -1,8 +1,8 @@
 #pragma once
 // Abstract class from which all objects from the game will inherit
 #include "Sprite.h"
-#include <vector>
 #include "Vector2f.h"
+#include <vector>
 
 
 class Level;
@@ -19,6 +19,8 @@ public:
 		boss,
 		end
 	};
+
+	// Type of GameObject
 	enum class Type {
 
 		avatar,
@@ -33,7 +35,7 @@ public:
 	};
 
 
-	GameObject( GameObject::Type id, const Point2f& startPos, const Point2f& speed, bool comingFromRight ,
+	GameObject( const GameObject::Type& id, const Point2f& startPos, const Point2f& speed, bool comingFromRight ,
 		const Point2f& acceleration = Point2f{0.f, g_Gravity} );
 	virtual ~GameObject() = default;
 	GameObject(const GameObject& gameObject) = delete;
@@ -48,13 +50,14 @@ public:
 	// Getters
 	bool GetIsActive() const;
 	bool GetIsDead() const;
+	bool GetIsDying() const;
+	bool GetIsComingFromRight() const;
+	bool GetGameStageChanged() const;
 	Rectf GetTopShape() const;
 	Rectf GetBotShape() const;
 	GameStage& GetGameStage() const;
-	bool GetGameStageChanged() const;
 	Type GetType() const;
-	bool GetIsDying() const;
-	bool GetIsComingFromRight() const;
+	
 
 	// Setters
 	void SetIsActive(bool active);
@@ -64,34 +67,35 @@ public:
 
 
 protected:
+	// General
 	const Type m_Id;
 	Point2f m_StartPosition;
 				
-	bool m_IsActive;			// GameObject activated or not
-	bool m_IsDead;				// GameObject is dead or not (for death animation)
+	bool m_IsActive;								// GameObject activated or not
+	bool m_IsDead;									// GameObject is dead or not (for death animation)
 	bool m_IsDying;
-	bool m_IsComingFromRight;	// GameObject appears from right of the window of not
+	bool m_IsComingFromRight;						// GameObject appears from right of the window of not
 
 	// Sprite related
 	Sprite* m_pTopSprite;
 	Sprite* m_pBottomSprite;
-	bool m_TopSpriteChanged;		// Indicates if Top sprite was changed from the previous one
+	bool m_TopSpriteChanged;						// Indicates if Top sprite was changed from the previous one
 	bool m_BotSpriteChanged;
 
+	// Physics
 	Vector2f m_Velocity;
 	Vector2f m_Acceleration;
 	const Point2f m_Speed;
 	
-
 	// GameStages
 	static GameStage m_GameState;					// Current stage of the game
-
 	// To know if a stage has started or not
 	static bool m_IsFirstHeliFightStart;
 	static bool m_IsSecondHeliFightStart;
 	static bool m_IsBossFightStart;
 
-	static bool m_IsStageChanged;					// To know if we have change from moving to another stage
+	// To know if we have change from moving to another stage
+	static bool m_IsStageChanged;					
 
 };
 

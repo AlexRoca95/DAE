@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Bomb.h"
-#include <iostream>
 
 
 Bomb::Bomb()
@@ -23,7 +22,7 @@ void Bomb::Initialize()
 	m_Acceleration.y = m_FallingAcc;
 
 	// Bomb sprite
-	m_pTopSprite = new Sprite("Resources/sprites/enemies/BomHeli.png");
+	m_pTopSprite = new Sprite("Resources/sprites/enemies/BombHeli.png");
 	m_pTopSprite->UpdateValues(7, 1, 7, 15.f, 25.f, 26.f, 26.f, 2.7f);
 
 	// Explosion sprite
@@ -38,6 +37,7 @@ void Bomb::Update(float elapsedSec, const Rectf& actorShape)
 	
 	if (!m_IsHit)
 	{
+		// Bomb Update
 		if (!m_IsInitialized)
 		{
 			SetStartPos(actorShape);
@@ -49,13 +49,16 @@ void Bomb::Update(float elapsedSec, const Rectf& actorShape)
 	}
 	else
 	{
+		// Explosion Update
 		m_pBottomSprite->Update(elapsedSec, false);
 
 		if (m_pBottomSprite->GetAnimationFinish())
 		{
 			m_pBottomSprite->ResetAnimationFinish(false);
 			m_pBottomSprite->ResetActFrame();
+
 			DesactivateProjectile();
+
 			m_Velocity.y = m_Speed.y;
 			m_Acceleration.y = m_FallingAcc;
 		}
@@ -91,12 +94,12 @@ void Bomb::CheckGameState()
 
 }
 
-Sprite* Bomb::GetBotSprite()
+Sprite* Bomb::GetBotSprite() const
 {
 	return m_pBottomSprite;
 }
 
-Sprite* Bomb::GetTopSprite()
+Sprite* Bomb::GetTopSprite() const
 {
 	return m_pTopSprite;
 }

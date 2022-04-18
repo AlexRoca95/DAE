@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "Projectile.h"
-#include "utils.h"
-#include <iostream>
 
-Projectile::Projectile(GameObject::Type type, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration)
+
+
+Projectile::Projectile(const GameObject::Type& type, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration)
 	:GameObject(type, startPos, speed, false, acceleration)
 	, m_MaxSeconds { 0.7f }
 	, m_Seconds { }
@@ -28,13 +28,14 @@ void Projectile::Draw() const
 
 	}
 
-	//utils::DrawRect(shape);
 }
 
+// Projectile hit with something
 void Projectile::Hit()
 {
 	m_IsHit = true;
 
+	// Save position of the collision
 	m_pBottomSprite->SetLeftDstRect(m_Position.x);
 	m_pBottomSprite->SetBottomDstRect(m_Position.y);
 }

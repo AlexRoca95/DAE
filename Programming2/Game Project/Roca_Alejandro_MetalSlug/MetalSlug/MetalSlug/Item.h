@@ -18,7 +18,7 @@ public:
 
 
 	Item(const Point2f& startPos);
-	virtual ~Item();
+	~Item();
 	Item(const Item & item) = delete;
 	Item(Item && item) = delete;
 	Item& operator=(const Item & item) = delete;

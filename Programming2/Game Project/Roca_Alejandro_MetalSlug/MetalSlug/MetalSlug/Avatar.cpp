@@ -3,10 +3,6 @@
 #include "Texture.h"
 #include "Level.h"
 #include "BulletManager.h"
-#include <iostream>
-
-int Avatar::m_GameObjectCounter = 0;
-
 
 
 Avatar::Avatar()
@@ -37,7 +33,6 @@ Avatar::Avatar()
 	, m_CameraPos{ }
 	, m_CountNrFrames { }
 {
-	m_GameObjectCounter++;
 
 	Initialize();
 
@@ -45,7 +40,6 @@ Avatar::Avatar()
 
 Avatar::~Avatar()
 {
-	m_GameObjectCounter--;
 
 	delete m_pBottomSprite;
 	delete m_pTopSprite;
@@ -130,8 +124,6 @@ void Avatar::CheckFlipSprite() const
 }
 
 
-
-// Draw only one sprite if ActionState is crawling. Draw two otherwise
 void Avatar::DrawAvatar() const
 {
 	
@@ -153,7 +145,6 @@ void Avatar::DrawAvatar() const
 void Avatar::Update( float elapsedSeconds, const Level* level, const Rectf& cameraPos)
 {
 
-	//std::cout << m_pBottomSprite->GetDstRect().bottom << std::endl;
 	m_CameraPos = cameraPos;
 
 	if (!m_IsDead)
@@ -199,8 +190,6 @@ void Avatar::Update( float elapsedSeconds, const Level* level, const Rectf& came
 
 	m_pBulletManager->Update(elapsedSeconds, this);
 
-
-	//std::cout << m_pBottomSprite->GetActFrame() << std::endl;
 }
 
 // Update the Source Rectangle of the Top Sprite

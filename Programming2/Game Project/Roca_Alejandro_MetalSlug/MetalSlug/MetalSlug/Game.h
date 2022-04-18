@@ -41,17 +41,13 @@ private:
 	// DATA MEMBERS
 	const Window m_Window;
 
-	// All GameObjects from the game
-	std::vector <GameObject*> m_pGameObjects;
-
 	GameState m_GameState;
 
-	// Level
-	Level* m_Level;
-	Avatar* m_Avatar;
-	Camera* m_Camera;
+	Level* m_pLevel;
+	Avatar* m_pAvatar;
+	Camera* m_pCamera;
 
-	// Enemies
+	// GameObjects
 	const int m_NrHelicopters;
 	GameObjectManager* m_pGameObjectManager;
 
@@ -60,9 +56,7 @@ private:
 	void InitAvatar();
 	void InitCamera();
 	void AddGameObjects();
-
-
-	void DisplayControlsInfo();
+	void DisplayControlsInfo();				// Display info about the controls of the game
 
 	void Cleanup( );
 	void ClearBackground( ) const;

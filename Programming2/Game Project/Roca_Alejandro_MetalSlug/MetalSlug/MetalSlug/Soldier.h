@@ -8,7 +8,7 @@ class Soldier final : public Enemy
 public:
 
 	Soldier(const Point2f& startPos, bool comingFromRight);
-	virtual ~Soldier();
+	~Soldier();
 	Soldier(const Soldier& soldier) = delete;
 	Soldier(Soldier&& soldier) = delete;
 	Soldier& operator=(const Soldier& soldier) = delete;
@@ -30,9 +30,10 @@ private:
 	const float m_RunSpeed;
 	const float m_RunAwayDist;
 	const float m_ThrowGrenadeDist;
-	bool m_FacingRight;
-	bool m_IsReset;						// Animation has been reset already
+	bool m_FacingRight;						// Is soldier loocking to the right or not
+	bool m_IsReset;							// Animation has been reset already
 
+	// TIMERS
 	// Time the soldier runs Away from avatar
 	const float m_MaxTimeRunAway;
 	float m_Seconds;

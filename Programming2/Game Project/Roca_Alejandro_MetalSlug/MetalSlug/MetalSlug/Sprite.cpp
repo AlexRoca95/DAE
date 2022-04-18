@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "Sprite.h"
-
 #include "Texture.h"
-#include <iostream>
+
 
 Sprite::Sprite( const std::string& path, int cols, int rows, float frameSec, float scale )
 	: m_Path{ path }

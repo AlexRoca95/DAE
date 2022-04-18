@@ -19,7 +19,7 @@ public:
 
 	};
 
-	Enemy(GameObject::Type id, const Point2f& startPos, int health, const Point2f& speed, 
+	Enemy(const GameObject::Type& id, const Point2f& startPos, int health, const Point2f& speed, 
 		 bool comingFromRight, const Point2f& acceleration);
 	virtual ~Enemy() = default;
 	Enemy(const Enemy & enemy) = delete;
@@ -28,7 +28,7 @@ public:
 	Enemy& operator=(Enemy && enemy) = delete;
 
 
-	virtual void Draw() const override = 0;
+	virtual void Draw() const = 0;
 	virtual void CheckGameState() = 0;
 	virtual void Update(float elapsedSec, Avatar* avatar, const Level* level) = 0;
 

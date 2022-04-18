@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-class Camera
+class Camera final
 {
 public:
 

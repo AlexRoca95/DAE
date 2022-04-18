@@ -3,13 +3,13 @@
 
 class Avatar;
 class Level;
-class GameObjectManager
+class GameObjectManager final
 {
 
 public:
 
 	GameObjectManager();
-	virtual ~GameObjectManager();
+	~GameObjectManager();
 	GameObjectManager(const GameObjectManager& gameObjectManager) = delete;
 	GameObjectManager(GameObjectManager&& GameObjectManager) = delete;
 	GameObjectManager& operator=(const GameObjectManager& GameObjectManager) = delete;
@@ -42,7 +42,7 @@ private:
 	void GrabItem(Avatar* avatar);
 	Point2f SetStartPosItem(const Rectf& prisonerShape);
 	void CheckPosCamera(const Rectf& cameraPos);
-	//void DropItem();
+	
 
 
 };

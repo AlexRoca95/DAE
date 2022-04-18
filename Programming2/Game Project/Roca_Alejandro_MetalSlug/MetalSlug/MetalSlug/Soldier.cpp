@@ -3,7 +3,6 @@
 #include "Level.h"
 #include "Avatar.h"
 #include "Grenade.h"
-#include <iostream>
 
 
 
@@ -39,45 +38,45 @@ void Soldier::Draw() const
 
 	switch (m_ActionState)
 	{
-	case Enemy::ActionState::state2:
-		if (!m_FacingRight)
-		{
-			// Flip to the left
-			glPushMatrix();
+		case Enemy::ActionState::state2:
+			if (!m_FacingRight)
+			{
+				// Flip to the left
+				glPushMatrix();
 
-			m_pBottomSprite->FlipSprite();
+				m_pBottomSprite->FlipSprite();
+				m_pBottomSprite->Draw();
+
+				glPopMatrix();
+			}
+			else
+			{
+				m_pBottomSprite->Draw();
+			}
+			break;
+		case Enemy::ActionState::state3:
+		case Enemy::ActionState::state1:
+		case Enemy::ActionState::state4:
+		case Enemy::ActionState::state5:
+			if (m_FacingRight)
+			{
+				// Flip to the left
+				glPushMatrix();
+
+				m_pBottomSprite->FlipSprite();
+				m_pBottomSprite->Draw();
+
+				glPopMatrix();
+			}
+			else
+			{
+				m_pBottomSprite->Draw();
+			}
+			break;
+
+		default:
 			m_pBottomSprite->Draw();
-
-			glPopMatrix();
-		}
-		else
-		{
-			m_pBottomSprite->Draw();
-		}
-		break;
-	case Enemy::ActionState::state3:
-	case Enemy::ActionState::state1:
-	case Enemy::ActionState::state4:
-	case Enemy::ActionState::state5:
-		if (m_FacingRight)
-		{
-			// Flip to the left
-			glPushMatrix();
-
-			m_pBottomSprite->FlipSprite();
-			m_pBottomSprite->Draw();
-
-			glPopMatrix();
-		}
-		else
-		{
-			m_pBottomSprite->Draw();
-		}
-		break;
-
-	default:
-		m_pBottomSprite->Draw();
-		break;
+			break;
 	}
 
 	if (m_pGrenade->GetIsActive())
@@ -433,8 +432,6 @@ void Soldier::Initialize()
 	m_pBottomSprite->SetBottomDstRect(m_StartPosition.y);
 	m_pBottomSprite->UpdateLeftSrcRect();
 
-
-	
 }
 
 

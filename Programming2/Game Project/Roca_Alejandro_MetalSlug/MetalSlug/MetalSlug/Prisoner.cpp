@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Prisoner.h"
 #include "Level.h"
-#include <iostream>
 
 
 Prisoner::Prisoner(const Point2f& startPos)
@@ -43,7 +42,6 @@ void Prisoner::Initialize()
 
 void Prisoner::Draw() const
 {
-	//std::cout << "Prisoner activated" << std::endl;
 
 	if (!m_IsDying && !m_IsReleased)
 	{
@@ -60,7 +58,6 @@ void Prisoner::Draw() const
 		
 		if (m_IsReleased)
 		{
-
 			// Giving object animation
 			m_pTopSprite->Draw();
 		}
@@ -73,8 +70,6 @@ void Prisoner::Draw() const
 
 void Prisoner::Update(float elapsedSec, Avatar* avatar, const Level* level)
 {
-
-	
 	if (!m_IsDying && !m_IsReleased)
 	{
 		// Prisoner not released yet (Captured animation)
@@ -98,19 +93,16 @@ void Prisoner::Update(float elapsedSec, Avatar* avatar, const Level* level)
 			// Prisoner released
 			GiveObject(elapsedSec);
 		}
-		
-	
 
 	}
 	
-
 }
 
 void Prisoner::ReleasePrisoner(float elapsedSec)
 {
 	m_pBottomSprite->Update(elapsedSec, false);
 
-	if (m_pBottomSprite->GetActFrame() == m_pBottomSprite->GetTotalFrames() - 7)
+	if ( m_pBottomSprite->GetActFrame() == m_pBottomSprite->GetTotalFrames() - 7 )
 	{
 		m_IsReleased = true;
 	}
@@ -128,10 +120,10 @@ void Prisoner::GiveObject(float elapsedSec)
 	
 	m_pTopSprite->Update(elapsedSec, false);
 
-	if (m_pTopSprite->GetAnimationFinish())
+	if ( m_pTopSprite->GetAnimationFinish() )
 	{
 		
-		if (!m_IsItemDropped)
+		if ( !m_IsItemDropped )
 		{
 			m_DropItem = true;		// Item needs to be drop for the player
 			m_IsItemDropped = true;
@@ -140,7 +132,7 @@ void Prisoner::GiveObject(float elapsedSec)
 
 		m_SecondsWait += elapsedSec;
 
-		if (m_SecondsWait >= m_MaxTimeWait)
+		if ( m_SecondsWait >= m_MaxTimeWait )
 		{
 			
 			m_IsReleased = false;
@@ -167,6 +159,7 @@ void Prisoner::Hit()
 
 }
 
+// Check if avatar shape overlaps with the prisoner shape in order to release him
 void Prisoner::CheckAvatarRelease(const Rectf& avatarShape)
 {
 
@@ -176,7 +169,6 @@ void Prisoner::CheckAvatarRelease(const Rectf& avatarShape)
 		Hit();
 
 	}
-
 
 }
 

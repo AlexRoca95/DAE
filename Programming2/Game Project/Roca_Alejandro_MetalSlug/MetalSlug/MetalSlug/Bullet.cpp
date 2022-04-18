@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Bullet.h"
 #include "Avatar.h"
-#include <iostream>
 
 
 
@@ -43,10 +42,11 @@ void Bullet::Initialize()
 
 void Bullet::Update(float elapsedSeconds, const Avatar* avatar)
 {
-	
+
 	if(!m_IsHit)
 	{
-		if (!m_IsInitialized)
+		// Bullet update
+		if (!m_IsInitialized)  
 		{
 			SetStartPos(avatar);
 		}
@@ -62,6 +62,7 @@ void Bullet::Update(float elapsedSeconds, const Avatar* avatar)
 	}
 	else
 	{
+		// Explosion update
 		m_pBottomSprite->Update(elapsedSeconds, false);
 
 		if (m_pBottomSprite->GetAnimationFinish())
@@ -135,7 +136,7 @@ void Bullet::Move( float elapsedSec )
 {
 	if (m_IsMovingUp)
 	{
-		// Move Verti
+		// Move Vertically
 		m_Position.y += m_Velocity.y * elapsedSec;
 		m_pTopSprite->SetBottomDstRect(m_Position.y);
 	}

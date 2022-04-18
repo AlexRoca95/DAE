@@ -3,7 +3,6 @@
 #include "Soldier.h"
 #include "Avatar.h"
 #include "utils.h"
-#include <iostream>
 
 
 
@@ -59,14 +58,6 @@ void Grenade::Draw() const
 	
 	}
 
-	Rectf shape;
-
-	shape.left = m_pTopSprite->GetDstRect().left;
-	shape.bottom = m_pTopSprite->GetDstRect().bottom;
-	shape.width = m_pTopSprite->GetDstRect().width;
-	shape.height = m_pTopSprite->GetDstRect().height;
-
-	//utils::DrawRect(shape);
 }
 
 void Grenade::Update(float elapsedSec, Avatar* avatar, const Soldier* soldier, const std::vector<Point2f>& vertices)
@@ -76,7 +67,7 @@ void Grenade::Update(float elapsedSec, Avatar* avatar, const Soldier* soldier, c
 		// Rotation speed for the grenade
 		m_Angle += 240 * elapsedSec;
 
-		if (!m_IsInitialized)
+		if ( !m_IsInitialized )
 		{
 			m_IsMovingRight = soldier->GetFacingRight();
 			m_IsInitialized = true;
@@ -91,8 +82,10 @@ void Grenade::Update(float elapsedSec, Avatar* avatar, const Soldier* soldier, c
 	{
 		m_pBottomSprite->Update(elapsedSec, false);
 
-		if (m_pBottomSprite->GetAnimationFinish())
+		if ( m_pBottomSprite->GetAnimationFinish() )
 		{
+			// Reset everything
+
 			m_pBottomSprite->ResetAnimationFinish(false);
 			m_pBottomSprite->ResetActFrame();
 			DesactivateProjectile();
@@ -106,14 +99,14 @@ void Grenade::Update(float elapsedSec, Avatar* avatar, const Soldier* soldier, c
 
 }
 
-void Grenade::SetStartPos(const Point2f& soldierPos)
+void Grenade::SetStartPos( const Point2f& soldierPos )
 {
 	m_Position = soldierPos;
 	m_pTopSprite->SetLeftDstRect(m_Position.x);
 	m_pTopSprite->SetBottomDstRect(m_Position.y);
 }
 
-// Grenade going a small parabola
+// Grenade going for a small parabola
 void Grenade::Move(float elapsedSec)
 {
 

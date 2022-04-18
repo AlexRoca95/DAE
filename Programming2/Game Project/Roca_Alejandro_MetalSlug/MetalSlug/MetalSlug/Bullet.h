@@ -18,8 +18,6 @@ public:
 
 	void Update(float elapsedSec, const Avatar* avatar);
 	
-
-
 private:
 
 	bool m_IsMovingUp;

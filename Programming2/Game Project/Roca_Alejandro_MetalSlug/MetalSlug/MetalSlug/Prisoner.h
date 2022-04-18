@@ -6,7 +6,7 @@ class Prisoner final : public Enemy
 
 public:
 	Prisoner(const Point2f& startPos);
-	virtual ~Prisoner();
+	~Prisoner();
 	Prisoner(const Prisoner& prisioner) = delete;
 	Prisoner(Prisoner&& prisioner) = delete;
 	Prisoner& operator=(const Prisoner& prisioner) = delete;
@@ -19,7 +19,6 @@ public:
 	virtual void Update(float elapsedSec, Avatar* avatar, const Level* level) override;
 
 	void CheckAvatarRelease(const Rectf& avatarShape);
-
 
 	bool GetDropItem() const;
 

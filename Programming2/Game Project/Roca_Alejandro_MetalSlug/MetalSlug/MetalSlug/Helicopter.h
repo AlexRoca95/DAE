@@ -11,7 +11,7 @@ public:
 	
 
 	Helicopter(const Point2f& startPos);
-	virtual ~Helicopter();
+	~Helicopter();
 	Helicopter(const Helicopter & helicopter) = delete;
 	Helicopter(Helicopter && helicopter) = delete;
 	Helicopter& operator=(const Helicopter & helicopter) = delete;
@@ -46,6 +46,8 @@ private:
 	void ColocateInPos(float elapsedSec);
 	void CheckTimerBombs(float elapsedSec);
 	void CheckBombCollision(Avatar* avatar, const std::vector<Point2f>& vertices);
+	void CollisionAvatar(Avatar* avatar);
+	void CollisionLevel(const std::vector<Point2f>& vertices);
 
 
 };

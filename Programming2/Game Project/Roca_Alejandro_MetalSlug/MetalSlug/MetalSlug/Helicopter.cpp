@@ -3,8 +3,7 @@
 #include "Avatar.h"
 #include "Bomb.h"
 #include "Level.h"
-#include "utils.h"
-#include <iostream>
+
 
 
 
@@ -40,7 +39,7 @@ Helicopter::~Helicopter()
 
 void Helicopter::Initialize()
 {
-	m_pBottomSprite = new Sprite("Resources/sprites/enemies/helicopterv2.png");
+	m_pBottomSprite = new Sprite("Resources/sprites/enemies/Helicopter.png");
 	m_pBottomSprite->UpdateValues(5, 1, 5, 11.f, 100.f, 67.f, 67.f); // Iddle Helicopter
 	m_pBottomSprite->SetLeftDstRect(m_StartPosition.x);
 	m_pBottomSprite->SetBottomDstRect(m_StartPosition.y);
@@ -55,7 +54,7 @@ void Helicopter::Initialize()
 
 void Helicopter::Draw() const
 {
-	if (m_IsThrowingBombs)
+	if (m_IsThrowingBombs)   // If bombs being throw --> Draw them
 	{
 		for (Bomb* ptr : m_pBombs)
 		{
@@ -66,15 +65,17 @@ void Helicopter::Draw() const
 		}
 	}
 
+	// Draw the helicopter
 	m_pBottomSprite->Draw();
 	
 }
 
 void Helicopter::Update(float elapsedSec, Avatar* avatar, const Level* level)
 {
-	//std::cout << int(m_GameState) << std::endl;
+	
 	if (!m_IsDying)
 	{
+		// Update helicopter
 		m_pBottomSprite->Update(elapsedSec, true);
 
 		// Check which action do
@@ -102,6 +103,7 @@ void Helicopter::Update(float elapsedSec, Avatar* avatar, const Level* level)
 	}
 	else
 	{
+		// Update death animation 
 		DestroyHelicopter(elapsedSec);
 
 		if (m_IsThrowingBombs)
@@ -173,6 +175,8 @@ void Helicopter::ThrowBombs(float elapsedSec, const Rectf& actorShape)
 		}
 
 	}
+
+	// If bomb activate --> Update it
 	for (Bomb* ptr : m_pBombs)
 	{
 		if (ptr->GetIsActive())
@@ -203,11 +207,6 @@ void Helicopter::ColocateInPos(float elapsedSec)
 void Helicopter::Move(float elapsedSec, const Avatar* avatar)
 {
 
-
-	//std::cout << utils::GetDistanceDirect(m_pBottomSprite->GetDstRect().left, avatar->GetTopShape().left) << std::endl;
-
-	
-
 	if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width / 2)
 		< avatar->GetTopShape().left + avatar->GetTopShape().width/2)
 	{
@@ -218,9 +217,7 @@ void Helicopter::Move(float elapsedSec, const Avatar* avatar)
 		m_Velocity.x = -m_Speed.x;
 	}
 	
-		
 	
-
 	m_pBottomSprite->SetLeftDstRect(m_pBottomSprite->GetDstRect().left + (m_Velocity.x * elapsedSec));
 	
 }
@@ -245,6 +242,54 @@ void Helicopter::CheckTimerBombs(float elapsedSec)
 void Helicopter::CheckBombCollision(Avatar* avatar, const std::vector<Point2f>& vertices)
 {
 	// Check collision with the ground
+	CollisionLevel(vertices);
+
+	// Check collision with Avatar	
+	CollisionAvatar(avatar);
+
+	
+	// Check if all bombs have exploded or not
+	if (m_ExplosionCounter == m_pBombs.size())
+	{
+		if (!m_pBombs[m_ExplosionCounter - 1]->GetIsActive())
+		{
+			m_IsThrowingBombs = false;
+			m_NewBombs = true;
+			m_ExplosionCounter = 0;
+		}
+		
+	}
+
+	
+}
+
+void  Helicopter::CollisionAvatar(Avatar* avatar)
+{
+	for (int i{}; i < m_pBombs.size(); i++)
+	{
+		if (m_pBombs[i]->GetIsActive() && !m_pBombs[i]->GetIsHit())
+		{
+			// Only check collision when bomb is active and didn't explode yet
+			if (utils::IsOverlapping(m_pBombs[i]->GetTopSprite()->GetDstRect(), avatar->GetHitBox()))
+			{
+				m_pBombs[i]->Hit();
+				m_ExplosionCounter = i + 1;
+				avatar->Hit();
+
+				if (m_ExplosionCounter == m_pBombs.size())
+				{
+					// Last bombb hit
+					m_IsThrowingBombs = false;
+					m_NewBombs = true;
+					m_ExplosionCounter = 0;
+				}
+			}
+		}
+	}
+}
+
+void  Helicopter::CollisionLevel(const std::vector<Point2f>& vertices)
+{
 	for (int i{}; i < m_pBombs.size(); i++)
 	{
 		if (m_pBombs[i]->GetIsActive())
@@ -266,46 +311,6 @@ void Helicopter::CheckBombCollision(Avatar* avatar, const std::vector<Point2f>& 
 		}
 
 	}
-
-
-	// Check collision with Avatar	
-	for (int i{}; i < m_pBombs.size(); i++)
-	{
-			if (m_pBombs[i]->GetIsActive() && !m_pBombs[i]->GetIsHit())
-			{
-				// Only check collision when bomb is active and didn't explode yet
-				if (utils::IsOverlapping(m_pBombs[i]->GetTopSprite()->GetDstRect(), avatar->GetHitBox()))
-				{
-					m_pBombs[i]->Hit();
-					m_ExplosionCounter = i + 1;
-					avatar->Hit();
-
-					if (m_ExplosionCounter == m_pBombs.size())
-					{
-						// Last bombb hit
-						m_IsThrowingBombs = false;
-						m_NewBombs = true;
-						m_ExplosionCounter = 0;
-					}
-				}
-			}
-	}
-
-	
-	// Check if all bombs have exploded or not
-	if (m_ExplosionCounter == m_pBombs.size())
-	{
-		if (!m_pBombs[m_ExplosionCounter - 1]->GetIsActive())
-		{
-			m_IsThrowingBombs = false;
-			m_NewBombs = true;
-			m_ExplosionCounter = 0;
-		}
-		
-	}
-
-	
-	
 }
 
 void Helicopter::CheckGameState() 

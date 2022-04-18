@@ -6,7 +6,7 @@
 #include "Avatar.h"
 #include "Item.h"
 #include "utils.h"
-#include <iostream>
+
 
 
 GameObjectManager::GameObjectManager()
@@ -106,17 +106,16 @@ void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* le
 			GrabItem(avatar);
 		}
 
-		// Erase enemy from the vector if is Dead
+		// Erase GameObject from the vector if it is Dead
 		RemoveGameObject();
 	}
 
 }
 
 
-// Activate the gameObject if avatar is nearby to it (thanks to the cameraPos)
+// Activate the gameObject depending on the distance of the camera
 void GameObjectManager::CheckPosCamera(const Rectf& cameraPos)
 {
-	//utils::GetDistanceX(pGameObject->GetBotShape().left, cameraPos.left + cameraPos.width)
 
 	for (GameObject* pGameObject : m_pGameObjects)
 	{
@@ -146,8 +145,6 @@ void GameObjectManager::CheckPosCamera(const Rectf& cameraPos)
 				}
 				else
 				{
-					//std::cout << "Enemy pos " << pGameObject->GetBotShape().left << std::endl;
-					//std::cout << "Camera pos " << cameraPos.left << std::endl;
 					// GameObject appears from the left of the window
 					if (pGameObject->GetBotShape().left < cameraPos.left)
 					{
@@ -177,21 +174,28 @@ void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject:
 	switch (type)
 	{
 	case GameObject::Type::helicopter:
+
 		gameObject = new Helicopter(startPos);
 		m_TotalNrHelicopters++;
+
 		break;
 
 	case GameObject::Type::soldier:
+
 		gameObject = new Soldier(startPos, comingFromRight);
+
 		break;
 
 	case GameObject::Type::prisoner:
+
 		gameObject = new Prisoner(startPos);
 		m_TotalNrPrisoners++;
+
 		// Create also an Item next to the position of the prisoner
 		Point2f starPosItem = SetStartPosItem(gameObject->GetBotShape());
 		item = new Item(starPosItem);
 		m_TotalNrItems++;
+
 		break;
 	}
 
@@ -205,14 +209,14 @@ void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject:
 	}
 }
 
-// Erase enemy from the vector if is Dead
+// Erase GameObject from the vector if it is Dead
 void GameObjectManager::RemoveGameObject()
 {
 	for (int i{ }; i < m_pGameObjects.size(); i++)
 	{
 		if (m_pGameObjects[i]->GetIsDead())   // Enemy dead
 		{
-			DecrementTotalNrGameObject(m_pGameObjects[i]->GetType());
+			DecrementTotalNrGameObject(m_pGameObjects[i]->GetType());  // Reduce counter of gameObject
 			delete m_pGameObjects[i];
 			m_pGameObjects.erase(m_pGameObjects.begin() + i);
 		}

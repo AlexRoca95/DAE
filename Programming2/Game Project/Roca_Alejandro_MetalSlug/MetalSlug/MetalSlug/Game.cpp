@@ -8,18 +8,16 @@
 #include <iostream>
 
 
-
 Game::Game( const Window& window ) 
 	:m_Window{ window }
-	, m_Camera{ new Camera(m_Window.width, m_Window.height) }
-	, m_Level{ new Level }
-	, m_Avatar{ new Avatar }
+	, m_pCamera{ new Camera( m_Window.width, m_Window.height ) }
+	, m_pLevel{ new Level }
+	, m_pAvatar{ new Avatar }
 	, m_pGameObjectManager{ new GameObjectManager }
 	, m_NrHelicopters{ 1 }
 	, m_GameState { GameState::start }
 {
 	Initialize( );
-
 }
 
 Game::~Game( )
@@ -29,6 +27,7 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
+
 	InitAvatar();
 	InitCamera();
 	AddGameObjects();
@@ -37,15 +36,13 @@ void Game::Initialize( )
 
 void Game::InitAvatar()
 {
-	
-	m_pGameObjects.push_back(m_Avatar);
-	m_Avatar->SetVerticesLevel(m_Level->GetVertices());
-
+	m_pAvatar->SetVerticesLevel(m_pLevel->GetVertices());
 }
 
 void Game::InitCamera()
 {
-	m_Camera->SetLevelBoundaries(m_Level->GetBoundaries());
+
+	m_pCamera->SetLevelBoundaries(m_pLevel->GetBoundaries());
 
 }
 
@@ -84,38 +81,26 @@ void  Game::AddGameObjects()
 
 void Game::Cleanup( )
 {
-	for (GameObject* ptr : m_pGameObjects)
-	{
-		delete ptr;
-	}
-
-	m_pGameObjects.clear();  // Remove all elements from the vector
-
-	delete m_Level;
-	delete m_Camera;
+	
+	delete m_pAvatar;
+	delete m_pLevel;
+	delete m_pCamera;
 	delete m_pGameObjectManager;
 
 }
 
 void Game::Update( float elapsedSec )
 {
-	/*
-	for (GameObject* ptr : m_pGameObjects)
-	{
-		ptr->Update(elapsedSec, m_Level);
-	}
-	*/
+	
+	m_pAvatar->Update(elapsedSec, m_pLevel, m_pCamera->GetCameraPos());
 
-	m_Avatar->Update(elapsedSec, m_Level, m_Camera->GetCameraPos());
+	m_pGameObjectManager->Update(elapsedSec, m_pAvatar, m_pLevel, m_pCamera->GetCameraPos());
 
-	m_pGameObjectManager->Update(elapsedSec, m_Avatar, m_Level, m_Camera->GetCameraPos());
+	m_pAvatar->GetBullets()->CheckHitGameObjects(m_pGameObjectManager->GetGameObjects());
 
-	m_Avatar->GetBullets()->CheckHitGameObjects(m_pGameObjectManager->GetGameObjects());
+	m_pLevel->Update(elapsedSec, m_pAvatar->GetBotShape());
 
-	m_Level->Update(elapsedSec, m_Avatar->GetBotShape());
-
-	m_Camera->SetLevelBoundaries(m_Level->GetBoundaries());
-
+	m_pCamera->SetLevelBoundaries(m_pLevel->GetBoundaries());
 
 }
 
@@ -126,33 +111,29 @@ void Game::Draw( ) const
 
 	glPushMatrix();
 	
-		m_Camera->Transform(m_Avatar->GetBotShape(), m_Avatar->GetGameStage() );
+		m_pCamera->Transform(m_pAvatar->GetBotShape(), m_pAvatar->GetGameStage() );
 	
-		m_Level->DrawBackground();
+		m_pLevel->DrawBackground();
 		
 		m_pGameObjectManager->Draw();
 
-		// Draw all game objects
-		for (GameObject* ptr : m_pGameObjects)
-		{
-			ptr->Draw();
-		}
+		m_pAvatar->Draw();
 		
-		m_Level->DrawForeground();
+		m_pLevel->DrawForeground();
 
 	glPopMatrix();
-
 
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
-
+	// X Key --> Shoot
 	if (e.keysym.sym == SDLK_x)
 	{
-		m_Avatar->Shoot();
+		m_pAvatar->Shoot();
 	}
 
+	// I key --> Show controls game info at the console
 	if (e.keysym.sym == SDLK_i)
 	{
 		DisplayControlsInfo();

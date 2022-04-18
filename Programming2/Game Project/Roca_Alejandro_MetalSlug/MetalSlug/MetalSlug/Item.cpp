@@ -2,8 +2,6 @@
 #include "Item.h"
 #include "Avatar.h"
 #include "Level.h"
-#include "utils.h"
-#include <iostream>
 
 
 Item::Item(const Point2f& startPos)

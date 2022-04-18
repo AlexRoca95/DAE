@@ -4,6 +4,7 @@
 
 #include "Item.h"
 
+
 class Texture;
 class Level;
 class BulletManager;
@@ -40,6 +41,7 @@ public:
 		death,
 		respawn
 	};
+
 	// Action State for the Bottom sprite
 	enum class BotActionState {   
 		iddle,
@@ -65,6 +67,7 @@ public:
 	void Update(float elapsedSeconds, const Level* level, const Rectf& cameraPos);
 	void GrabItem(Item::ItemType itemType);
 
+	// Getters
 	const bool GetIsMovingRight() const;
 	const Animations GetActiveAnimation() const;
 	BulletManager* GetBullets();
@@ -74,16 +77,17 @@ public:
 
 private:
 
-	// General
-	static int m_GameObjectCounter;
+	// Camera
 	Rectf m_CameraPos;
 	
 	// BulletManager
+
 	const int m_NrOfBullets;
 	BulletManager* m_pBulletManager;
 
 
 	// Sprite Related
+
 	TopActionState m_TopActionState;				// Current action state for the Top sprite
 	BotActionState m_BotActionState;
 	Animations m_ActTopAnimation;
@@ -99,6 +103,7 @@ private:
 	const float m_NormalSpeed;
 	
 	// Booleans
+
 	bool m_IsMovingRight;							// Moving right or not (for OpenGL)
 	bool m_IsMoving;								// Indicates if character is moving or not (for sprites)				
 	bool m_IsOnGround;								// Avatar is in the ground or not
@@ -106,6 +111,7 @@ private:
 	
 
 	// Death
+
 	bool m_IsImmortal;								// To know if the avatar should avoid all damage
 	bool m_IsBlink;									// Drawing of the avatar needs to blink when Immortal
 	const float m_MaxTimeRespawn;

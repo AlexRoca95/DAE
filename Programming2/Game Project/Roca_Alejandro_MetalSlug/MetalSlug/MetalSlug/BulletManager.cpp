@@ -4,11 +4,11 @@
 #include "utils.h"
 #include "GameObject.h"
 #include "Enemy.h"
-#include <iostream>
 
 
 BulletManager::BulletManager()
-	: m_pBullets{}
+	: m_pBullets{ }
+	, m_VerticesLevel{ }
 {
 
 }
