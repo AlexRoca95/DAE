@@ -203,13 +203,13 @@ bool Level::IsOnGround(const Rectf& actorShape, const Vector2f& velocity) const
 void Level::InitSprites()
 {
 	// Mid Sprite Level Background
-	m_pLevelTexture->UpdateValues(1, m_Rows, m_Rows, 15.f, 4152.f, 352.f, 352.f);
+	m_pLevelTexture->UpdateValues(1, m_Rows, m_Rows, 30.f, 4152.f, 352.f, 352.f);
 	m_pLevelTexture->SetLeftDstRect(0);
 	m_pLevelTexture->SetBottomDstRect(0);
 	m_pLevelTexture->UpdateLeftSrcRect();
 
 	// Front Sprite Level 
-	m_pLevelLakeTexture->UpdateValues(1, m_Rows, m_Rows, 20.f, 4152.f, 352.f, 352.f);
+	m_pLevelLakeTexture->UpdateValues(1, m_Rows, m_Rows, 30.f, 4152.f, 352.f, 352.f);
 	m_pLevelLakeTexture->SetLeftDstRect(0);
 	m_pLevelLakeTexture->SetBottomDstRect(0);
 	m_pLevelLakeTexture->UpdateLeftSrcRect();

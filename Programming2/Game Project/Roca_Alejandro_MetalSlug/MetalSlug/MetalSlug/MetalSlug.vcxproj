@@ -214,6 +214,29 @@
     <ClInclude Include="utils.h" />
     <ClInclude Include="Vector2f.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Roca_AlejandroMetalSlug.xlsx" />
+    <None Include="Resources\sprites\Level\level.svg" />
+    <None Include="Resources\sprites\Level\levelV2.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\sprites\Enemies\BomHeli.png" />
+    <Image Include="Resources\sprites\Enemies\Explosion.png" />
+    <Image Include="Resources\sprites\Enemies\grenade.png" />
+    <Image Include="Resources\sprites\Enemies\helicopterv2.png" />
+    <Image Include="Resources\sprites\Enemies\rebelSoldier.png" />
+    <Image Include="Resources\sprites\Items.png" />
+    <Image Include="Resources\sprites\Level\level1.png" />
+    <Image Include="Resources\sprites\Level\level1_black white.bmp" />
+    <Image Include="Resources\sprites\Level\levelLeft.png" />
+    <Image Include="Resources\sprites\Level\levelRight.png" />
+    <Image Include="Resources\sprites\marco\MarcoBody.png" />
+    <Image Include="Resources\sprites\marco\MarcoLegs.png" />
+    <Image Include="Resources\sprites\marco\pistolHit.png" />
+    <Image Include="Resources\sprites\marco\Projectiles.png" />
+    <Image Include="Resources\sprites\marco\Projectiles2.png" />
+    <Image Include="Resources\sprites\Prisoner.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

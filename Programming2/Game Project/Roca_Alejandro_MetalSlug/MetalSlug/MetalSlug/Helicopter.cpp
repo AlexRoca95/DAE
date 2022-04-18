@@ -271,24 +271,24 @@ void Helicopter::CheckBombCollision(Avatar* avatar, const std::vector<Point2f>& 
 	// Check collision with Avatar	
 	for (int i{}; i < m_pBombs.size(); i++)
 	{
-		if (m_pBombs[i]->GetIsActive() && !m_pBombs[i]->GetIsHit())
-		{
-			// Only check collision when bomb is active and didn't explode yet
-			if (utils::IsOverlapping(m_pBombs[i]->GetTopSprite()->GetDstRect(), avatar->GetHitBox()))
+			if (m_pBombs[i]->GetIsActive() && !m_pBombs[i]->GetIsHit())
 			{
-				m_pBombs[i]->Hit();
-				m_ExplosionCounter = i + 1;
-				avatar->Hit();
-
-				if (m_ExplosionCounter == m_pBombs.size())
+				// Only check collision when bomb is active and didn't explode yet
+				if (utils::IsOverlapping(m_pBombs[i]->GetTopSprite()->GetDstRect(), avatar->GetHitBox()))
 				{
-					// Last bombb hit
-					m_IsThrowingBombs = false;
-					m_NewBombs = true;
-					m_ExplosionCounter = 0;
+					m_pBombs[i]->Hit();
+					m_ExplosionCounter = i + 1;
+					avatar->Hit();
+
+					if (m_ExplosionCounter == m_pBombs.size())
+					{
+						// Last bombb hit
+						m_IsThrowingBombs = false;
+						m_NewBombs = true;
+						m_ExplosionCounter = 0;
+					}
 				}
 			}
-		}
 	}
 
 	

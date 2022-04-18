@@ -13,6 +13,15 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Enemies">
+      <UniqueIdentifier>{d1c2ca7b-79f4-4bc9-87cd-5e5f5489e15f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Marco">
+      <UniqueIdentifier>{16e6bfaa-62be-441a-82a2-a123cf96c59c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Level">
+      <UniqueIdentifier>{8ef71cca-79c9-45e7-a58e-2124ee22f9f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -182,5 +191,66 @@
     <ClInclude Include="Item.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Roca_AlejandroMetalSlug.xlsx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\sprites\Level\level.svg">
+      <Filter>Resource Files\Level</Filter>
+    </None>
+    <None Include="Resources\sprites\Level\levelV2.svg">
+      <Filter>Resource Files\Level</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\sprites\Items.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\sprites\Prisoner.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resources\sprites\Enemies\BomHeli.png">
+      <Filter>Resource Files\Enemies</Filter>
+    </Image>
+    <Image Include="Resources\sprites\Enemies\Explosion.png">
+      <Filter>Resource Files\Enemies</Filter>
+    </Image>
+    <Image Include="Resources\sprites\Enemies\grenade.png">
+      <Filter>Resource Files\Enemies</Filter>
+    </Image>
+    <Image Include="Resources\sprites\Enemies\helicopterv2.png">
+      <Filter>Resource Files\Enemies</Filter>
+    </Image>
+    <Image Include="Resources\sprites\Enemies\rebelSoldier.png">
+      <Filter>Resource Files\Enemies</Filter>
+    </Image>
+    <Image Include="Resources\sprites\marco\MarcoBody.png">
+      <Filter>Resource Files\Marco</Filter>
+    </Image>
+    <Image Include="Resources\sprites\marco\MarcoLegs.png">
+      <Filter>Resource Files\Marco</Filter>
+    </Image>
+    <Image Include="Resources\sprites\marco\pistolHit.png">
+      <Filter>Resource Files\Marco</Filter>
+    </Image>
+    <Image Include="Resources\sprites\marco\Projectiles.png">
+      <Filter>Resource Files\Marco</Filter>
+    </Image>
+    <Image Include="Resources\sprites\marco\Projectiles2.png">
+      <Filter>Resource Files\Marco</Filter>
+    </Image>
+    <Image Include="Resources\sprites\Level\level1.png">
+      <Filter>Resource Files\Level</Filter>
+    </Image>
+    <Image Include="Resources\sprites\Level\level1_black white.bmp">
+      <Filter>Resource Files\Level</Filter>
+    </Image>
+    <Image Include="Resources\sprites\Level\levelLeft.png">
+      <Filter>Resource Files\Level</Filter>
+    </Image>
+    <Image Include="Resources\sprites\Level\levelRight.png">
+      <Filter>Resource Files\Level</Filter>
+    </Image>
   </ItemGroup>
 </Project>
