@@ -20,10 +20,12 @@ public:
 
 private:
 
+	const float m_AvatarWidth;
 	float m_Width;
 	float m_Height;
 	Rectf m_LevelBoundaries;
 	Point2f m_CameraPos;
+	float m_PreviousXPos;
 	
 
 	void Clamp();

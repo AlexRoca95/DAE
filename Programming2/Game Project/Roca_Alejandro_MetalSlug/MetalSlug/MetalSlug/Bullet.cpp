@@ -79,32 +79,26 @@ void Bullet::Update(float elapsedSeconds, const Avatar* avatar)
 // Change the Bullet pos to the correct start position according with the pos of the Avatar
 void Bullet::SetStartPos( const Avatar* avatar )
 {
-	switch ( avatar->GetActiveAnimation() )
+	Avatar::Animations animation{ avatar->GetActiveAnimation() };
+	switch ( animation )
 	{
 		case Avatar::Animations::shooting:  // Pointing Horizontally
+		case Avatar::Animations::crawlingShooting:
 			
 			m_pTopSprite->SetSrcRect(7.f, 11.f, 7.f);  // Change Bullet sprite
 			m_pTopSprite->SetDstRect(11.f, 7.f);
 			m_IsMovingUp = false;
 
-			m_StartPosition.y = ( avatar->GetTopShape().bottom + avatar->GetTopShape().height/2 ) 
-				- m_pTopSprite->GetFrameHeight()/3;
-
-			if (avatar->GetIsMovingRight())
+			// Get the correct shape of the avatar
+			if (animation == Avatar::Animations::crawlingShooting)
 			{
-				m_StartPosition.x = ( avatar->GetTopShape().left + avatar->GetTopShape().width ) 
-					- m_pTopSprite->GetFrameWidth() * 2;
-
-				m_Velocity.x = m_Speed.x;
+				SetHorizPos(avatar->GetBotShape(), avatar->GetIsMovingRight() );
 			}
 			else
 			{
-				m_StartPosition.x = avatar->GetTopShape().left - avatar->GetTopShape().width
-					+ m_pTopSprite->GetFrameWidth() * 5;
-
-				m_Velocity.x = - m_Speed.x;
+				SetHorizPos(avatar->GetTopShape(), avatar->GetIsMovingRight());
 			}
-
+			
 		break;
 
 		case Avatar::Animations::shootingUp:  // Pointing Vertically
@@ -130,6 +124,30 @@ void Bullet::SetStartPos( const Avatar* avatar )
 	m_pTopSprite->SetLeftDstRect(m_StartPosition.x);
 	m_pTopSprite->SetBottomDstRect(m_StartPosition.y);
 	
+}
+
+
+void Bullet::SetHorizPos(const Rectf& avatarShape, const bool movingRight)
+{
+
+	m_StartPosition.y = (avatarShape.bottom + avatarShape.height / 2)
+		- m_pTopSprite->GetFrameHeight() / 3;
+
+	if ( movingRight )
+	{
+		m_StartPosition.x = (avatarShape.left + avatarShape.width)
+			- m_pTopSprite->GetFrameWidth() * 2;
+
+		m_Velocity.x = m_Speed.x;
+	}
+	else
+	{
+		m_StartPosition.x = avatarShape.left - avatarShape.width
+			+ m_pTopSprite->GetFrameWidth() * 5;
+
+		m_Velocity.x = -m_Speed.x;
+	}
+
 }
 
 void Bullet::Move( float elapsedSec )

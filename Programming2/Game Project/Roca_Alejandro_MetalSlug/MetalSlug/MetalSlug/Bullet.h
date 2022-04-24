@@ -24,7 +24,9 @@ private:
 
 	void Initialize();
 	void SetStartPos(const Avatar* avatar);
+	void SetHorizPos(const Rectf& avatarShape, const bool movingRight);
 
 	virtual void Move(float elapsedSec) override;
+	
 };
 

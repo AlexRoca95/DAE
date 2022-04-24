@@ -374,19 +374,33 @@ void Avatar::UpdateFrames( float elapsedSeconds )
 	
 
 	// Check if the shooting animation has finished
-	if( m_IsShooting && m_pTopSprite->GetAnimationFinish() )
+
+
+		if( m_IsShooting && m_pTopSprite->GetAnimationFinish() )
+		{
+			if (m_IsOnGround)
+			{
+				// Only reset shoot animation when we are On the ground
+				ResetSprite(m_pTopSprite, true);
+				m_IsShooting = false;
+				m_TopActionState = TopActionState::iddle;
+			}
+		
+		
+		}
+
+		/*
+	if (m_IsShooting && m_pBottomSprite->GetAnimationFinish())
 	{
 		if (m_IsOnGround)
 		{
 			// Only reset shoot animation when we are On the ground
-			ResetSprite(m_pTopSprite, true);
+			ResetSprite(m_pBottomSprite, false);
 			m_IsShooting = false;
-			m_TopActionState = TopActionState::iddle;
+		
 		}
-		
-		
 	}
-
+	*/
 	// Check if death animation has finished
 	if (m_IsDead && m_pBottomSprite->GetAnimationFinish())
 	{
@@ -468,6 +482,16 @@ void Avatar::HandleInput()
 				m_ActTopAnimation = Animations::crawlingIddle;
 				m_ActBotAnimation = Animations::crawlingIddle;
 			}
+
+			if (pStates[SDL_SCANCODE_X]  && pStates[SDL_SCANCODE_DOWN] )
+			{
+				// CRAWLING
+				m_TopActionState = TopActionState::crawling;
+				m_BotActionState = BotActionState::crawling;
+				m_ActTopAnimation = Animations::crawlingIddle;
+				m_ActBotAnimation = Animations::crawlingIddle;
+			}
+			
 		}
 	}
 
@@ -484,6 +508,12 @@ void Avatar::HandleInput()
 		
 			m_ActTopAnimation = Animations::movingRight;
 			m_ActBotAnimation = Animations::movingRight;
+		}
+		else
+		{
+			m_ActTopAnimation = Animations::crawlingRight;
+			m_ActBotAnimation = Animations::crawlingRight;
+			
 		}
 		
 
@@ -528,6 +558,11 @@ void Avatar::HandleInput()
 			{
 				m_ActTopAnimation = Animations::movingLeft;
 				m_ActBotAnimation = Animations::movingLeft;
+			}
+			else
+			{
+				m_ActTopAnimation = Animations::crawlingLeft;
+				m_ActBotAnimation = Animations::crawlingLeft;
 			}
 
 			if ( ( m_BotActionState == BotActionState::jumping ) && m_IsOnGround)
@@ -583,6 +618,7 @@ void Avatar::CheckShooting()
 		{
 			m_BotActionState = BotActionState::shooting;
 			m_ActBotAnimation = Animations::crawlingShooting;
+			m_ActTopAnimation = Animations::crawlingShooting;
 		}
 		else
 		{
@@ -638,21 +674,30 @@ void Avatar::CheckPreviousState( )
 // Check if Avatar Crawling, reduce speed if so
 void Avatar::CheckCrawling()
 {   
-	if  (m_BotActionState == BotActionState::crawling )
+	
+	if (m_BotActionState == BotActionState::crawling)
 	{
 		// Speed is reduced when crawling
-		if ( m_IsMovingRight )
+
+		if (!m_IsShooting)
 		{
-			m_Velocity.x = m_SlowSpeed;
+			if (m_IsMovingRight)
+			{
+				m_Velocity.x = m_SlowSpeed;
+			}
+			else
+			{
+				m_Velocity.x = -m_SlowSpeed;
+			}
 		}
 		else
 		{
-			m_Velocity.x = -m_SlowSpeed;
+			m_Velocity.x = 0.f;
 		}
 	}
 	else
 	{
-		if ( m_IsMovingRight )
+		if (m_IsMovingRight)
 		{
 			m_Velocity.x = m_NormalSpeed;
 		}
@@ -661,6 +706,7 @@ void Avatar::CheckCrawling()
 			m_Velocity.x = -m_NormalSpeed;
 		}
 	}
+	
 }
 
 void Avatar::Move( float elapsedSec )
@@ -698,12 +744,22 @@ void Avatar::CheckCameraBoundaries()
 
 void Avatar::Shoot()
 {
-	m_IsShooting = true;
-	m_pTopSprite->ResetAnimationFinish( false );
-	ResetSprite( m_pTopSprite, true );
+	if (m_BotActionState != BotActionState::crawling)
+	{
+		m_IsShooting = true;
 
-	m_pBulletManager->ActivateBullet();
+		m_pBulletManager->ActivateBullet();
 
+		m_pTopSprite->ResetAnimationFinish(false);
+		ResetSprite(m_pTopSprite, true);
+	}
+	/*
+	else
+	{
+		m_pBottomSprite->ResetAnimationFinish(false);
+		ResetSprite(m_pBottomSprite, false);
+	}
+	*/
 }
 
 // Correct the top sprite so it draws it correctly
