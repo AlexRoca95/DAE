@@ -32,12 +32,17 @@ public:
 	virtual void CheckGameState() = 0;
 	virtual void Update(float elapsedSec, Avatar* avatar, const Level* level) = 0;
 
+	virtual void ChangeSprite(const int cols, const int rows, const int frames, const float frameSec, const float width,
+		const float height, const float spriteSheetTop);
+
 protected:
 
 	ActionState m_ActionState;
 	ActionState m_PreviousAction;
 	int m_Health;
 
+
+	
 
 	
 

@@ -29,9 +29,11 @@ public:
 		grenade,
 		helicopter,
 		soldier,
+		soldierShield,
 		boss,
 		prisoner,
-		item
+		item,
+		shield
 	};
 
 
@@ -67,6 +69,11 @@ public:
 
 
 protected:
+
+
+	// Gravity
+	void Falling(float elapsedSec, const Level* level);
+
 	// General
 	const Type m_Id;
 	Point2f m_StartPosition;

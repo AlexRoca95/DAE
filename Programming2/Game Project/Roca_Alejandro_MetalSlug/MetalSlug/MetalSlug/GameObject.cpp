@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "GameObject.h"
+#include "Level.h"
 
 GameObject::GameStage GameObject::m_GameState = GameStage::moving;
 bool GameObject::m_IsFirstHeliFightStart = false;
@@ -28,6 +29,18 @@ GameObject::GameObject( const GameObject::Type& id, const Point2f& startPos, con
 
 
 
+
+
+// Gravity for the gameObjects
+void GameObject::Falling(float elapsedSec, const Level* level)
+{
+	if (!level->IsOnGround(m_pBottomSprite->GetDstRect(), m_Velocity))
+	{
+		m_Velocity.y += m_Acceleration.y * elapsedSec;
+	}
+
+	m_pBottomSprite->SetBottomDstRect(m_pBottomSprite->GetDstRect().bottom + m_Velocity.y * elapsedSec);
+}
 
 void GameObject::SetIsActive(bool active)
 {

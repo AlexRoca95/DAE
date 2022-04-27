@@ -51,8 +51,6 @@ private:
 	void Initialize();
 	void Move(float elapsedSec);
 
-	void ChangeSprite(const int cols, const int rows, const int frames, const float frameSec, const float width,
-		const float height, const float spriteSheetTop);
 	void ActivateGrenade();
 
 	// Action States (AI) for soldier
@@ -61,8 +59,7 @@ private:
 	void DoRunAwayState(float elapsedSec, const Rectf& avatarShape);
 	void DoWaitingState(float elapsedSec, const Rectf& avatarShape);
 
-	// Gravity
-	void Falling(float elapsedSec, const Level* level);
+
 
 	void UpdateFrames(float elapsedSec);
 

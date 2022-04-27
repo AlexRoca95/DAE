@@ -2,6 +2,7 @@
 #include "GameObjectManager.h"
 #include "Helicopter.h"
 #include "Soldier.h"
+#include "SoldierShield.h"
 #include "Prisoner.h"
 #include "Avatar.h"
 #include "Item.h"
@@ -66,6 +67,7 @@ void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* le
 				{
 					case GameObject::Type::helicopter:
 					case GameObject::Type::soldier:
+					case GameObject::Type::soldierShield:
 					case GameObject::Type::prisoner:
 					{
 						Enemy* pEnemy{ dynamic_cast<Enemy*>(pGameObject) };
@@ -186,12 +188,18 @@ void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject:
 
 		break;
 
+	case GameObject::Type::soldierShield:
+
+		gameObject = new SoldierShield(startPos, comingFromRight);
+
+		break;
+
 	case GameObject::Type::prisoner:
 
 		gameObject = new Prisoner(startPos);
 		m_TotalNrPrisoners++;
 
-		// Create also an Item next to the position of the prisoner
+		// Create also an Item next to the position of the prisoner (doesn't draw it yet)
 		Point2f starPosItem = SetStartPosItem(gameObject->GetBotShape());
 		item = new Item(starPosItem);
 		m_TotalNrItems++;

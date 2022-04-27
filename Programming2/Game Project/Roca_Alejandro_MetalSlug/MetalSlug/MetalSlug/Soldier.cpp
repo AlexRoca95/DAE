@@ -3,6 +3,7 @@
 #include "Level.h"
 #include "Avatar.h"
 #include "Grenade.h"
+#include <iostream>
 
 
 
@@ -19,8 +20,8 @@ Soldier::Soldier(const Point2f& startPos, bool comingFromRight)
 	, m_Seconds { -1.f }
 	, m_SecondsDeath { 0.f }
 	, m_SecondsWaiting { 0.f }
-	, m_pGrenade { new Grenade }
 	, m_IsReset { false }
+	, m_pGrenade { }
 {
 	Initialize();
 }
@@ -29,7 +30,13 @@ Soldier::Soldier(const Point2f& startPos, bool comingFromRight)
 Soldier::~Soldier()
 {
 	delete m_pBottomSprite;
-	delete m_pGrenade;
+
+	if (m_pGrenade != nullptr)
+	{
+		// Only delete if it exits
+		delete m_pGrenade;
+	}
+
 }
 
 
@@ -79,9 +86,12 @@ void Soldier::Draw() const
 			break;
 	}
 
-	if (m_pGrenade->GetIsActive())
+	if (m_pGrenade != nullptr)
 	{
-		m_pGrenade->Draw();
+		if (m_pGrenade->GetIsActive())
+		{
+			m_pGrenade->Draw();
+		}
 	}
 
 }
@@ -125,12 +135,18 @@ void Soldier::Update(float elapsedSec, Avatar* avatar, const Level* level)
 	Move(elapsedSec);
 	level->HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
 
-	if (m_pGrenade->GetIsActive())
+	if (m_pGrenade != nullptr)
 	{
-		// Grenade throwed
-		m_pGrenade->Update( elapsedSec, avatar, this, level->GetVertices() );
+		if (m_pGrenade->GetIsActive())
+		{
+			// Grenade throwed
+			m_pGrenade->Update(elapsedSec, avatar, this, level->GetVertices());
+		}
+		
+			
+		
 	}
-
+		
 }
 
 // Check if soldier changed action in order to reset sprite correctly
@@ -158,14 +174,7 @@ void Soldier::UpdateFrames(float elapsedSec)
 }
 
 
-void Soldier::Falling(float elasedSec, const Level* level)
-{
 
-	if (!level->IsOnGround(m_pBottomSprite->GetDstRect(), m_Velocity))
-	{
-		m_Velocity.y += m_Acceleration.y * elasedSec;
-	}
-}
 
 // Walking State --> Soldier walks into direction of the avatar
 void Soldier::DoWalkingState(float elapsedSec, const Rectf& avatarShape)
@@ -200,12 +209,19 @@ void Soldier::DoAttackState(float elapsedSec, const Rectf& avatarShape)
 		ChangeSprite(14, 1, 14, 15.f, 40.f, 46.f, 191.f);
 		m_Velocity.x = 0.f;
 	}
+	
+	if (m_pGrenade == nullptr)
+	{
+		m_pGrenade = new Grenade();
+
+	}
 
 	if (!m_pGrenade->GetIsActive())
 	{
 		// Grenade available
 		ActivateGrenade();
 	}
+	
 
 	if (m_pBottomSprite->GetAnimationFinish())
 	{
@@ -302,6 +318,7 @@ void Soldier::DoWaitingState(float elapsedSec, const Rectf& avatarShape)
 // Activate the grenate and put it on the correct position to throw it
 void Soldier::ActivateGrenade()
 {
+	
 	if (m_pBottomSprite->GetActFrame() == m_pBottomSprite->GetTotalFrames() - 4)
 	{
 		// Activate grenade
@@ -406,17 +423,6 @@ void Soldier::KillSoldier(float elapsedSec)
 
 }
 
-// Change sprite and reset it to inital values for correct animation
-void Soldier::ChangeSprite(const int cols, const int rows, const int frames, const float frameSec, const float width,
-	const float height, const float spriteSheetTop)
-{
-
-	m_pBottomSprite->UpdateValues(cols, rows, frames, frameSec, width, height, spriteSheetTop);
-	m_pBottomSprite->ResetSprite();
-
-	m_BotSpriteChanged = false;
-
-}
 
 void Soldier::CheckGameState()
 {

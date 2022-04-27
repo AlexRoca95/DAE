@@ -108,6 +108,12 @@
     <ClCompile Include="Item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SoldierShield.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shield.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -190,6 +196,12 @@
     </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoldierShield.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shield.h">
+      <Filter>Framework Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

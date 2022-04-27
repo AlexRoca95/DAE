@@ -12,3 +12,14 @@ Enemy::Enemy(const GameObject::Type& id, const Point2f& startPos, int health, co
 
 }
 
+
+void Enemy::ChangeSprite(const int cols, const int rows, const int frames, const float frameSec, const float width,
+	const float height, const float spriteSheetTop)
+{
+	m_pBottomSprite->UpdateValues(cols, rows, frames, frameSec, width, height, spriteSheetTop);
+	m_pBottomSprite->ResetSprite();
+
+	m_BotSpriteChanged = false;
+}
+
+

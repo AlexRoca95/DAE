@@ -38,7 +38,6 @@ private:
 
 	void Initialize();
 	void SelectTypeItem();
-	void Fall(float elapsedSec, const Level* level);
 
 };
 

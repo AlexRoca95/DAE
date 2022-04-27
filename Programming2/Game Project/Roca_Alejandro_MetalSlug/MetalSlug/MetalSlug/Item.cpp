@@ -76,7 +76,7 @@ void Item::Update(float elapsedSec, const Level* level)
 	}
 
 	level->HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
-	Fall(elapsedSec, level);
+	Falling(elapsedSec, level);
 	
 }
 
@@ -116,16 +116,6 @@ void Item::GrabItem(Avatar* avatar)
 
 }
 
-// Item falls when it is dropped
-void Item::Fall(float elapsedSec, const Level* level)
-{
-	if (!level->IsOnGround(m_pBottomSprite->GetDstRect(), m_Velocity))
-	{
-		m_Velocity.y += m_Acceleration.y * elapsedSec;
-	}
-
-	m_pBottomSprite->SetBottomDstRect(m_pBottomSprite->GetDstRect().bottom + m_Velocity.y * elapsedSec);
-}
 
 void Item::CheckGameState()
 {

@@ -252,6 +252,7 @@ void Sprite::ResetSprite()
 	m_ActFrame = 0;
 	m_IsFinish = false;
 	UpdateLeftSrcRect();
+	UpdateBottomSrcRect();
 }
 
 float Sprite::GetFrameWidth( ) const

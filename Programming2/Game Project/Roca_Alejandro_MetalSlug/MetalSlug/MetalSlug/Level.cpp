@@ -12,7 +12,7 @@ Level::Level()
 	, m_pLevelLakeTexture{ new Sprite("Resources/sprites/level/levelRight.png") }
 	, m_Vertices{ }
 	, m_pLevelSVG{ }
-	, m_NrOfPaths{ 21 }
+	, m_NrOfPaths{ 20 }
 	, m_TransformedVertices{ }
 	, m_Rows{ 8 }
 	, m_UpperBoundary{ }
@@ -28,7 +28,7 @@ Level::Level()
 
 	UpdateLevelBoundaries();
 
-	m_pLevelSVG->GetVerticesFromSvgFile("resources/sprites/Level/level.svg", m_Vertices);
+	m_pLevelSVG->GetVerticesFromSvgFile("resources/sprites/Level/levelFinal.svg", m_Vertices);
 	TransformSVGVertices();
 
 	InitSprites();
@@ -141,7 +141,7 @@ void Level::HorizCollision(Rectf& actorShape, Vector2f& velocity) const
 
 	utils::HitInfo hitInfo{};
 
-	if ( utils::Raycast(m_TransformedVertices[20], ray, rayEnd, hitInfo) )
+	if ( utils::Raycast(m_TransformedVertices[19], ray, rayEnd, hitInfo) )
 	{
 		if ( rayEnd.x <= hitInfo.intersectPoint.x )
 		{
@@ -157,7 +157,7 @@ void Level::HorizCollision(Rectf& actorShape, Vector2f& velocity) const
 	rayEnd.x = actorShape.left + actorShape.width;
 	rayEnd.y = actorShape.bottom + actorShape.height; 
 
-	if (utils::Raycast(m_TransformedVertices[20], ray, rayEnd, hitInfo))
+	if (utils::Raycast(m_TransformedVertices[19], ray, rayEnd, hitInfo))
 	{
 
 		if (rayEnd.x >= hitInfo.intersectPoint.x)
@@ -230,5 +230,5 @@ Rectf Level::GetBoundaries() const
 
 std::vector <Point2f> Level::GetVertices() const
 {
-	return m_TransformedVertices[20];
+	return m_TransformedVertices[19];
 }
