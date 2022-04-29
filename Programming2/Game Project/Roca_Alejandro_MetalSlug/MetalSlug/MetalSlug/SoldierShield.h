@@ -26,11 +26,19 @@ private:
 	void Initialize();
 	void InitShield();
 	void KillSoldier(float elapsedSec);
+	void CheckPreviousAction();
+	
+	void DoRunningState( float elapsedSec, const Rectf& avatarShape);
+	void DoAttackState( float elapsedSec, const Rectf& avatarShape);
+	void CheckFacingRight(const Rectf& avatarShape);
+	void CheckDistanceAvatar(const Rectf& avatarShape);
 
 	void Move(float elapsedSec);
+	void UpdateFrames(float elapsedSec);
 
 	bool m_IsShieldOn;			// Soldier has the shield or not
 	bool m_IsFacingRight;		   // Is soldier loocking to the right or not
+	bool m_IsAttackStarted;
 
 	Shield* m_pShield;			// Flying shield
 
@@ -39,6 +47,11 @@ private:
 	// Time soldier body remains in ground
 	const float m_MaxTimeDeath;
 	float m_SecondsDeath;
+
+
+	const float m_AttackDist;
+
+
 
 
 };
