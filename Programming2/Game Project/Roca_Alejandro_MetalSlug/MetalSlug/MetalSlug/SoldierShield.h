@@ -39,6 +39,7 @@ private:
 	bool m_IsShieldOn;			// Soldier has the shield or not
 	bool m_IsFacingRight;		   // Is soldier loocking to the right or not
 	bool m_IsAttackStarted;
+	bool m_IsAttackFinished;
 
 	Shield* m_pShield;			// Flying shield
 
@@ -48,6 +49,9 @@ private:
 	const float m_MaxTimeDeath;
 	float m_SecondsDeath;
 
+	// Time soldier waits until attack again
+	const float m_MaxTimeWait;
+	float m_SecondsWaiting;
 
 	const float m_AttackDist;
 

@@ -14,9 +14,12 @@ SoldierShield::SoldierShield(const Point2f& startPos, bool comingFromRight)
 	, m_pShield {}
 	, m_MaxTimeDeath{ 2.f }
 	, m_SecondsDeath{ 0.f }
+	, m_MaxTimeWait { 0.5f }
+	, m_SecondsWaiting { 0.f }
 	, m_RunSpeed { 200.f }
 	, m_AttackDist { 60.f }
 	, m_IsAttackStarted { false }
+	, m_IsAttackFinished { false }
 {
 
 
@@ -69,8 +72,22 @@ void SoldierShield::Draw() const
 		m_pShield->Draw();
 	}
 
+	
+	if (m_IsFacingRight)
+	{
+		// Flip to the right
+		glPushMatrix();
 
-	m_pBottomSprite->Draw();
+			m_pBottomSprite->FlipSprite();
+			m_pBottomSprite->Draw();
+
+		glPopMatrix();
+	}
+	else
+	{
+		m_pBottomSprite->Draw();
+	}
+	
 
 }
 
@@ -157,6 +174,8 @@ void SoldierShield::DoRunningState(float elapsedSec, const Rectf& avatarShape)
 
 }
 
+
+// Soldier attack the avatar
 void SoldierShield::DoAttackState(float elapsedSec, const Rectf& avatarShape)
 {
 	if (m_BotSpriteChanged)
@@ -175,18 +194,15 @@ void SoldierShield::DoAttackState(float elapsedSec, const Rectf& avatarShape)
 			m_IsAttackStarted = true;
 		}
 	}
-	else
-	{
-		//if (m_IsAttackStarted && m_pBottomSprite->GetAnimationFinish())
-	}
 
 	if (m_IsAttackStarted && m_pBottomSprite->GetAnimationFinish())
 	{
 		// Finish the attack animation
 		m_IsAttackStarted = false;
+
 		if (m_IsShieldOn)
 		{
-			ChangeSprite(8, 1, 8, 15.f, 54.f, 48.f, 210.f); // Soldier attack with shield pt2
+			ChangeSprite(9, 1, 9, 15.f, 54.f, 48.f, 210.f); // Soldier attack with shield pt2
 			
 		}
 		else
@@ -194,9 +210,24 @@ void SoldierShield::DoAttackState(float elapsedSec, const Rectf& avatarShape)
 			ChangeSprite(11, 1, 11, 15.f, 58.f, 37.f, 540.f);  // Soldier without sield attacking pt2
 			
 		}
-
 	}
+
 	
+	if (!m_IsAttackStarted && m_pBottomSprite->GetAnimationFinish())
+	{
+		// Wait a moment before attacking again
+		CheckDistanceAvatar(avatarShape);   
+
+		m_SecondsWaiting += elapsedSec;
+
+		if (m_SecondsWaiting > m_MaxTimeWait)
+		{
+			m_BotSpriteChanged = true;  // START attack again
+			m_SecondsWaiting = 0.f;
+		}
+		
+	}
+
 }
 
 
