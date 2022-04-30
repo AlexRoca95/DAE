@@ -32,8 +32,7 @@ public:
 	virtual void CheckGameState() = 0;
 	virtual void Update(float elapsedSec, Avatar* avatar, const Level* level) = 0;
 
-	virtual void ChangeSprite(const int cols, const int rows, const int frames, const float frameSec, const float width,
-		const float height, const float spriteSheetTop);
+	
 
 protected:
 
@@ -41,10 +40,23 @@ protected:
 	ActionState m_PreviousAction;
 	int m_Health;
 
+	bool m_IsFacingRight;				// Is soldier loocking to the right or not
+
+	// Time enemy body remains in ground  ( only for soldiers )
+	const float m_MaxTimeDeath;
+	float m_SecondsDeath;
+
+	// Seconds waiting for attack again
+	float m_SecondsWaiting;
 
 	
+	virtual void ChangeSprite(const int cols, const int rows, const int frames, const float frameSec, const float width,
+		const float height, const float spriteSheetTop);
 
+	void CheckFacingRight(const Rectf& avatarShape);
+	void CheckPreviousAction();
 	
+	void KillSoldier(float elapsedSec);
 
 };
 

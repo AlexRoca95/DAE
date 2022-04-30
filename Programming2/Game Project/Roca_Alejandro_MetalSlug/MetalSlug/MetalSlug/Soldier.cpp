@@ -11,15 +11,11 @@ Soldier::Soldier(const Point2f& startPos, bool comingFromRight)
 	:Enemy(GameObject::Type::soldier, startPos, 1, Point2f{ 150.f, 0.f }, 
 		comingFromRight, Point2f{0.f, g_Gravity})   // Type, starting position, health, speed and accelerat
 	, m_RunSpeed { 200.f }
-	, m_FacingRight { false }
 	, m_RunAwayDist { 200.f }
 	, m_ThrowGrenadeDist { 300.f }
 	, m_MaxTimeRunAway { 3.f }
-	, m_MaxTimeDeath { 2.f }
 	, m_MaxTimeWait { 1.f }
 	, m_Seconds { -1.f }
-	, m_SecondsDeath { 0.f }
-	, m_SecondsWaiting { 0.f }
 	, m_IsReset { false }
 	, m_pGrenade { }
 {
@@ -46,7 +42,7 @@ void Soldier::Draw() const
 	switch (m_ActionState)
 	{
 		case Enemy::ActionState::state2:
-			if (!m_FacingRight)
+			if (!m_IsFacingRight)
 			{
 				// Flip to the left
 				glPushMatrix();
@@ -65,7 +61,7 @@ void Soldier::Draw() const
 		case Enemy::ActionState::state1:
 		case Enemy::ActionState::state4:
 		case Enemy::ActionState::state5:
-			if (m_FacingRight)
+			if (m_IsFacingRight)
 			{
 				// Flip to the left
 				glPushMatrix();
@@ -149,15 +145,6 @@ void Soldier::Update(float elapsedSec, Avatar* avatar, const Level* level)
 		
 }
 
-// Check if soldier changed action in order to reset sprite correctly
-void Soldier::CheckPreviousAction()
-{
-	if (m_ActionState != m_PreviousAction)
-	{
-		m_PreviousAction = m_ActionState;
-		m_BotSpriteChanged = true;
-	}
-}
 
 
 void Soldier::UpdateFrames(float elapsedSec)
@@ -189,7 +176,7 @@ void Soldier::DoWalkingState(float elapsedSec, const Rectf& avatarShape)
 	CheckFacingRight(avatarShape);
 
 	// Move in the direction of the avatar
-	if (m_FacingRight)
+	if (m_IsFacingRight)
 	{
 		m_Velocity.x = m_Speed.x;
 	}
@@ -213,7 +200,6 @@ void Soldier::DoAttackState(float elapsedSec, const Rectf& avatarShape)
 	if (m_pGrenade == nullptr)
 	{
 		m_pGrenade = new Grenade();
-
 	}
 
 	if (!m_pGrenade->GetIsActive())
@@ -277,7 +263,7 @@ void Soldier::DoRunAwayState(float elapsedSec, const Rectf& avatarShape)
 	
 	CheckFacingRight(avatarShape);
 
-	if (m_FacingRight)
+	if (m_IsFacingRight)
 	{
 		m_Velocity.x = - m_RunSpeed;
 	}
@@ -343,20 +329,7 @@ void Soldier::Move(float elapsedSec)
 	m_pBottomSprite->SetBottomDstRect(m_pBottomSprite->GetDstRect().bottom + m_Velocity.y * elapsedSec);
 }
 
-// Check into which direction is the soldier loocking
-void Soldier::CheckFacingRight(const Rectf& avatarShape)
-{
-	if (avatarShape.left + avatarShape.width >
-		m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width)
-	{
-		m_FacingRight = true;
-	}
-	else
-	{
-		m_FacingRight = false;
-	}
 
-}
 
 // Check distance between soldier and avatar and change action according to this
 void Soldier::CheckDistanceAvatar(const Rectf& avatarShape)
@@ -403,25 +376,7 @@ void Soldier::Hit()
 }
 
 
-void Soldier::KillSoldier(float elapsedSec)
-{
-	m_pBottomSprite->Update(elapsedSec, false);
 
-	if (m_pBottomSprite->GetAnimationFinish())
-	{
-		m_SecondsDeath += elapsedSec;
-		
-		if (m_SecondsDeath >= m_MaxTimeDeath)
-		{
-			m_IsDead = true;
-			m_pBottomSprite->ResetSprite();
-			m_IsActive = false;
-			m_SecondsDeath = 0.f;
-		}
-	}
-
-
-}
 
 
 void Soldier::CheckGameState()
@@ -443,5 +398,5 @@ void Soldier::Initialize()
 
 bool Soldier::GetFacingRight() const
 {
-	return m_FacingRight;
+	return m_IsFacingRight;
 }

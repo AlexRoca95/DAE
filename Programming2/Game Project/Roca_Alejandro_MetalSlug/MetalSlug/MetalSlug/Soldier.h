@@ -30,7 +30,6 @@ private:
 	const float m_RunSpeed;
 	const float m_RunAwayDist;
 	const float m_ThrowGrenadeDist;
-	bool m_FacingRight;						// Is soldier loocking to the right or not
 	bool m_IsReset;							// Animation has been reset already
 
 	// TIMERS
@@ -38,13 +37,8 @@ private:
 	const float m_MaxTimeRunAway;
 	float m_Seconds;
 
-	// Time soldier body remains in ground
-	const float m_MaxTimeDeath;
-	float m_SecondsDeath;
-
-	// Time soldier waits until throws another grenade
+	// Max Time soldier waits until attack again 
 	const float m_MaxTimeWait;
-	float m_SecondsWaiting;
 
 	Grenade* m_pGrenade;
 
@@ -63,11 +57,8 @@ private:
 
 	void UpdateFrames(float elapsedSec);
 
-	void CheckPreviousAction();
-	void CheckFacingRight(const Rectf& avatarShape);
 	void CheckDistanceAvatar(const Rectf& avatarShape);
-
-	void KillSoldier(float elapsedSec);
+	
 
 };
 

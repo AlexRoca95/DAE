@@ -46,6 +46,7 @@ void Shield::Update(float elapsedSec, const Level* level)
 		m_Impact = false;  // Only once
 	}
 	m_Velocity.x += m_ImpactSpeed.x;
+
 	level->HandleCollision(m_pBottomSprite->GetDstRect(), m_Velocity);
 	Falling(elapsedSec, level);
 

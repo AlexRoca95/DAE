@@ -57,11 +57,8 @@ void  Game::AddGameObjects()
 	m_pGameObjectManager->AddGameObject(Point2f{ 980.f * g_Scale, 280.f }, GameObject::Type::soldier, true);
 	m_pGameObjectManager->AddGameObject(Point2f{ 1400 * g_Scale, 160.f }, GameObject::Type::soldier, true);
 	m_pGameObjectManager->AddGameObject(Point2f{ 1450 * g_Scale, 280.f }, GameObject::Type::soldier, true);
-	m_pGameObjectManager->AddGameObject(Point2f{ 1480 * g_Scale, 160.f }, GameObject::Type::soldier, false);
-	m_pGameObjectManager->AddGameObject(Point2f{ 1700 * g_Scale, 160.f }, GameObject::Type::soldier, false);
 	m_pGameObjectManager->AddGameObject(Point2f{ 2110 * g_Scale, 300.f }, GameObject::Type::soldier, true);
 	m_pGameObjectManager->AddGameObject(Point2f{ 2150 * g_Scale, 160.f }, GameObject::Type::soldier, true);
-	m_pGameObjectManager->AddGameObject(Point2f{ 2500 * g_Scale, 160.f }, GameObject::Type::soldier, false);
 	m_pGameObjectManager->AddGameObject(Point2f{ 2600 * g_Scale, 160.f }, GameObject::Type::soldier, true);
 	m_pGameObjectManager->AddGameObject(Point2f{ 2620 * g_Scale, 160.f }, GameObject::Type::soldier, true);
 	m_pGameObjectManager->AddGameObject(Point2f{ 3550 * g_Scale, 300.f }, GameObject::Type::soldier, true);
@@ -70,7 +67,9 @@ void  Game::AddGameObjects()
 
 
 	// Shield soldiers
-	m_pGameObjectManager->AddGameObject(Point2f{ 400.f * g_Scale, 160.f }, GameObject::Type::soldierShield, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 1480 * g_Scale, 160.f }, GameObject::Type::soldierShield, false);
+	m_pGameObjectManager->AddGameObject(Point2f{ 1700 * g_Scale, 160.f }, GameObject::Type::soldierShield, false);
+	m_pGameObjectManager->AddGameObject(Point2f{ 2500 * g_Scale, 160.f }, GameObject::Type::soldierShield, false);
 
 	// Prisoners
 	m_pGameObjectManager->AddGameObject(Point2f{ 450.f * g_Scale, 156.f }, GameObject::Type::prisoner, true);

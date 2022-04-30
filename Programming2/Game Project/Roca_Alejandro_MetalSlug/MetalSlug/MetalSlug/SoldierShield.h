@@ -2,6 +2,7 @@
 #include "Enemy.h"
 
 class Shield;
+class Avatar;
 class SoldierShield final : public Enemy
 {
 public:
@@ -24,38 +25,42 @@ public:
 private:
 
 	void Initialize();
-	void InitShield();
-	void KillSoldier(float elapsedSec);
-	void CheckPreviousAction();
 	
+	
+	// Action States (AI) for soldier with shield
 	void DoRunningState( float elapsedSec, const Rectf& avatarShape);
-	void DoAttackState( float elapsedSec, const Rectf& avatarShape);
-	void CheckFacingRight(const Rectf& avatarShape);
+	void DoAttackState( float elapsedSec, Avatar* avatar);
+	void DoWaitState(float elapsedSec, Avatar* avatar);
+
+	void StartAttackAnimation();
+	void FinishAttackAnimation(Avatar* avatar);
+	void SoldierDeathAnimation();
+	void StartFlyingShieldAnimation();
+
 	void CheckDistanceAvatar(const Rectf& avatarShape);
+	void CheckAvatarHit(Avatar* avatar);
 
 	void Move(float elapsedSec);
 	void UpdateFrames(float elapsedSec);
 
-	bool m_IsShieldOn;			// Soldier has the shield or not
-	bool m_IsFacingRight;		   // Is soldier loocking to the right or not
-	bool m_IsAttackStarted;
-	bool m_IsAttackFinished;
 
-	Shield* m_pShield;			// Flying shield
+	// Booleans
+	bool m_IsShieldOn;				// To know if the soldier is carrying the shield or not
+	bool m_IsAttackStarted;			
+	bool m_IsAttacking;
 
-	const float m_RunSpeed;
+	Shield* m_pShield;				// Flying shield
 
-	// Time soldier body remains in ground
-	const float m_MaxTimeDeath;
-	float m_SecondsDeath;
-
-	// Time soldier waits until attack again
-	const float m_MaxTimeWait;
-	float m_SecondsWaiting;
+	const float m_RunSpeed;		
 
 	const float m_AttackDist;
 
+	// Time soldier waits until attack again  
+	const float m_MaxTimeWait;
 
+	// Health of the shield and the soldier
+	int m_ShieldHealth;
+	int m_SoldierHealth;
 
 
 };
