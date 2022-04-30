@@ -1,0 +1,5 @@
+
+
+- Movement of the character changed: Before the movement of the player was calculated with the 
+Delta Time Seconds which sometimes made the movement different according with the speed of the computer.
+Now is working with the character movement given in the framework.
