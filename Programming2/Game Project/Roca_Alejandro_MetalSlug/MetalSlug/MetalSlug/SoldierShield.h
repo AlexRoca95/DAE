@@ -24,7 +24,7 @@ public:
 
 private:
 
-	void Initialize();
+	virtual void Initialize() override;
 	
 	
 	// Action States (AI) for soldier with shield

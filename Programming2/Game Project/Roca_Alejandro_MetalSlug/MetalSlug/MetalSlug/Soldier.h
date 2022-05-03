@@ -42,7 +42,7 @@ private:
 
 	Grenade* m_pGrenade;
 
-	void Initialize();
+	virtual void Initialize() override;
 	void Move(float elapsedSec);
 
 	void ActivateGrenade();

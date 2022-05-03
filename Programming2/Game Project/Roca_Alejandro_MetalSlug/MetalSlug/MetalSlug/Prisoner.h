@@ -34,7 +34,7 @@ private:
 	bool m_DropItem;
 	bool m_IsItemDropped;
 
-	void Initialize();
+	virtual void Initialize() override;
 
 	void ReleasePrisoner(float elapsedSec);
 	void GiveObject(float elapsedSec);

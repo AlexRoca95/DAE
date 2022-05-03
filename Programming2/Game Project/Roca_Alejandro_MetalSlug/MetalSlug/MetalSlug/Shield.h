@@ -22,7 +22,7 @@ public:
 
 private:
 
-	void Initialize();
+	virtual void Initialize() override;
 
 	const Point2f m_ImpactSpeed;				// Speed at which the shield will fly when it is destroyed
 	bool m_Impact;							// Shield destroyed

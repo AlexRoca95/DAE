@@ -36,7 +36,7 @@ private:
 	ItemType m_ItemType;
 
 
-	void Initialize();
+	virtual void Initialize() override;
 	void SelectTypeItem();
 
 };

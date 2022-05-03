@@ -27,7 +27,7 @@ private:
 	float m_Angle;				// Rotation angle for the grenade 
 	bool m_IsMovingRight;
 
-	void Initialize();
+	virtual void Initialize() override;
 	void CheckHitLevel(const std::vector<Point2f>& vertices);
 	void CheckHitAvatar(Avatar* avatar);
 

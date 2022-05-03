@@ -69,7 +69,8 @@ public:
 
 
 protected:
-
+	// Init data of the game object
+	virtual void Initialize() = 0;
 
 	// Gravity
 	void Falling(float elapsedSec, const Level* level);

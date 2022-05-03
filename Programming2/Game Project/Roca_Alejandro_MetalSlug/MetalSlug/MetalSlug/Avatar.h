@@ -123,7 +123,8 @@ private:
 
 	// PRIVATE functions
 
-	void Initialize();
+	virtual void Initialize() override;
+
 	void Respawn(float elapsedSec);
 	void AvoidDamage(float elapsedSec);
 	void DoBlink(float elapsedSec);

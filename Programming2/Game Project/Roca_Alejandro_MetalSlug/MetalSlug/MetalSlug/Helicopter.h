@@ -39,7 +39,9 @@ private:
 
 
 	// PRIVATE methods
-	void Initialize();
+	
+	virtual void Initialize() override;
+
 	void DestroyHelicopter(float elapsedSec);
 	void ThrowBombs(float elapsedSec, const Rectf& actorShape);
 	void Move(float elapsedSec, const Avatar* avatar);

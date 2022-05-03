@@ -16,6 +16,7 @@ public:
 	Bomb& operator=( Bomb&& bomb ) = delete;
 
 	virtual void CheckGameState() override;
+	
 
 	void Update(float elapsedSec, const Rectf& actorShape);
 
@@ -26,7 +27,7 @@ private:
 
 	const float m_FallingAcc;
 
-	void Initialize();
+	virtual void Initialize() override;
 	void SetStartPos(const Rectf& helicopter);
 	virtual void Move(float elapsedSec) override;
 

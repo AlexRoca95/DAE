@@ -7,6 +7,7 @@
 #include "Avatar.h"
 #include "Item.h"
 #include "utils.h"
+#include "Boss.h"
 
 
 
@@ -69,6 +70,7 @@ void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* le
 					case GameObject::Type::soldier:
 					case GameObject::Type::soldierShield:
 					case GameObject::Type::prisoner:
+					case GameObject::Type::boss:
 					{
 						Enemy* pEnemy{ dynamic_cast<Enemy*>(pGameObject) };
 						if (pEnemy != nullptr)
@@ -194,6 +196,12 @@ void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject:
 
 		break;
 
+	case GameObject::Type::boss:
+
+		gameObject = new Boss(startPos, comingFromRight);
+
+		break;
+
 	case GameObject::Type::prisoner:
 
 		gameObject = new Prisoner(startPos);
@@ -205,6 +213,8 @@ void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject:
 		m_TotalNrItems++;
 
 		break;
+
+	
 	}
 
 	

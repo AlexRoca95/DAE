@@ -22,11 +22,13 @@ private:
 
 	bool m_IsMovingUp;
 
-	void Initialize();
+	virtual void Initialize() override;
+	virtual void Move(float elapsedSec) override;
+
 	void SetStartPos(const Avatar* avatar);
 	void SetHorizPos(const Rectf& avatarShape, const bool movingRight);
 
-	virtual void Move(float elapsedSec) override;
+	
 	
 };
 

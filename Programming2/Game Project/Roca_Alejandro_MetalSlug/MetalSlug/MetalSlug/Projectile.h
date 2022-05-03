@@ -33,6 +33,7 @@ protected:
 	float m_Seconds;			  // Current Seconds
 
 	virtual void Move(float elapsedSec) = 0;
+	virtual void Initialize() = 0;
 
 };
 
