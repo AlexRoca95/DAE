@@ -3,3 +3,6 @@
 - Movement of the character changed: Before the movement of the player was calculated with the 
 Delta Time Seconds which sometimes made the movement different according with the speed of the computer.
 Now is working with the character movement given in the framework.
+
+- Lighting has been changed. Now is a little bit darker and enemies are wearing a flashlight. This also
+represents the area of vision of them.
