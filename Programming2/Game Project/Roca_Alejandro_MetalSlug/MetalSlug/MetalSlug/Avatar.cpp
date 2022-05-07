@@ -6,7 +6,7 @@
 
 
 Avatar::Avatar()
-	: GameObject(GameObject::Type::avatar, Point2f{ 100.f * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
+	: GameObject(GameObject::Type::avatar, Point2f{ 200 * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
 		, false , Point2f{ 0.f, g_Gravity + g_Gravity/2 })  // Type, startPos, speed and acceleration
 	, m_SlowSpeed{ 90.f }
 	, m_JumpSpeed{ 650.f }
@@ -185,7 +185,7 @@ void Avatar::Update( float elapsedSeconds, const Level* level, const Rectf& came
 	
 	if (!m_IsDead)
 	{
-		CheckGameState();
+		//CheckGameState();
 	}
 
 	m_pBulletManager->Update(elapsedSeconds, this);

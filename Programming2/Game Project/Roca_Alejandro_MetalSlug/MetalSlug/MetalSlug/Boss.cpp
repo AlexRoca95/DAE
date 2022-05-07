@@ -35,25 +35,25 @@ void Boss::Initialize()
 	m_pTopSprite->SetBottomDstRect(m_StartPosition.y);
 	m_pTopSprite->UpdateLeftSrcRect();
 	*/
-	m_pTopSprite = new Sprite("Resources/sprites/enemies/Boss/Cloth.png");
+	//m_pTopSprite = new Sprite("Resources/sprites/enemies/Boss/Cloth.png");
 	//m_pTopSprite->UpdateValues(1, 1, 1, 10.f, 120.f, 93.f, 108.f);  // Cloth iddle
-	m_pTopSprite->UpdateValues(15, 1, 15, 7.f, 120.f, 103.f, 230.f);  // Cloth flying away
-	m_pTopSprite->SetLeftDstRect(m_StartPosition.x);
-	m_pTopSprite->SetBottomDstRect(m_StartPosition.y);
-	m_pTopSprite->UpdateLeftSrcRect();
+	//m_pTopSprite->UpdateValues(15, 1, 15, 7.f, 120.f, 103.f, 230.f);  // Cloth flying away
+	//m_pTopSprite->SetLeftDstRect(m_StartPosition.x);
+	//m_pTopSprite->SetBottomDstRect(m_StartPosition.y);
+	//m_pTopSprite->UpdateLeftSrcRect();
 
 }
 
 Boss::~Boss()
 {
 	delete m_pBottomSprite;
-	delete m_pTopSprite;
+	//delete m_pTopSprite;
 }
 
 
  void Boss::Draw() const
 {
-	 m_pTopSprite->Draw();
+	 m_pBottomSprite->Draw();
 }
 
 
@@ -70,7 +70,13 @@ void Boss::CheckGameState()
 
 void Boss::Update(float elapsedSec, Avatar* avatar, const Level* level)
 {
-	m_pTopSprite->Update(elapsedSec, true);
+	m_pBottomSprite->Update(elapsedSec, true);
 
-	std::cout << m_pBottomSprite->GetActFrame() << std::endl;
+	//std::cout << m_pBottomSprite->GetActFrame() << std::endl;
+}
+
+
+Point2f Boss::GetStartPos() const
+{
+	return m_StartPosition;
 }

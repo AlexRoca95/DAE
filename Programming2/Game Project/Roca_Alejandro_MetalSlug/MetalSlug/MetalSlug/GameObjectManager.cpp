@@ -43,14 +43,27 @@ void GameObjectManager::Draw() const
 	{
 		for (GameObject* pGameObject : m_pGameObjects)
 		{
-			if (pGameObject->GetIsActive())
+			if (pGameObject->GetIsActive() && pGameObject->GetType() != GameObject::Type::boss)
 			{
 				pGameObject->Draw();
 			}
 		}
 	}
+}
 
-
+void GameObjectManager::DrawBoss() const
+{
+	if (!m_pGameObjects.empty())
+	{
+		for (GameObject* pGameObject : m_pGameObjects)
+		{
+			if (pGameObject->GetType() == GameObject::Type::boss && pGameObject->GetIsActive())
+			{
+				pGameObject->Draw();
+			}
+		}
+	}
+	
 }
 
 void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* level, const Rectf& cameraPos)

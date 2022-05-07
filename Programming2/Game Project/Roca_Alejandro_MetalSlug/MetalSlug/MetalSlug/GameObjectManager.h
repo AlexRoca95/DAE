@@ -17,6 +17,7 @@ public:
 
 
 	void Draw() const;
+	void DrawBoss() const;
 	void Update(float elapsedSec, Avatar* avatar, const Level* level, const Rectf& cameraPos);
 
 	void AddGameObject(const Point2f& startPos, const GameObject::Type& type, bool comingFromRight);

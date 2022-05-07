@@ -5,6 +5,8 @@
 #include "BulletManager.h"
 #include "GameObjectManager.h"
 #include "Soldier.h"
+#include "Boss.h"
+#include "HUD.h"
 #include <iostream>
 
 
@@ -30,6 +32,7 @@ void Game::Initialize( )
 
 	InitAvatar();
 	InitCamera();
+	InitHUD();
 	AddGameObjects();
 
 }
@@ -46,8 +49,15 @@ void Game::InitCamera()
 
 }
 
+void Game::InitHUD()
+{
+	m_pHUD = new HUD( Point2f{ m_pCamera->GetCameraPos().left, m_pCamera->GetCameraPos().bottom } );
+}
+
+
 void  Game::AddGameObjects()
 {
+	
 	// Helicoperts
 	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage2Pos * g_Scale, 700.f }, GameObject::Type::helicopter, false);
 	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage3Pos * g_Scale, 700.f }, GameObject::Type::helicopter, false);
@@ -77,9 +87,9 @@ void  Game::AddGameObjects()
 	m_pGameObjectManager->AddGameObject(Point2f{ 1125.f * g_Scale, 170.f }, GameObject::Type::prisoner, true);
 	m_pGameObjectManager->AddGameObject(Point2f{ 2450.f * g_Scale, 390.f }, GameObject::Type::prisoner, true);
 	m_pGameObjectManager->AddGameObject(Point2f{ 3970.f * g_Scale, 690.f }, GameObject::Type::prisoner, true);
-
+	
 	// Boss 
-	m_pGameObjectManager->AddGameObject(Point2f{ 300.f * g_Scale, 206.f }, GameObject::Type::boss, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 4022.f * g_Scale, 390.f }, GameObject::Type::boss, true);
 }
 
 
@@ -91,12 +101,15 @@ void Game::Cleanup( )
 	delete m_pLevel;
 	delete m_pCamera;
 	delete m_pGameObjectManager;
+	delete m_pHUD;
 
 }
 
 void Game::Update( float elapsedSec )
 {
-	
+	Point2f cameraPos{ m_pCamera->GetCameraPos().left, m_pCamera->GetCameraPos().bottom };
+	m_pHUD->Update(elapsedSec, cameraPos);
+
 	m_pAvatar->Update(elapsedSec, m_pLevel, m_pCamera->GetCameraPos());
 
 	m_pGameObjectManager->Update(elapsedSec, m_pAvatar, m_pLevel, m_pCamera->GetCameraPos());
@@ -106,6 +119,8 @@ void Game::Update( float elapsedSec )
 	m_pLevel->Update(elapsedSec, m_pAvatar->GetBotShape());
 
 	m_pCamera->SetLevelBoundaries(m_pLevel->GetBoundaries());
+
+	
 
 }
 
@@ -125,6 +140,10 @@ void Game::Draw( ) const
 		m_pAvatar->Draw();
 		
 		m_pLevel->DrawForeground();
+
+		m_pGameObjectManager->DrawBoss();
+
+		m_pHUD->Draw();
 
 	glPopMatrix();
 

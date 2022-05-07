@@ -9,6 +9,8 @@ class Avatar;
 class Enemy;
 class Soldier;
 class GameObjectManager;
+class Boss;
+class HUD;
 class Game final
 {
 public:
@@ -44,6 +46,7 @@ private:
 	GameState m_GameState;
 
 	Level* m_pLevel;
+	HUD* m_pHUD;
 	Avatar* m_pAvatar;
 	Camera* m_pCamera;
 
@@ -55,6 +58,7 @@ private:
 	void Initialize( );
 	void InitAvatar();
 	void InitCamera();
+	void InitHUD();
 	void AddGameObjects();
 	void DisplayControlsInfo();				// Display info about the controls of the game
 

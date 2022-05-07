@@ -19,6 +19,7 @@ public:
 
 	virtual void Update(float elapsedSec, Avatar* avatar, const Level* level) override;
 
+	Point2f GetStartPos() const;
 
 private:
 
