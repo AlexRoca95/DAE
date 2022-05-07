@@ -1,0 +1,19 @@
+- Main mechanics:
+
+	- Throw objects to enemies.
+	- Show info of items before picking up
+	- Noise mechanics
+	- Change Energy bar mechanic with the energy drink
+	- Accumulate points with the items when dropping them
+	- Finish game and show results
+	- Change random generator for items (the more far away the better)
+	- Backpack random position
+	- Map? So player can see what he wants
+	- Exit indications so player knows where to go
+	- Change movement
+	- 
+	
+- Secondary stuff
+	
+	. Make a backpack shape
+	. 
