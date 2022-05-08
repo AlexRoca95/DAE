@@ -20,7 +20,7 @@ void Boss::Initialize()
 	//m_pBottomSprite->UpdateValues(24, 1, 24, 11.f, 66.f, 68.f, 93.f);   // Firing up
 	//m_pBottomSprite->UpdateValues(9, 1, 9, 11.f, 66.f, 68.f, 178.f);   // Going back firing up
 	//m_pBottomSprite->UpdateValues(28, 1, 28, 11.f, 120.f, 64.f, 321.f);   // Firing horiz (Top)
-	//m_pBottomSprite->UpdateValues(11, 1, 11, 10.f, 90.f, 70.f, 408.f);
+	m_pBottomSprite->UpdateValues(11, 1, 11, 10.f, 90.f, 70.f, 408.f);
 	//m_pBottomSprite->UpdateValues(3, 1, 3, 20.f, 80.f, 70.f, 493.f);	// Charging fire
 	
 	m_pBottomSprite->SetLeftDstRect(m_StartPosition.x);

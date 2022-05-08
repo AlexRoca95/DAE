@@ -7,19 +7,20 @@
 #include "Soldier.h"
 #include "Boss.h"
 #include "HUD.h"
+#include "Menu.h"
 #include <iostream>
 
 
 Game::Game( const Window& window ) 
 	:m_Window{ window }
-	, m_pCamera{ new Camera( m_Window.width, m_Window.height ) }
-	, m_pLevel{ new Level }
-	, m_pAvatar{ new Avatar }
-	, m_pGameObjectManager{ new GameObjectManager }
-	, m_NrHelicopters{ 1 }
-	, m_GameState { GameState::start }
+	, m_pCamera{ }
+	, m_pLevel{ }
+	, m_pAvatar{ }
+	, m_pGameObjectManager{ }
+	, m_pMenu { }
+	, m_GameState { GameState::menu }
 {
-	Initialize( );
+	InitMenu();
 }
 
 Game::~Game( )
@@ -29,7 +30,7 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-
+	m_pLevel = new Level;
 	InitAvatar();
 	InitCamera();
 	InitHUD();
@@ -39,12 +40,13 @@ void Game::Initialize( )
 
 void Game::InitAvatar()
 {
+	m_pAvatar = new Avatar;
 	m_pAvatar->SetVerticesLevel(m_pLevel->GetVertices());
 }
 
 void Game::InitCamera()
 {
-
+	m_pCamera = new Camera(m_Window.width, m_Window.height);
 	m_pCamera->SetLevelBoundaries(m_pLevel->GetBoundaries());
 
 }
@@ -54,10 +56,15 @@ void Game::InitHUD()
 	m_pHUD = new HUD( Point2f{ m_pCamera->GetCameraPos().left, m_pCamera->GetCameraPos().bottom } );
 }
 
+void Game::InitMenu()
+{
+	m_pMenu = new Menu( Point2f{m_Window.width, m_Window.height} );
+}
 
 void  Game::AddGameObjects()
 {
-	
+	m_pGameObjectManager = new GameObjectManager;
+
 	// Helicoperts
 	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage2Pos * g_Scale, 700.f }, GameObject::Type::helicopter, false);
 	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage3Pos * g_Scale, 700.f }, GameObject::Type::helicopter, false);
@@ -96,16 +103,52 @@ void  Game::AddGameObjects()
 
 void Game::Cleanup( )
 {
-	
-	delete m_pAvatar;
-	delete m_pLevel;
-	delete m_pCamera;
-	delete m_pGameObjectManager;
-	delete m_pHUD;
-
+	// Delete according in the state the player is
+	switch (m_GameState)
+	{
+		case Game::GameState::menu:
+			delete m_pMenu;
+			break;
+		case Game::GameState::playing:
+			delete m_pAvatar;
+			delete m_pLevel;
+			delete m_pCamera;
+			delete m_pGameObjectManager;
+			delete m_pHUD;
+			break;
+		case Game::GameState::gameOver:
+			delete m_pAvatar;
+			delete m_pLevel;
+			delete m_pCamera;
+			delete m_pGameObjectManager;
+			delete m_pHUD;
+			break;
+	}
 }
 
 void Game::Update( float elapsedSec )
+{
+	switch (m_GameState)
+	{
+	case Game::GameState::menu:
+		m_pMenu->Update(elapsedSec, m_GameState);
+
+		if ( m_pMenu->GetStartPlaying() )
+		{
+			// Start playing --> Init all data needed
+			Initialize();
+			delete m_pMenu;
+		}
+		break;
+	case Game::GameState::playing:
+		UpdatePlaying(elapsedSec);
+		break;
+	case Game::GameState::gameOver:
+		break;
+	}
+}
+
+void Game::UpdatePlaying(float elapsedSec)
 {
 	Point2f cameraPos{ m_pCamera->GetCameraPos().left, m_pCamera->GetCameraPos().bottom };
 	m_pHUD->Update(elapsedSec, cameraPos);
@@ -120,25 +163,38 @@ void Game::Update( float elapsedSec )
 
 	m_pCamera->SetLevelBoundaries(m_pLevel->GetBoundaries());
 
-	
-
 }
-
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
 
+	switch (m_GameState)
+	{
+	case Game::GameState::menu:
+		m_pMenu->Draw();
+		break;
+	case Game::GameState::playing:
+		DrawPlaying();
+		break;
+	case Game::GameState::gameOver:
+		break;
+	}
+}
+
+// Draw the Playing GAME STATE
+void  Game::DrawPlaying() const
+{
 	glPushMatrix();
-	
-		m_pCamera->Transform(m_pAvatar->GetBotShape(), m_pAvatar->GetGameStage() );
-	
+
+		m_pCamera->Transform(m_pAvatar->GetBotShape(), m_pAvatar->GetGameStage());
+
 		m_pLevel->DrawBackground();
-		
+
 		m_pGameObjectManager->Draw();
 
 		m_pAvatar->Draw();
-		
+
 		m_pLevel->DrawForeground();
 
 		m_pGameObjectManager->DrawBoss();
@@ -146,22 +202,39 @@ void Game::Draw( ) const
 		m_pHUD->Draw();
 
 	glPopMatrix();
-
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
-	// X Key --> Shoot
-	if (e.keysym.sym == SDLK_x)
-	{
-		m_pAvatar->Shoot();
-	}
 
-	// I key --> Show controls game info at the console
-	if (e.keysym.sym == SDLK_i)
+	switch (m_GameState)
 	{
-		DisplayControlsInfo();
+	case Game::GameState::menu:
+		// Enter key --> Start Playing
+		if (e.keysym.sym == SDLK_RETURN)
+		{
+			m_pMenu->SetPlaying(true);
+		}
+		break;
+	case Game::GameState::playing:
+
+		// X Key --> Shoot
+		if (e.keysym.sym == SDLK_x)
+		{
+			m_pAvatar->Shoot();
+		}
+
+		// I key --> Show controls game info at the console
+		if (e.keysym.sym == SDLK_i)
+		{
+			DisplayControlsInfo();
+		}
+
+		break;
+	case Game::GameState::gameOver:
+		break;
 	}
+	
 	
 }
 
@@ -234,6 +307,7 @@ void Game::DisplayControlsInfo()
 	std::cout << " - Down Arrow key --> Avatar starts crawling. " << std::endl;
 	std::cout << " - C key --> Jump." << std::endl;
 	std::cout << " - X key --> Shoot." << std::endl;
+	std::cout << " - ENTER key --> Start the Game (Only for the Start Screen Menu)" << std::endl;
 
 }
 

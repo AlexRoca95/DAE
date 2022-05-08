@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
-
-class Texture;
+#include "Texture.h"
 
 class Sprite final
 {

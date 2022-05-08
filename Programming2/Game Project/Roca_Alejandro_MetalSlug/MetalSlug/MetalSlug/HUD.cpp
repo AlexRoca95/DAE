@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "HUD.h"
-#include "Texture.h"
 #include "Sprite.h"
 
 HUD::HUD(const Point2f& bottomLeft)

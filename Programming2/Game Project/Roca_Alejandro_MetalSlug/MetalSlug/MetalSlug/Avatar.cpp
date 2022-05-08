@@ -185,7 +185,7 @@ void Avatar::Update( float elapsedSeconds, const Level* level, const Rectf& came
 	
 	if (!m_IsDead)
 	{
-		//CheckGameState();
+		CheckGameState();
 	}
 
 	m_pBulletManager->Update(elapsedSeconds, this);
