@@ -51,6 +51,7 @@ void GameObjectManager::Draw() const
 	}
 }
 
+// In order to draw the boss in front of the level
 void GameObjectManager::DrawBoss() const
 {
 	if (!m_pGameObjects.empty())
@@ -218,6 +219,7 @@ void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject:
 	case GameObject::Type::prisoner:
 
 		gameObject = new Prisoner(startPos);
+
 		m_TotalNrPrisoners++;
 
 		// Create also an Item next to the position of the prisoner (doesn't draw it yet)
@@ -230,7 +232,6 @@ void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject:
 	
 	}
 
-	
 	m_pGameObjects.push_back(gameObject);
 
 	if (type == GameObject::Type::prisoner)

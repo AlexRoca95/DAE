@@ -82,7 +82,7 @@ protected:
 	bool m_IsActive;								// GameObject activated or not
 	bool m_IsDead;									// GameObject is dead or not (for death animation)
 	bool m_IsDying;
-	bool m_IsComingFromRight;						// GameObject appears from right of the window of not
+	bool m_IsComingFromRight;						// GameObject appears from right of the window or not
 
 	// Sprite related
 	Sprite* m_pTopSprite;

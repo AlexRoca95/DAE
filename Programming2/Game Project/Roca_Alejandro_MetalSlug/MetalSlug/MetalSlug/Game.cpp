@@ -53,7 +53,8 @@ void Game::InitCamera()
 
 void Game::InitHUD()
 {
-	m_pHUD = new HUD( Point2f{ m_pCamera->GetCameraPos().left, m_pCamera->GetCameraPos().bottom } );
+	// Bottom left and size of the window
+	m_pHUD = new HUD(Point2f{ }, Point2f{ m_Window.width, m_Window.height } ); 
 }
 
 void Game::InitMenu()
@@ -150,9 +151,7 @@ void Game::Update( float elapsedSec )
 
 void Game::UpdatePlaying(float elapsedSec)
 {
-	Point2f cameraPos{ m_pCamera->GetCameraPos().left, m_pCamera->GetCameraPos().bottom };
-	m_pHUD->Update(elapsedSec, cameraPos);
-
+	
 	m_pAvatar->Update(elapsedSec, m_pLevel, m_pCamera->GetCameraPos());
 
 	m_pGameObjectManager->Update(elapsedSec, m_pAvatar, m_pLevel, m_pCamera->GetCameraPos());
@@ -199,9 +198,10 @@ void  Game::DrawPlaying() const
 
 		m_pGameObjectManager->DrawBoss();
 
-		m_pHUD->Draw();
-
 	glPopMatrix();
+
+	// HUD will always stay at a fixed position
+	m_pHUD->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

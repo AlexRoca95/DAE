@@ -22,6 +22,18 @@
     <Filter Include="Resource Files\Level">
       <UniqueIdentifier>{8ef71cca-79c9-45e7-a58e-2124ee22f9f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Enemies">
+      <UniqueIdentifier>{12f38446-281c-4dd6-a4c6-3413cc08dc6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Projectiles">
+      <UniqueIdentifier>{f9fcd2a3-72fd-486a-bab2-0cffe6b9e5a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Avatar">
+      <UniqueIdentifier>{da6c5c1a-701a-47e2-b906-1ab65c8e0c32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Interface">
+      <UniqueIdentifier>{0cc92bee-301b-471b-873c-074f648c4fea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -60,12 +72,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Avatar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -75,53 +81,59 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BulletManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Helicopter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bomb.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Soldier.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Grenade.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjectManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Prisoner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SoldierShield.cpp">
+    <ClCompile Include="GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shield.cpp">
+    <ClCompile Include="GameObjectManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Boss.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Shield.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Soldier.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="SoldierShield.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Helicopter.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Avatar.cpp">
+      <Filter>Source Files\Avatar</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files\Avatar</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletManager.cpp">
+      <Filter>Source Files\Avatar</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Source Files\Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files\Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Grenade.cpp">
+      <Filter>Source Files\Projectiles</Filter>
     </ClCompile>
     <ClCompile Include="HUD.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Interface</Filter>
     </ClCompile>
     <ClCompile Include="Menu.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,12 +170,6 @@
     <ClInclude Include="Game.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Avatar.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -173,53 +179,59 @@
     <ClInclude Include="Sprite.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BulletManager.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Helicopter.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bomb.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Soldier.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Grenade.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjectManager.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Prisoner.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="SoldierShield.h">
+    <ClInclude Include="GameObject.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shield.h">
+    <ClInclude Include="GameObjectManager.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Source Files\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Boss.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="SoldierShield.h">
+      <Filter>Source Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Shield.h">
+      <Filter>Source Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Soldier.h">
+      <Filter>Source Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Helicopter.h">
+      <Filter>Source Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Avatar.h">
+      <Filter>Source Files\Avatar</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Source Files\Avatar</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletManager.h">
+      <Filter>Source Files\Avatar</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Source Files\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Source Files\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Grenade.h">
+      <Filter>Source Files\Projectiles</Filter>
     </ClInclude>
     <ClInclude Include="HUD.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Interface</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

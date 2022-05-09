@@ -62,8 +62,6 @@ void Camera::Track(const Rectf target, const GameObject::GameStage& gameStage)
 	if (gameStage == GameObject::GameStage::moving)
 	{
 		// Only move camera when State of the game is moving
-
-		
 		m_CameraPos.x = (target.left + m_AvatarWidth / 2) - (m_Width / 2);
 		m_CameraPos.y = (target.bottom + target.height / 2) - (m_Height / 4.5f);
 
