@@ -17,3 +17,17 @@
 	
 	. Make a backpack shape
 	. 
+
+
+
+
+
+ - Learning Curve / Feedback / Difficulty
+	
+	. Put an item at the beggining of the level to show what does the player has to do.
+	. Add more enemies when the time is less 
+	. Add some info about the keyboard (like grabbing an object) but just the first time.
+	. Hands of the hud blink when there is no space left
+	. Energy drink blinks when energy is almost done or recharging
+	. put arrows in the level to show the way back
+	. Indicators to let the player now that he has to escape when he is caught.
