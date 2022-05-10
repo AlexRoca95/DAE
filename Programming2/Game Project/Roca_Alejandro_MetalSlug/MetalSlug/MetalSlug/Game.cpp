@@ -4,6 +4,7 @@
 #include "Helicopter.h"
 #include "BulletManager.h"
 #include "GameObjectManager.h"
+#include "SoundManager.h"
 #include "Soldier.h"
 #include "Boss.h"
 #include "HUD.h"
@@ -17,6 +18,7 @@ Game::Game( const Window& window )
 	, m_pLevel{ }
 	, m_pAvatar{ }
 	, m_pGameObjectManager{ }
+	, m_pSoundManager{ new SoundManager() }
 	, m_pMenu { }
 	, m_GameState { GameState::menu }
 {
@@ -36,6 +38,9 @@ void Game::Initialize( )
 	InitHUD();
 	AddGameObjects();
 
+	InitLevelSounds();
+
+	
 }
 
 void Game::InitAvatar()
@@ -60,6 +65,20 @@ void Game::InitHUD()
 void Game::InitMenu()
 {
 	m_pMenu = new Menu( Point2f{m_Window.width, m_Window.height} );
+
+	m_MenuSong = m_pSoundManager->GetSound("Resources/Sprites/Sounds/Menu.mp3");
+
+	m_MenuSong->Play(true);
+}
+
+void Game::InitLevelSounds()
+{
+	m_LevelSong = m_pSoundManager->GetSound("Resources/Sprites/Sounds/Soundtrack.mp3");
+	m_PistolFire = m_pSoundManager->GetEffect("Resources/Sprites/Sounds/PistolFire.wav");
+
+	// Stop the menu song and start the level song
+	m_MenuSong->Stop();
+	m_LevelSong->Play(true);
 }
 
 void  Game::AddGameObjects()
@@ -109,6 +128,7 @@ void Game::Cleanup( )
 	{
 		case Game::GameState::menu:
 			delete m_pMenu;
+			delete m_pSoundManager;
 			break;
 		case Game::GameState::playing:
 			delete m_pAvatar;
@@ -116,6 +136,7 @@ void Game::Cleanup( )
 			delete m_pCamera;
 			delete m_pGameObjectManager;
 			delete m_pHUD;
+			delete m_pSoundManager;
 			break;
 		case Game::GameState::gameOver:
 			delete m_pAvatar;
@@ -123,6 +144,7 @@ void Game::Cleanup( )
 			delete m_pCamera;
 			delete m_pGameObjectManager;
 			delete m_pHUD;
+			delete m_pSoundManager;
 			break;
 	}
 }
@@ -222,6 +244,7 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		if (e.keysym.sym == SDLK_x)
 		{
 			m_pAvatar->Shoot();
+			m_PistolFire->Play(0);
 		}
 
 		// I key --> Show controls game info at the console
@@ -233,6 +256,13 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		break;
 	case Game::GameState::gameOver:
 		break;
+	}
+
+
+	if (e.keysym.sym == SDLK_p)
+	{
+		// Mute all sound // effects
+		m_pSoundManager->turnOffSound();
 	}
 	
 	

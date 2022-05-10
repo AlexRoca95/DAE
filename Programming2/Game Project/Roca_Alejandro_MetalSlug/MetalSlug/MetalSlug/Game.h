@@ -1,7 +1,8 @@
 #pragma once
 #include "Level.h"
 #include "Camera.h"
-
+#include "SoundEffect.h"
+#include "SoundStream.h"
 
 
 class GameObject;
@@ -9,6 +10,7 @@ class Avatar;
 class Enemy;
 class Soldier;
 class GameObjectManager;
+class SoundManager;
 class Boss;
 class HUD;
 class Menu;
@@ -56,6 +58,12 @@ private:
 	// GameObjects
 	GameObjectManager* m_pGameObjectManager;
 
+	// Sounds && Effects
+	SoundManager* m_pSoundManager;
+	SoundStream* m_MenuSong;
+	SoundStream* m_LevelSong;
+	SoundEffect* m_PistolFire;			// Shoot pistol effect
+
 	// FUNCTIONS
 
 	// Init Data 
@@ -64,6 +72,7 @@ private:
 	void InitAvatar();
 	void InitCamera();
 	void InitHUD();
+	void InitLevelSounds();
 	void AddGameObjects();
 
 	// PLAYING GAME STATE

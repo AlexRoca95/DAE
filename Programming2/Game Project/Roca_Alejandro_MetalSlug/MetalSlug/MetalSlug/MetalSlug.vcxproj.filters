@@ -34,6 +34,9 @@
     <Filter Include="Source Files\Interface">
       <UniqueIdentifier>{0cc92bee-301b-471b-873c-074f648c4fea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Sound">
+      <UniqueIdentifier>{64300743-39de-4df3-b7a9-ddbe4ed9a65a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -135,6 +138,9 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files\Interface</Filter>
     </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files\Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -232,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="Menu.h">
       <Filter>Source Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Source Files\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
