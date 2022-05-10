@@ -19,15 +19,21 @@
 	. 
 
 
-
+- Bugs 
+  .Drop objects correctly on the truck
 
 
  - Learning Curve / Feedback / Difficulty
 	
-	. Put an item at the beggining of the level to show what does the player has to do.
 	. Add more enemies when the time is less 
-	. Add some info about the keyboard (like grabbing an object) but just the first time.
-	. Hands of the hud blink when there is no space left
-	. Energy drink blinks when energy is almost done or recharging
-	. put arrows in the level to show the way back
 	. Indicators to let the player now that he has to escape when he is caught.
+
+
+
+- Make it more fun
+
+	. Add elements in the map to make it more fun to play. Like some powerUps for the player. Rn the 
+	backpack is okay but I could add more stuff like this so the player feels that searching helps to
+	find useful stuff. Like extra time, more space, faster movement, faster delivery of the stolen stuff
+	like conducts to the beggining of the game etc etc
+	. Add noise to the player stealh part
