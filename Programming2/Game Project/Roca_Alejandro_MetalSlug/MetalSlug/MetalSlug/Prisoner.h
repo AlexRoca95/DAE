@@ -5,7 +5,7 @@ class Prisoner final : public Enemy
 {
 
 public:
-	Prisoner(const Point2f& startPos);
+	Prisoner(const Point2f& startPos, SoundManager* sounds);
 	~Prisoner();
 	Prisoner(const Prisoner& prisioner) = delete;
 	Prisoner(Prisoner&& prisioner) = delete;

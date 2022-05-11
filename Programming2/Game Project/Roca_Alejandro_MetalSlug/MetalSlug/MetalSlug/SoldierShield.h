@@ -7,7 +7,7 @@ class SoldierShield final : public Enemy
 {
 public:
 
-	SoldierShield(const Point2f& startPos, bool comingFromRight);
+	SoldierShield(const Point2f& startPos, bool comingFromRight, SoundManager* sounds);
 	~SoldierShield();
 	SoldierShield(const SoldierShield & soldierShield) = delete;
 	SoldierShield(SoldierShield && soldierShield) = delete;
@@ -63,5 +63,7 @@ private:
 	int m_SoldierHealth;
 
 
+	// Death sound
+	SoundEffect* m_pDeathSound;
 };
 

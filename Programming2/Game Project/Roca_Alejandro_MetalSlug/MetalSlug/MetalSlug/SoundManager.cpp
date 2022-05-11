@@ -65,42 +65,63 @@ SoundEffect* SoundManager::GetEffect(const std::string& filename)
 }
 
 
-// Turn ON/Off the sound depending if it was on already or not
-void SoundManager::turnOffSound()
+void SoundManager::turnOnOffSound()
 {
 	
-	for (std::pair<std::string, SoundStream*> sound : m_Sounds)
+	if (m_IsSoundOn)
 	{
-		if (m_IsSoundOn)
+		// Turn off sound
+
+		for (std::pair<std::string, SoundStream*> sound : m_Sounds)
 		{
 			sound.second->Pause();
 		}
-		else
-		{
-			sound.second->Resume();
-		}
-	}
 
-	for (std::pair<std::string, SoundEffect*> effect : m_Effects)
-	{
-		if (m_IsSoundOn)
+		for (std::pair<std::string, SoundEffect*> effect : m_Effects)
 		{
 			effect.second->StopAll();
 		}
-		else
-		{
-			effect.second->ResumeAll();
-		}
-	}
 
-	if (m_IsSoundOn)
-	{
 		m_IsSoundOn = false;
 	}
 	else
 	{
+		// turn on sound
+		for (std::pair<std::string, SoundStream*> sound : m_Sounds)
+		{
+			sound.second->Resume();
+		}
+
+		for (std::pair<std::string, SoundEffect*> effect : m_Effects)
+		{
+			effect.second->ResumeAll();
+		}
+
 		m_IsSoundOn = true;
 	}
 	
-	
+}
+
+bool SoundManager::GetSoundActivated()
+{
+	return m_IsSoundOn;
+}
+
+// Randomly chooses the death sound for the enemies
+std::string SoundManager::GetDeathSound()
+{
+	int deathEffect = rand() % 2;
+
+	std::string filename{};
+
+	if (deathEffect == 0)
+	{
+		filename = "Resources/Sprites/Sounds/Soldierdies1.wav";
+	}
+	else
+	{
+		filename = "Resources/Sprites/Sounds/Soldierdies2.wav";
+	}
+
+	return filename;
 }

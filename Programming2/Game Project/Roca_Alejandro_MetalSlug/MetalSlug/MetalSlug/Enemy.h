@@ -1,5 +1,6 @@
 // Base Class for all enemies
 #include "GameObject.h"
+#include "SoundManager.h"
 
 #pragma once
 class Avatar;
@@ -20,7 +21,7 @@ public:
 	};
 
 	Enemy(const GameObject::Type& id, const Point2f& startPos, int health, const Point2f& speed, 
-		 bool comingFromRight, const Point2f& acceleration);
+		 bool comingFromRight, const Point2f& acceleration, SoundManager* sounds);
 	virtual ~Enemy() = default;
 	Enemy(const Enemy & enemy) = delete;
 	Enemy(Enemy && enemy) = delete;
@@ -48,6 +49,10 @@ protected:
 
 	// Seconds waiting for attack again
 	float m_SecondsWaiting;
+
+	// Sounds && effects
+
+	SoundManager* m_pSoundmanager;
 
 	virtual void Initialize() = 0;
 	virtual void ChangeSprite(const int cols, const int rows, const int frames, const float frameSec, const float width,

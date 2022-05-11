@@ -4,9 +4,9 @@
 
 
 
-Boss::Boss(const Point2f& startPos, bool comingFromRight)
+Boss::Boss(const Point2f& startPos, bool comingFromRight, SoundManager* sounds)
 	:Enemy(GameObject::Type::boss, startPos, 1, Point2f{ },
-		comingFromRight, Point2f{ 0.f, g_Gravity })
+		comingFromRight, Point2f{ 0.f, g_Gravity }, sounds)
 {
 
 	Initialize();

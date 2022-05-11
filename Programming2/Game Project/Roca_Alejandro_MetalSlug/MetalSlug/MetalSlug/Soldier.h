@@ -7,7 +7,7 @@ class Soldier final : public Enemy
 
 public:
 
-	Soldier(const Point2f& startPos, bool comingFromRight);
+	Soldier(const Point2f& startPos, bool comingFromRight, SoundManager* sounds);
 	~Soldier();
 	Soldier(const Soldier& soldier) = delete;
 	Soldier(Soldier&& soldier) = delete;
@@ -41,6 +41,11 @@ private:
 	const float m_MaxTimeWait;
 
 	Grenade* m_pGrenade;
+
+	// Death sound
+	SoundEffect* m_pDeathSound;
+
+	// PRIVATE FUNCTIONS
 
 	virtual void Initialize() override;
 	void Move(float elapsedSec);

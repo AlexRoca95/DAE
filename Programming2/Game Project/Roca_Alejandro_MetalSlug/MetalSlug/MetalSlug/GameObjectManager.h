@@ -8,7 +8,7 @@ class GameObjectManager final
 
 public:
 
-	GameObjectManager();
+	GameObjectManager(SoundManager* sounds);
 	~GameObjectManager();
 	GameObjectManager(const GameObjectManager& gameObjectManager) = delete;
 	GameObjectManager(GameObjectManager&& GameObjectManager) = delete;
@@ -35,6 +35,7 @@ private:
 	Rectf m_CameraPos;
 	const float m_ActivateGameObjectDist;
 
+	SoundManager* m_pSoundManager;
 
 	void ActivateHelicopter();
 	void RemoveGameObject();

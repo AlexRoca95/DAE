@@ -3,9 +3,9 @@
 #include "Level.h"
 
 
-Prisoner::Prisoner(const Point2f& startPos)
+Prisoner::Prisoner(const Point2f& startPos, SoundManager* sounds)
 	:Enemy(GameObject::Type::prisoner, startPos, 1, Point2f{ }, 
-		true, Point2f{ 0.f, -981.f}) // Type, startPos, health, speed and acceleration
+		true, Point2f{ 0.f, -981.f}, sounds) // Type, startPos, health, speed and acceleration
 	, m_IsReleased { false }
 	, m_MaxTimeWait { 1.5f }
 	, m_SecondsWait { }

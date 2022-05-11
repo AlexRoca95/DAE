@@ -3,13 +3,14 @@
 #include "Shield.h"
 #include "Level.h"
 #include "Avatar.h"
+#include "SoundEffect.h"
 #include <iostream>
 
 
 
-SoldierShield::SoldierShield(const Point2f& startPos, bool comingFromRight)
+SoldierShield::SoldierShield(const Point2f& startPos, bool comingFromRight, SoundManager* sounds)
 	:Enemy(GameObject::Type::soldierShield, startPos, 3, Point2f{ 150.f, 0.f },
-		comingFromRight, Point2f{ 0.f, g_Gravity })   // Type, starting position, health, speed and accelerat
+		comingFromRight, Point2f{ 0.f, g_Gravity }, sounds)   // Type, starting position, health, speed and accelerat
 	, m_IsShieldOn { true }
 	, m_pShield { }
 	, m_MaxTimeWait { 0.8f }
@@ -19,6 +20,7 @@ SoldierShield::SoldierShield(const Point2f& startPos, bool comingFromRight)
 	, m_IsAttacking { false }
 	, m_ShieldHealth { 3 }
 	, m_SoldierHealth { 1 }
+	, m_pDeathSound { sounds->GetEffect(sounds->GetDeathSound()) }
 {
 	Initialize();
 
@@ -336,6 +338,11 @@ void SoldierShield::Hit()
 		}
 		else
 		{
+			if (m_pSoundmanager->GetSoundActivated())
+			{
+				m_pDeathSound->Play(0);
+			}
+
 			SoldierDeathAnimation();
 		}
 	}

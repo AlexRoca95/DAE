@@ -6,8 +6,8 @@
 
 
 
-Grenade::Grenade()
-	:Projectile(GameObject::Type::grenade, Point2f{}, Point2f{ 400.f, 300.f }, Point2f{ 100.f, g_Gravity })
+Grenade::Grenade(SoundManager* m_pSoundManager)
+	:Projectile(GameObject::Type::grenade, Point2f{}, Point2f{ 400.f, 300.f }, Point2f{ 100.f, g_Gravity } )
 	, m_Angle { }
 	, m_IsMovingRight { false }
 {
@@ -142,6 +142,7 @@ void Grenade::CheckHitLevel(const std::vector<Point2f>& vertices)
 		if ( rayEnd.y <= hitInfo.intersectPoint.y )
 		{
 			Hit();
+			//m_pSoundManager->PlayGrenadeExplosionSound();
 		}
 	}
 
@@ -156,6 +157,7 @@ void Grenade::CheckHitAvatar(Avatar* avatar)
 		{
 			Hit();
 			avatar->Hit();  // Kill avatar
+			//m_pSoundManager->PlayGrenadeExplosionSound();
 		}
 	}
 	

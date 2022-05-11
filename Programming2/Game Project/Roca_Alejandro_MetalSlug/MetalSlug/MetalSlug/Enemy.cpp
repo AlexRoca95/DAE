@@ -3,7 +3,7 @@
 
 
 Enemy::Enemy(const GameObject::Type& id, const Point2f& startPos, int health, const Point2f& speed,
-	bool comingFromRight, const Point2f& acceleration)
+	bool comingFromRight, const Point2f& acceleration, SoundManager* sounds)
 	: GameObject(id, startPos, speed, comingFromRight, acceleration)
 	, m_Health { health }
 	, m_ActionState { Enemy::ActionState::state1 }
@@ -12,6 +12,7 @@ Enemy::Enemy(const GameObject::Type& id, const Point2f& startPos, int health, co
 	, m_SecondsDeath { }
 	, m_SecondsWaiting { }
 	, m_IsFacingRight { }
+	, m_pSoundmanager{ sounds }
 {
 
 }

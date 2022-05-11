@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "SoundManager.h"
 
 class Projectile : public GameObject
 {
@@ -31,6 +32,7 @@ protected:
 
 	const float m_MaxSeconds;     // Time the bullet is active if it doesn't collide 
 	float m_Seconds;			  // Current Seconds
+
 
 	virtual void Move(float elapsedSec) = 0;
 	virtual void Initialize() = 0;

@@ -11,12 +11,13 @@
 
 
 
-GameObjectManager::GameObjectManager()
+GameObjectManager::GameObjectManager(SoundManager* sounds)
 	:m_pGameObjects{ }
 	, m_TotalNrHelicopters{ }
 	, m_TotalNrPrisoners{ }
 	, m_TotalNrItems{ }
 	, m_ActivateGameObjectDist { 40.f }
+	, m_pSoundManager { sounds }
 {
 
 }
@@ -69,7 +70,6 @@ void GameObjectManager::DrawBoss() const
 
 void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* level, const Rectf& cameraPos)
 {
-	
 	if (!m_pGameObjects.empty())
 	{
 		CheckPosCamera(cameraPos);
@@ -193,32 +193,32 @@ void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject:
 	{
 	case GameObject::Type::helicopter:
 
-		gameObject = new Helicopter(startPos);
+		gameObject = new Helicopter(startPos, m_pSoundManager);
 		m_TotalNrHelicopters++;
 
 		break;
 
 	case GameObject::Type::soldier:
 
-		gameObject = new Soldier(startPos, comingFromRight);
+		gameObject = new Soldier(startPos, comingFromRight, m_pSoundManager);
 
 		break;
 
 	case GameObject::Type::soldierShield:
 
-		gameObject = new SoldierShield(startPos, comingFromRight);
+		gameObject = new SoldierShield(startPos, comingFromRight, m_pSoundManager);
 
 		break;
 
 	case GameObject::Type::boss:
 
-		gameObject = new Boss(startPos, comingFromRight);
+		gameObject = new Boss(startPos, comingFromRight, m_pSoundManager);
 
 		break;
 
 	case GameObject::Type::prisoner:
 
-		gameObject = new Prisoner(startPos);
+		gameObject = new Prisoner(startPos, m_pSoundManager);
 
 		m_TotalNrPrisoners++;
 

@@ -1,16 +1,17 @@
 #include "pch.h"
 #include "Projectile.h"
+#include "SoundEffect.h"
 
 
 
-Projectile::Projectile(const GameObject::Type& type, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration)
+Projectile::Projectile(const GameObject::Type& type, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration )
 	:GameObject(type, startPos, speed, false, acceleration)
 	, m_MaxSeconds { 0.7f }
 	, m_Seconds { }
 	, m_IsHit{ false }
 	, m_IsInitialized { false }
 {
-
+	
 }
 
 
@@ -38,6 +39,7 @@ void Projectile::Hit()
 	// Save position of the collision
 	m_pBottomSprite->SetLeftDstRect(m_Position.x);
 	m_pBottomSprite->SetBottomDstRect(m_Position.y);
+	
 }
 
 

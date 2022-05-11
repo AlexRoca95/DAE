@@ -3,13 +3,14 @@
 #include "Level.h"
 #include "Avatar.h"
 #include "Grenade.h"
+#include "SoundEffect.h"
 #include <iostream>
 
 
 
-Soldier::Soldier(const Point2f& startPos, bool comingFromRight)
+Soldier::Soldier(const Point2f& startPos, bool comingFromRight, SoundManager* sounds)
 	:Enemy(GameObject::Type::soldier, startPos, 1, Point2f{ 150.f, 0.f }, 
-		comingFromRight, Point2f{0.f, g_Gravity})   // Type, starting position, health, speed and accelerat
+		comingFromRight, Point2f{0.f, g_Gravity}, sounds)   // Type, starting position, health, speed and accelerat
 	, m_RunSpeed { 200.f }
 	, m_RunAwayDist { 200.f }
 	, m_ThrowGrenadeDist { 300.f }
@@ -18,6 +19,8 @@ Soldier::Soldier(const Point2f& startPos, bool comingFromRight)
 	, m_Seconds { -1.f }
 	, m_IsReset { false }
 	, m_pGrenade { }
+	, m_pDeathSound{ sounds->GetEffect(sounds->GetDeathSound()) } // Choose randomly a death effect for the soldier
+
 {
 	Initialize();
 }
@@ -199,7 +202,7 @@ void Soldier::DoAttackState(float elapsedSec, const Rectf& avatarShape)
 	
 	if (m_pGrenade == nullptr)
 	{
-		m_pGrenade = new Grenade();
+		m_pGrenade = new Grenade(m_pSoundmanager);
 	}
 
 	if (!m_pGrenade->GetIsActive())
@@ -371,6 +374,12 @@ void Soldier::Hit()
 		m_pBottomSprite->UpdateValues(11, 1, 11, 8.f, 60.f, 44.f, 357.f);  // Change death animation
 		m_pBottomSprite->ResetSprite();
 		m_ActionState = ActionState::state4;  // Death state
+
+		if (m_pSoundmanager->GetSoundActivated())
+		{
+			m_pDeathSound->Play(0);
+		}
+		
 	}
 
 }

@@ -55,15 +55,16 @@ private:
 	Avatar* m_pAvatar;
 	Camera* m_pCamera;
 
-	// GameObjects
-	GameObjectManager* m_pGameObjectManager;
-
 	// Sounds && Effects
 	SoundManager* m_pSoundManager;
 	SoundStream* m_MenuSong;
 	SoundStream* m_LevelSong;
 	SoundEffect* m_PistolFire;			// Shoot pistol effect
 
+	// GameObjects
+	GameObjectManager* m_pGameObjectManager;
+
+	
 	// FUNCTIONS
 
 	// Init Data 

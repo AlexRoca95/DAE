@@ -20,7 +20,11 @@ public:
 	SoundStream* GetSound(const std::string& filename);
 	SoundEffect* GetEffect(const std::string& filename);
 
-	void turnOffSound();
+	void turnOnOffSound();
+
+	bool GetSoundActivated();
+	std::string GetDeathSound();
+	
 
 private:
 
@@ -28,5 +32,10 @@ private:
 	std::unordered_map < std::string, SoundEffect* > m_Effects;
 
 	bool m_IsSoundOn;
+
+
+	// Sounds
+
+	
 };
 

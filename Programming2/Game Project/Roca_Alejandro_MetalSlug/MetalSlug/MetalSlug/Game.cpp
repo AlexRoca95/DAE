@@ -78,12 +78,19 @@ void Game::InitLevelSounds()
 
 	// Stop the menu song and start the level song
 	m_MenuSong->Stop();
-	m_LevelSong->Play(true);
+	m_LevelSong->Play(true); 
+	
+	if (!m_pSoundManager->GetSoundActivated())
+	{
+		// If the sound was disabled dont play it yet
+		m_LevelSong->Pause();
+	}
+	
 }
 
 void  Game::AddGameObjects()
 {
-	m_pGameObjectManager = new GameObjectManager;
+	m_pGameObjectManager = new GameObjectManager(m_pSoundManager);
 
 	// Helicoperts
 	m_pGameObjectManager->AddGameObject(Point2f{ g_Stage2Pos * g_Scale, 700.f }, GameObject::Type::helicopter, false);
@@ -244,7 +251,11 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		if (e.keysym.sym == SDLK_x)
 		{
 			m_pAvatar->Shoot();
-			m_PistolFire->Play(0);
+
+			if (m_pSoundManager->GetSoundActivated())
+			{
+				m_PistolFire->Play(0);
+			}
 		}
 
 		// I key --> Show controls game info at the console
@@ -261,8 +272,8 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 
 	if (e.keysym.sym == SDLK_p)
 	{
-		// Mute all sound // effects
-		m_pSoundManager->turnOffSound();
+		// Turn on / off the sound 
+		m_pSoundManager->turnOnOffSound();
 	}
 	
 	

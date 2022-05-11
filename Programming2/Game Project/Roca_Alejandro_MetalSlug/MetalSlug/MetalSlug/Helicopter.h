@@ -10,7 +10,7 @@ public:
 
 	
 
-	Helicopter(const Point2f& startPos);
+	Helicopter(const Point2f& startPos, SoundManager* sounds);
 	~Helicopter();
 	Helicopter(const Helicopter & helicopter) = delete;
 	Helicopter(Helicopter && helicopter) = delete;
@@ -36,6 +36,10 @@ private:
 	const float m_TimeThrowBomb;					// Time needed to throw the next bomb (between single bombs)
 	float m_Seconds;
 	int m_ExplosionCounter;
+
+
+	// Sounds
+	SoundEffect* m_pHelixEffect;
 
 
 	// PRIVATE methods

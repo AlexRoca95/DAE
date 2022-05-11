@@ -8,7 +8,7 @@ class Grenade final : public Projectile
 
 public:
 
-	Grenade();
+	Grenade(SoundManager* m_pSoundManager);
 	Grenade(const Grenade& grenade) = delete;
 	Grenade(Grenade&& grenade) = delete;
 	Grenade& operator=(const Grenade& grenade) = delete;
@@ -27,12 +27,15 @@ private:
 	float m_Angle;				// Rotation angle for the grenade 
 	bool m_IsMovingRight;
 
+	// Sound
+	SoundManager* m_pSoundManager;
+
 	virtual void Initialize() override;
+
 	void CheckHitLevel(const std::vector<Point2f>& vertices);
 	void CheckHitAvatar(Avatar* avatar);
 
 	virtual void Move(float elapsedSec) override;
-
 	
 
 };

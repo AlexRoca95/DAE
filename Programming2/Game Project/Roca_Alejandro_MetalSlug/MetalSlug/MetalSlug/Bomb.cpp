@@ -3,7 +3,7 @@
 
 
 Bomb::Bomb()
-	: Projectile(GameObject::Type::bomb, Point2f{}, Point2f{ 0.f, 20.f }, Point2f{ 0.f, -600.f })
+	: Projectile( GameObject::Type::bomb, Point2f{}, Point2f{ 0.f, 20.f }, Point2f{ 0.f, -600.f } )
 	, m_FallingAcc{ -600.f }
 {
 	Initialize();

@@ -7,9 +7,9 @@
 
 
 
-Helicopter::Helicopter(const Point2f& startPos)
+Helicopter::Helicopter(const Point2f& startPos, SoundManager* sounds)
 	: Enemy( GameObject::Type::helicopter, startPos, 40, Point2f{ 220.f, 230.f }, 
-		false, Point2f{ }) // Type, startPos, health, speed and acceleration
+		false, Point2f{ }, sounds) // Type, startPos, health, speed and acceleration
 	, m_MaxHeight{ 400.f }
 	, m_MaxTimerBombs { 0.5f }
 	, m_TimerBombs {  }
@@ -46,9 +46,9 @@ void Helicopter::Initialize()
 	m_pBottomSprite->UpdateLeftSrcRect();
 
 	// Add 3 bombs 
-	m_pBombs.push_back(new Bomb);
-	m_pBombs.push_back(new Bomb);
-	m_pBombs.push_back(new Bomb);
+	m_pBombs.push_back( new Bomb() );
+	m_pBombs.push_back( new Bomb() );
+	m_pBombs.push_back( new Bomb() );
 
 }
 

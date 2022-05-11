@@ -5,7 +5,7 @@ class Boss final : public Enemy
 {
 public:
 
-	Boss(const Point2f& startPos, bool comingFromRight);
+	Boss(const Point2f& startPos, bool comingFromRight, SoundManager* sounds);
 	~Boss();
 	Boss(const Boss& soldier) = delete;
 	Boss(Boss&& soldier) = delete;

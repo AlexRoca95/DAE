@@ -7,7 +7,7 @@ class Bullet final : public Projectile
 
 public:
 
-	Bullet( const Point2f& startPos);
+	Bullet( const Point2f& startPos );
 	Bullet(const Bullet& bullet) = delete;
 	Bullet(Bullet&& bullet) = delete;
 	Bullet& operator=(const Bullet& bullet) = delete;
