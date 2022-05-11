@@ -29,6 +29,7 @@ private:
 
 	// Sound
 	SoundManager* m_pSoundManager;
+	SoundEffect* m_pExplosionSound;
 
 	virtual void Initialize() override;
 

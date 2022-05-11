@@ -3,6 +3,7 @@
 #include "Soldier.h"
 #include "Avatar.h"
 #include "utils.h"
+#include "SoundEffect.h"
 
 
 
@@ -10,6 +11,7 @@ Grenade::Grenade(SoundManager* m_pSoundManager)
 	:Projectile(GameObject::Type::grenade, Point2f{}, Point2f{ 400.f, 300.f }, Point2f{ 100.f, g_Gravity } )
 	, m_Angle { }
 	, m_IsMovingRight { false }
+	, m_pExplosionSound{ m_pSoundManager->GetEffect("Resources/sprites/sounds/grenade.wav") }
 {
 	Initialize();
 	
@@ -142,7 +144,7 @@ void Grenade::CheckHitLevel(const std::vector<Point2f>& vertices)
 		if ( rayEnd.y <= hitInfo.intersectPoint.y )
 		{
 			Hit();
-			//m_pSoundManager->PlayGrenadeExplosionSound();
+			m_pExplosionSound->Play(0);
 		}
 	}
 
@@ -157,7 +159,7 @@ void Grenade::CheckHitAvatar(Avatar* avatar)
 		{
 			Hit();
 			avatar->Hit();  // Kill avatar
-			//m_pSoundManager->PlayGrenadeExplosionSound();
+			m_pExplosionSound->Play(0);
 		}
 	}
 	
