@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Prisoner.h"
 #include "Level.h"
+#include "SoundEffect.h"
 
 
 Prisoner::Prisoner(const Point2f& startPos, SoundManager* sounds)
@@ -11,6 +12,7 @@ Prisoner::Prisoner(const Point2f& startPos, SoundManager* sounds)
 	, m_SecondsWait { }
 	, m_DropItem { false }
 	, m_IsItemDropped { false }
+	, m_pThankYouSound{ m_pSoundmanager->GetEffect("Resources/Sprites/sounds/thankyou.mp3")}
 
 {
 	Initialize();
@@ -117,7 +119,6 @@ void Prisoner::ReleasePrisoner(float elapsedSec)
 // Thanks the avatar by giving some object
 void Prisoner::GiveObject(float elapsedSec)
 {
-	
 	m_pTopSprite->Update(elapsedSec, false);
 
 	if ( m_pTopSprite->GetAnimationFinish() )
@@ -127,6 +128,7 @@ void Prisoner::GiveObject(float elapsedSec)
 		{
 			m_DropItem = true;		// Item needs to be drop for the player
 			m_IsItemDropped = true;
+
 		}
 			
 
@@ -154,6 +156,9 @@ void Prisoner::Hit()
 		m_IsDying = true;
 		m_pBottomSprite->UpdateValues(14, 1, 14, 8.f, 48.f, 48.f, 136.f);  // Change to release animation
 		m_pBottomSprite->ResetActFrame();
+
+		m_pThankYouSound->Play(0);
+
 	}
 	
 

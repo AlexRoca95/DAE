@@ -8,6 +8,8 @@
 #include "Item.h"
 #include "utils.h"
 #include "Boss.h"
+#include "SoundEffect.h"
+#include <iostream>
 
 
 
@@ -18,6 +20,7 @@ GameObjectManager::GameObjectManager(SoundManager* sounds)
 	, m_TotalNrItems{ }
 	, m_ActivateGameObjectDist { 40.f }
 	, m_pSoundManager { sounds }
+	, m_pHelixEffect { }
 {
 
 }
@@ -248,6 +251,12 @@ void GameObjectManager::RemoveGameObject()
 	{
 		if (m_pGameObjects[i]->GetIsDead())   // Enemy dead
 		{
+			if (m_pGameObjects[i]->GetType() == GameObject::Type::helicopter)
+			{
+				// If helicopter is dead --> Stop his sound effect
+				m_pHelixEffect->StopAll();
+			}
+	
 			DecrementTotalNrGameObject(m_pGameObjects[i]->GetType());  // Reduce counter of gameObject
 			delete m_pGameObjects[i];
 			m_pGameObjects.erase(m_pGameObjects.begin() + i);
@@ -291,6 +300,9 @@ void GameObjectManager::ActivateHelicopter()
 					// Activate the helicopter
 					pGameObject->SetIsActive(true);
 					pGameObject->SetGameStageChanged(false);
+					// Helix sound for the helicopter
+					m_pHelixEffect = m_pSoundManager->GetEffect("Resources/Sprites/Sounds/Helicopter.wav");
+					m_pHelixEffect->Play(100);
 					break;
 				}
 			}

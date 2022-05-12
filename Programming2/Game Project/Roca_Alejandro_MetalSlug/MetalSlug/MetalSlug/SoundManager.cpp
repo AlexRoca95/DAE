@@ -110,17 +110,24 @@ bool SoundManager::GetSoundActivated()
 // Randomly chooses the death sound for the enemies
 std::string SoundManager::GetDeathSound()
 {
-	int deathEffect = rand() % 2;
+	int deathEffect = rand() % 3;
 
 	std::string filename{};
 
-	if (deathEffect == 0)
+
+	switch (deathEffect)
 	{
+	case 0:
 		filename = "Resources/Sprites/Sounds/Soldierdies1.wav";
-	}
-	else
-	{
+		break;
+
+	case 1:
 		filename = "Resources/Sprites/Sounds/Soldierdies2.wav";
+		break;
+
+	case 2:
+		filename = "Resources/Sprites/Sounds/Soldierdies3.mp3";
+		break;
 	}
 
 	return filename;

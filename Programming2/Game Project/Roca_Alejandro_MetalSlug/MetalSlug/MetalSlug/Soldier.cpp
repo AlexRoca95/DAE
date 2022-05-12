@@ -374,7 +374,7 @@ void Soldier::Hit()
 		m_pBottomSprite->UpdateValues(11, 1, 11, 8.f, 60.f, 44.f, 357.f);  // Change death animation
 		m_pBottomSprite->ResetSprite();
 		m_ActionState = ActionState::state4;  // Death state
-
+		
 		if (m_pSoundmanager->GetSoundActivated())
 		{
 			m_pDeathSound->Play(0);

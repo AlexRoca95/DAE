@@ -33,6 +33,7 @@ Game::~Game( )
 void Game::Initialize( )
 {
 	m_pLevel = new Level;
+
 	InitAvatar();
 	InitCamera();
 	InitHUD();
@@ -73,12 +74,17 @@ void Game::InitMenu()
 
 void Game::InitLevelSounds()
 {
+	
 	m_LevelSong = m_pSoundManager->GetSound("Resources/Sprites/Sounds/Soundtrack.mp3");
 	m_PistolFire = m_pSoundManager->GetEffect("Resources/Sprites/Sounds/PistolFire.wav");
-
+	m_pMissionStartSound = m_pSoundManager->GetEffect("Resources/Sprites/Sounds/MissionStart.mp3");
+	 
 	// Stop the menu song and start the level song
 	m_MenuSong->Stop();
 	m_LevelSong->Play(true); 
+
+	m_pMissionStartSound->Play(0);  
+
 	
 	if (!m_pSoundManager->GetSoundActivated())
 	{
@@ -135,7 +141,6 @@ void Game::Cleanup( )
 	{
 		case Game::GameState::menu:
 			delete m_pMenu;
-			delete m_pSoundManager;
 			break;
 		case Game::GameState::playing:
 			delete m_pAvatar;
@@ -143,7 +148,6 @@ void Game::Cleanup( )
 			delete m_pCamera;
 			delete m_pGameObjectManager;
 			delete m_pHUD;
-			delete m_pSoundManager;
 			break;
 		case Game::GameState::gameOver:
 			delete m_pAvatar;
@@ -151,9 +155,10 @@ void Game::Cleanup( )
 			delete m_pCamera;
 			delete m_pGameObjectManager;
 			delete m_pHUD;
-			delete m_pSoundManager;
 			break;
 	}
+
+	delete m_pSoundManager;
 }
 
 void Game::Update( float elapsedSec )

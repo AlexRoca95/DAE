@@ -34,6 +34,11 @@ private:
 	bool m_DropItem;
 	bool m_IsItemDropped;
 
+
+	// Sounds
+
+	SoundEffect* m_pThankYouSound;
+
 	virtual void Initialize() override;
 
 	void ReleasePrisoner(float elapsedSec);

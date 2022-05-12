@@ -60,6 +60,7 @@ private:
 	SoundStream* m_MenuSong;
 	SoundStream* m_LevelSong;
 	SoundEffect* m_PistolFire;			// Shoot pistol effect
+	SoundEffect* m_pMissionStartSound;
 
 	// GameObjects
 	GameObjectManager* m_pGameObjectManager;

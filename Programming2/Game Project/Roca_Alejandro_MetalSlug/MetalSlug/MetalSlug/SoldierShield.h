@@ -63,7 +63,7 @@ private:
 	int m_SoldierHealth;
 
 
-	// Death sound
+	// Sounds
 	SoundEffect* m_pDeathSound;
 };
 

@@ -38,7 +38,7 @@ private:
 	int m_ExplosionCounter;
 
 
-	// Sounds
+	// Sounds && effects
 	SoundEffect* m_pHelixEffect;
 
 

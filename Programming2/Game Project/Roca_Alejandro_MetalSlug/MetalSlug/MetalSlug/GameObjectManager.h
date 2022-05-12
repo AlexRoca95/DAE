@@ -35,7 +35,9 @@ private:
 	Rectf m_CameraPos;
 	const float m_ActivateGameObjectDist;
 
+	// Sounds for the GameObjects
 	SoundManager* m_pSoundManager;
+	SoundEffect* m_pHelixEffect;
 
 	void ActivateHelicopter();
 	void RemoveGameObject();

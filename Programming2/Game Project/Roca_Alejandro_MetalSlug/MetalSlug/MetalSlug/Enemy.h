@@ -51,7 +51,6 @@ protected:
 	float m_SecondsWaiting;
 
 	// Sounds && effects
-
 	SoundManager* m_pSoundmanager;
 
 	virtual void Initialize() = 0;
