@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "Projectile.h"
 #include "SoundEffect.h"
+#include "SoundManager.h"
 
 
 
-Projectile::Projectile(const GameObject::Type& type, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration )
-	:GameObject(type, startPos, speed, false, acceleration)
+Projectile::Projectile(const GameObject::Type& type, const Point2f& startPos, const Point2f& speed, 
+	SoundManager* sounds, const Point2f& acceleration)
+	:GameObject(type, startPos, speed, false, sounds, acceleration)
 	, m_MaxSeconds { 0.7f }
 	, m_Seconds { }
 	, m_IsHit{ false }

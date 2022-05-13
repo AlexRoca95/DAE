@@ -1,13 +1,13 @@
 #pragma once
 #include "GameObject.h"
-#include "SoundManager.h"
 
 class Projectile : public GameObject
 {
 
 public:
 
-	Projectile(const GameObject::Type& type, const Point2f& startPos, const Point2f& speed, const Point2f& acceleration);
+	Projectile(const GameObject::Type& type, const Point2f& startPos, const Point2f& speed, 
+		SoundManager* sounds, const Point2f& acceleration);
 	virtual ~Projectile() = default;
 	Projectile(const Projectile & projectile) = delete;
 	Projectile(Projectile && projectile) = delete;

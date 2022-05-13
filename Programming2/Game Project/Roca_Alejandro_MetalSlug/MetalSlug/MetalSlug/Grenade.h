@@ -3,12 +3,13 @@
 
 class Soldier;
 class Avatar;
+class SoundEffect;
 class Grenade final : public Projectile
 {
 
 public:
 
-	Grenade(SoundManager* m_pSoundManager);
+	Grenade(SoundManager* sounds);
 	Grenade(const Grenade& grenade) = delete;
 	Grenade(Grenade&& grenade) = delete;
 	Grenade& operator=(const Grenade& grenade) = delete;
@@ -28,7 +29,6 @@ private:
 	bool m_IsMovingRight;
 
 	// Sound
-	SoundManager* m_pSoundManager;
 	SoundEffect* m_pExplosionSound;
 
 	virtual void Initialize() override;

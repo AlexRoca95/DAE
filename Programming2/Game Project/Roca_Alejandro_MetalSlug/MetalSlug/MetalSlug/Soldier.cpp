@@ -202,7 +202,7 @@ void Soldier::DoAttackState(float elapsedSec, const Rectf& avatarShape)
 	
 	if (m_pGrenade == nullptr)
 	{
-		m_pGrenade = new Grenade(m_pSoundmanager);
+		m_pGrenade = new Grenade(m_pSoundManager);
 	}
 
 	if (!m_pGrenade->GetIsActive())
@@ -375,10 +375,7 @@ void Soldier::Hit()
 		m_pBottomSprite->ResetSprite();
 		m_ActionState = ActionState::state4;  // Death state
 		
-		if (m_pSoundmanager->GetSoundActivated())
-		{
-			m_pDeathSound->Play(0);
-		}
+		m_pSoundManager->PlaySoundEffect(m_pDeathSound, 0);
 		
 	}
 

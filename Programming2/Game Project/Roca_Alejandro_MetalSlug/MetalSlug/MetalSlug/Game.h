@@ -57,9 +57,9 @@ private:
 
 	// Sounds && Effects
 	SoundManager* m_pSoundManager;
-	SoundStream* m_MenuSong;
-	SoundStream* m_LevelSong;
-	SoundEffect* m_PistolFire;			// Shoot pistol effect
+	SoundStream* m_pMenuSong;
+	SoundStream* m_pLevelSong;
+	SoundEffect* m_pPistolFire;				// Shoot pistol effect
 	SoundEffect* m_pMissionStartSound;
 
 	// GameObjects

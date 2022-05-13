@@ -64,6 +64,15 @@ SoundEffect* SoundManager::GetEffect(const std::string& filename)
 
 }
 
+// Play the sound effect as many times as indicated and only if the sound is on
+void SoundManager::PlaySoundEffect(const SoundEffect* soundEffect, const int times)
+{
+	if (m_IsSoundOn)
+	{
+		soundEffect->Play(times);
+	}
+}
+
 
 void SoundManager::turnOnOffSound()
 {
@@ -118,15 +127,15 @@ std::string SoundManager::GetDeathSound()
 	switch (deathEffect)
 	{
 	case 0:
-		filename = "Resources/Sprites/Sounds/Soldierdies1.wav";
+		filename = "Resources/Sounds/Soldierdies1.wav";
 		break;
 
 	case 1:
-		filename = "Resources/Sprites/Sounds/Soldierdies2.wav";
+		filename = "Resources/Sounds/Soldierdies2.wav";
 		break;
 
 	case 2:
-		filename = "Resources/Sprites/Sounds/Soldierdies3.mp3";
+		filename = "Resources/Sounds/Soldierdies3.mp3";
 		break;
 	}
 

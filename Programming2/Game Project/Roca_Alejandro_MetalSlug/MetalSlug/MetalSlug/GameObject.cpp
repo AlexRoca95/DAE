@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GameObject.h"
 #include "Level.h"
+#include "SoundManager.h"
 
 GameObject::GameStage GameObject::m_GameState = GameStage::moving;
 bool GameObject::m_IsFirstHeliFightStart = false;
@@ -9,7 +10,7 @@ bool GameObject::m_IsBossFightStart = false;
 bool GameObject::m_IsStageChanged = false;
 
 GameObject::GameObject( const GameObject::Type& id, const Point2f& startPos, const Point2f& speed,  bool comingFromRight, 
-	const Point2f& acceleration)
+	SoundManager* sounds, const Point2f& acceleration)
 	: m_Id{ id }
 	, m_StartPosition { startPos }
 	, m_pTopSprite{ }
@@ -23,6 +24,7 @@ GameObject::GameObject( const GameObject::Type& id, const Point2f& startPos, con
 	, m_Acceleration{ acceleration }
 	, m_Speed { speed }
 	, m_IsComingFromRight { comingFromRight }
+	, m_pSoundManager { sounds }
 {
 	
 }

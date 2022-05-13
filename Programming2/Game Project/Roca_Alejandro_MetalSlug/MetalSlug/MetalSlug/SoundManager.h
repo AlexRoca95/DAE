@@ -21,6 +21,7 @@ public:
 	SoundEffect* GetEffect(const std::string& filename);
 
 	void turnOnOffSound();
+	void PlaySoundEffect(const SoundEffect* soundEffect, const int times);
 
 	bool GetSoundActivated();
 	std::string GetDeathSound();

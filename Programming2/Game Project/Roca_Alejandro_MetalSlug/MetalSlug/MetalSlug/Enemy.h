@@ -50,9 +50,6 @@ protected:
 	// Seconds waiting for attack again
 	float m_SecondsWaiting;
 
-	// Sounds && effects
-	SoundManager* m_pSoundmanager;
-
 	virtual void Initialize() = 0;
 	virtual void ChangeSprite(const int cols, const int rows, const int frames, const float frameSec, const float width,
 		const float height, const float spriteSheetTop);

@@ -81,7 +81,6 @@ void Helicopter::Update(float elapsedSec, Avatar* avatar, const Level* level)
 		// Update helicopter
 		m_pBottomSprite->Update(elapsedSec, true);
 
-		//m_pHelixEffect->Play(0);
 		// Check which action do
 		switch (m_ActionState)
 		{

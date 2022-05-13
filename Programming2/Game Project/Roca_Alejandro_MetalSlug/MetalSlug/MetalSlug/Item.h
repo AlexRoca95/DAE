@@ -4,6 +4,8 @@
 
 class Avatar;
 class Level;
+class SoundManager;
+class SoundEffect;
 class Item final : public GameObject
 {
 
@@ -17,7 +19,7 @@ public:
 	};
 
 
-	Item(const Point2f& startPos);
+	Item(const Point2f& startPos, SoundManager* soundManager);
 	~Item();
 	Item(const Item & item) = delete;
 	Item(Item && item) = delete;
@@ -33,8 +35,11 @@ public:
 	void GrabItem(Avatar* avatar);
 
 private:
+
 	ItemType m_ItemType;
 
+	// Sounds
+	SoundEffect* m_pGrabItemSound;
 
 	virtual void Initialize() override;
 	void SelectTypeItem();

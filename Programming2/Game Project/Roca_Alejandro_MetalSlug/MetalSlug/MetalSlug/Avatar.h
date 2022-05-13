@@ -9,6 +9,7 @@ class Texture;
 class Level;
 class BulletManager;
 class Item;
+class SoundEffect;
 class Avatar final : public GameObject
 {
 public:
@@ -52,7 +53,7 @@ public:
 		respawn
 	};
 
-	Avatar();
+	Avatar(SoundManager* sounds);
 	Avatar(const Avatar& avatar) = delete;
 	Avatar(Avatar&& avatar) = delete;
 	Avatar& operator=(const Avatar& avatar) = delete;
@@ -119,6 +120,11 @@ private:
 	float m_SecondsRespawn;
 	float m_SecondsImmortal;
 	int m_CountNrFrames;								//  Every certain number of frames we do a blink in drawing
+
+	// Sounds
+
+	SoundEffect* m_pDeathSound;
+
 	
 
 	// PRIVATE functions

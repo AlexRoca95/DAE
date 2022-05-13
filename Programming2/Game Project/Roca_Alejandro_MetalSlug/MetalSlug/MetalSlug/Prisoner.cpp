@@ -12,7 +12,7 @@ Prisoner::Prisoner(const Point2f& startPos, SoundManager* sounds)
 	, m_SecondsWait { }
 	, m_DropItem { false }
 	, m_IsItemDropped { false }
-	, m_pThankYouSound{ m_pSoundmanager->GetEffect("Resources/Sprites/sounds/thankyou.mp3")}
+	, m_pThankYouSound{ m_pSoundManager->GetEffect("Resources/sounds/thankyou.mp3")}
 
 {
 	Initialize();
@@ -157,8 +157,8 @@ void Prisoner::Hit()
 		m_pBottomSprite->UpdateValues(14, 1, 14, 8.f, 48.f, 48.f, 136.f);  // Change to release animation
 		m_pBottomSprite->ResetActFrame();
 
-		m_pThankYouSound->Play(0);
-
+		m_pSoundManager->PlaySoundEffect(m_pThankYouSound, 0);
+		
 	}
 	
 

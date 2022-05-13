@@ -6,6 +6,7 @@
 
 
 class Level;
+class SoundManager;
 class GameObject
 {
 public:
@@ -38,7 +39,7 @@ public:
 
 
 	GameObject( const GameObject::Type& id, const Point2f& startPos, const Point2f& speed, bool comingFromRight ,
-		const Point2f& acceleration = Point2f{0.f, g_Gravity} );
+		SoundManager* sounds, const Point2f& acceleration = Point2f{0.f, g_Gravity} );
 	virtual ~GameObject() = default;
 	GameObject(const GameObject& gameObject) = delete;
 	GameObject(GameObject&& gameObject) = delete;
@@ -97,13 +98,17 @@ protected:
 	
 	// GameStages
 	static GameStage m_GameState;					// Current stage of the game
+
 	// To know if a stage has started or not
 	static bool m_IsFirstHeliFightStart;
 	static bool m_IsSecondHeliFightStart;
 	static bool m_IsBossFightStart;
 
 	// To know if we have change from moving to another stage
-	static bool m_IsStageChanged;					
+	static bool m_IsStageChanged;			
+
+	// Sounds for the GameObjects
+	SoundManager* m_pSoundManager;
 
 };
 

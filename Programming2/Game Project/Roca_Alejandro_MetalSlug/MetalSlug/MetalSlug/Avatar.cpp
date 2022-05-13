@@ -3,11 +3,13 @@
 #include "Texture.h"
 #include "Level.h"
 #include "BulletManager.h"
+#include "SoundManager.h"
+#include "SoundEffect.h"
 
 
-Avatar::Avatar()
+Avatar::Avatar(SoundManager* sounds)
 	: GameObject(GameObject::Type::avatar, Point2f{ 200 * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
-		, false , Point2f{ 0.f, g_Gravity + g_Gravity/2 })  // Type, startPos, speed and acceleration
+		, false , sounds, Point2f{ 0.f, g_Gravity + g_Gravity/2 })  // Type, startPos, speed, soundManager and acceleration
 	, m_SlowSpeed{ 90.f }
 	, m_JumpSpeed{ 650.f }
 	, m_NormalSpeed { 260.f }
@@ -32,6 +34,7 @@ Avatar::Avatar()
 	, m_SecondsRespawn {  }
 	, m_CameraPos{ }
 	, m_CountNrFrames { }
+	, m_pDeathSound { m_pSoundManager->GetEffect("Resources/sounds/HeroDies.wav") }
 {
 
 	Initialize();
@@ -788,6 +791,8 @@ void Avatar::Hit()
 		m_BotActionState = BotActionState::death;
 		m_ActBotAnimation = Animations::death;
 		m_ActTopAnimation = Animations::death;
+
+		m_pSoundManager->PlaySoundEffect(m_pDeathSound, 0);
 
 	}
 }

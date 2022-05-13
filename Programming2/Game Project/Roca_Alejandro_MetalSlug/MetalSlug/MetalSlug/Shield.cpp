@@ -3,7 +3,7 @@
 #include "Level.h"
 
 Shield::Shield(const Point2f& startPos)
-	:GameObject(GameObject::Type::shield, startPos, Point2f{}, false, Point2f{-40.f, g_Gravity})
+	:GameObject(GameObject::Type::shield, startPos, Point2f{}, false, nullptr, Point2f{-40.f, g_Gravity})
 	, m_ImpactSpeed { 40.f, 450.f }
 	, m_Impact { true }
 {

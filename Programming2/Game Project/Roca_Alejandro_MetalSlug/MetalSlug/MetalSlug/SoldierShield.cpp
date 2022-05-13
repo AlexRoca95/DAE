@@ -339,11 +339,8 @@ void SoldierShield::Hit()
 		else
 		{
 			
-			if (m_pSoundmanager->GetSoundActivated())
-			{
-				m_pDeathSound->Play(0);
-			}
-			
+			m_pSoundManager->PlaySoundEffect(m_pDeathSound, 0);
+
 			SoldierDeathAnimation();
 		}
 	}

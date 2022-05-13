@@ -227,7 +227,7 @@ void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject:
 
 		// Create also an Item next to the position of the prisoner (doesn't draw it yet)
 		Point2f starPosItem = SetStartPosItem(gameObject->GetBotShape());
-		item = new Item(starPosItem);
+		item = new Item(starPosItem, m_pSoundManager);
 		m_TotalNrItems++;
 
 		break;
@@ -244,7 +244,7 @@ void GameObjectManager::AddGameObject(const Point2f& startPos, const GameObject:
 	}
 }
 
-// Erase GameObject from the vector if it is Dead
+// Free memory for those game objects that are dead
 void GameObjectManager::RemoveGameObject()
 {
 	for (int i{ }; i < m_pGameObjects.size(); i++)
@@ -300,9 +300,10 @@ void GameObjectManager::ActivateHelicopter()
 					// Activate the helicopter
 					pGameObject->SetIsActive(true);
 					pGameObject->SetGameStageChanged(false);
+
 					// Helix sound for the helicopter
-					m_pHelixEffect = m_pSoundManager->GetEffect("Resources/Sprites/Sounds/Helicopter.wav");
-					m_pHelixEffect->Play(100);
+					m_pHelixEffect = m_pSoundManager->GetEffect("Resources/Sounds/Helicopter.wav");
+					m_pHelixEffect->Play(100);  // Repeat for a while
 					break;
 				}
 			}

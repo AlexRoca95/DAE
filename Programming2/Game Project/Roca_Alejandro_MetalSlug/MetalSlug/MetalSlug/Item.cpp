@@ -2,10 +2,13 @@
 #include "Item.h"
 #include "Avatar.h"
 #include "Level.h"
+#include "SoundEffect.h"
+#include "SoundManager.h"
 
 
-Item::Item(const Point2f& startPos)
-	:GameObject(GameObject::Type::item, startPos, Point2f{}, false)
+Item::Item(const Point2f& startPos, SoundManager* soundManager)
+	:GameObject(GameObject::Type::item, startPos, Point2f{}, false, soundManager)
+	, m_pGrabItemSound { m_pSoundManager->GetEffect("Resources/sounds/Ammo.mp3") }
 {
 	Initialize();
 }
@@ -100,11 +103,15 @@ void Item::GrabItem(Avatar* avatar)
 		}
 		else
 		{
+			// Grabbing ammo 
 			if (!m_IsDying)
 			{
 				m_IsDying = true;
 				m_pBottomSprite->UpdateValues(2, 1, 2, 6.f, 32.f, 32.f, 112.f);
 				m_pBottomSprite->ResetActFrame();
+
+				m_pSoundManager->PlaySoundEffect(m_pGrabItemSound, 0);
+				
 			}
 			
 		}

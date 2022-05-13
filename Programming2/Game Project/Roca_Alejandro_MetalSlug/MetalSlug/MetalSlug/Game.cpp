@@ -46,7 +46,7 @@ void Game::Initialize( )
 
 void Game::InitAvatar()
 {
-	m_pAvatar = new Avatar;
+	m_pAvatar = new Avatar(m_pSoundManager);
 	m_pAvatar->SetVerticesLevel(m_pLevel->GetVertices());
 }
 
@@ -67,21 +67,21 @@ void Game::InitMenu()
 {
 	m_pMenu = new Menu( Point2f{m_Window.width, m_Window.height} );
 
-	m_MenuSong = m_pSoundManager->GetSound("Resources/Sprites/Sounds/Menu.mp3");
+	m_pMenuSong = m_pSoundManager->GetSound("Resources/Sounds/MenuSoundtrack.mp3");
 
-	m_MenuSong->Play(true);
+	m_pMenuSong->Play(true);
 }
 
 void Game::InitLevelSounds()
 {
 	
-	m_LevelSong = m_pSoundManager->GetSound("Resources/Sprites/Sounds/Soundtrack.mp3");
-	m_PistolFire = m_pSoundManager->GetEffect("Resources/Sprites/Sounds/PistolFire.wav");
-	m_pMissionStartSound = m_pSoundManager->GetEffect("Resources/Sprites/Sounds/MissionStart.mp3");
+	m_pLevelSong = m_pSoundManager->GetSound("Resources/Sounds/Soundtrack.mp3");
+	m_pPistolFire = m_pSoundManager->GetEffect("Resources/Sounds/PistolFire.wav");
+	m_pMissionStartSound = m_pSoundManager->GetEffect("Resources/Sounds/MissionStart.mp3");
 	 
 	// Stop the menu song and start the level song
-	m_MenuSong->Stop();
-	m_LevelSong->Play(true); 
+	m_pMenuSong->Stop();
+	m_pLevelSong->Play(true); 
 
 	m_pMissionStartSound->Play(0);  
 
@@ -89,7 +89,7 @@ void Game::InitLevelSounds()
 	if (!m_pSoundManager->GetSoundActivated())
 	{
 		// If the sound was disabled dont play it yet
-		m_LevelSong->Pause();
+		m_pLevelSong->Pause();
 	}
 	
 }
@@ -256,11 +256,7 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		if (e.keysym.sym == SDLK_x)
 		{
 			m_pAvatar->Shoot();
-
-			if (m_pSoundManager->GetSoundActivated())
-			{
-				m_PistolFire->Play(0);
-			}
+			m_pSoundManager->PlaySoundEffect(m_pPistolFire, 0);
 		}
 
 		// I key --> Show controls game info at the console
