@@ -35,6 +35,8 @@ Avatar::Avatar(SoundManager* sounds)
 	, m_CameraPos{ }
 	, m_CountNrFrames { }
 	, m_pDeathSound { m_pSoundManager->GetEffect("Resources/sounds/HeroDies.wav") }
+	, m_NrLifes { 2 }
+	, m_AreLifesLeft { true }
 {
 
 	Initialize();
@@ -404,11 +406,18 @@ void Avatar::UpdateFrames( float elapsedSeconds )
 		}
 	}
 	*/
-	// Check if death animation has finished
+
+	
+	// Check if death animation has finished in order to respawn
 	if (m_IsDead && m_pBottomSprite->GetAnimationFinish())
 	{
+
 		Respawn(elapsedSeconds);
+
 	}
+	
+	
+	
 }
 
 
@@ -781,8 +790,14 @@ void Avatar::AvatarFalling( float elapsedSec )
 // Avatar has been hit = Death
 void Avatar::Hit()
 {
+	
 	if (!m_IsDead && !m_IsImmortal)
 	{
+		if (m_NrLifes > -1 )
+		{
+			m_NrLifes--;
+		}
+
 		ResetSprite(m_pBottomSprite, false);
 		m_IsDead = true;
 		m_Velocity = Vector2f{ 0.f, 0.f };
@@ -797,29 +812,39 @@ void Avatar::Hit()
 	}
 }
 
-// Respaw the player position according with the camera Pos
+// Respaw the player position according with the camera Pos (if there are lifes left)
 void Avatar::Respawn(float elapsedSec)
 {
 	m_SecondsRespawn += elapsedSec;
 
 	if (m_SecondsRespawn >= m_MaxTimeRespawn)
 	{
-		// Respawn player
-		ResetSprite(m_pBottomSprite, false);
-		m_SecondsRespawn = 0.f;
-		m_IsDead = false;
+		// Check if still lifes left
+		if (m_NrLifes > -1)
+		{
+			// Respawn player
+			ResetSprite(m_pBottomSprite, false);
+			m_SecondsRespawn = 0.f;
+			m_IsDead = false;
 
-		m_TopActionState = TopActionState::iddle;
-		m_BotActionState = BotActionState::iddle;
-		m_ActBotAnimation = Animations::iddle;
-		m_ActTopAnimation = Animations::iddle;
+			m_TopActionState = TopActionState::iddle;
+			m_BotActionState = BotActionState::iddle;
+			m_ActBotAnimation = Animations::iddle;
+			m_ActTopAnimation = Animations::iddle;
 
-		// Spawn at the middle of the window
-		Point2f respawnPos{ m_CameraPos.left + m_CameraPos.width/2, m_pBottomSprite->GetDstRect().bottom };
-		m_pBottomSprite->SetLeftDstRect(respawnPos.x);
-		m_pTopSprite->SetLeftDstRect(respawnPos.x);
+			// Spawn at the middle of the window
+			Point2f respawnPos{ m_CameraPos.left + m_CameraPos.width / 2, m_pBottomSprite->GetDstRect().bottom };
+			m_pBottomSprite->SetLeftDstRect(respawnPos.x);
+			m_pTopSprite->SetLeftDstRect(respawnPos.x);
 
-		m_IsImmortal = true;
+			m_IsImmortal = true;
+		}
+		else
+		{
+			// No more lifes. Game Over
+			m_AreLifesLeft = false;
+		}
+		
 
 	}
 
@@ -949,6 +974,16 @@ BulletManager* Avatar::GetBullets()
 Rectf Avatar::GetHitBox() const
 {
 	return m_pTopSprite->GetHitBox();
+}
+
+int Avatar::GetNrLifes() const
+{
+	return m_NrLifes;
+}
+
+const bool Avatar::GetAvatarAlive() const
+{
+	return m_AreLifesLeft;
 }
 
 void Avatar::SetVerticesLevel(std::vector<Point2f> vertices)

@@ -7,10 +7,11 @@
 
 HUD::HUD(const Point2f& bottomLeft, const Point2f& windowSize, SoundManager* sounds)
 	:m_pWeapons{ new Sprite ("Resources/sprites/HUD/weapons.png") }
-	, m_pLifes{ new Sprite("Resources/sprites/HUD/lifes.png") }
+	, m_pPlayer{ new Sprite("Resources/sprites/HUD/lifes.png") }
 	, m_pLevel{ new Sprite("Resources/sprites/HUD/level.png") }
 	, m_pPrisoners{ new Sprite("Resources/sprites/HUD/prisoner.png") }
 	, m_pGo( new Sprite("Resources/sprites/HUD/GO.png") )
+	, m_pNrLifes ( new Sprite("Resources/sprites/HUD/LifesCount.png") ) 
 	, m_BottomLeft { bottomLeft }
 	, m_WindowSize{ windowSize }
 	, m_TopBorder { 35.f }
@@ -32,23 +33,29 @@ HUD::HUD(const Point2f& bottomLeft, const Point2f& windowSize, SoundManager* sou
 HUD::~HUD()
 {
 	delete m_pWeapons;
-	delete m_pLifes;
+	delete m_pPlayer;
 	delete m_pLevel;
 	delete m_pPrisoners;
 	delete m_pGo;
+	delete m_pNrLifes;
 }
 
 
 void HUD::Initialize()
 {
 	// LIFES
-	m_pLifes->UpdateValues(1, 1, 1, 1.f, m_pLifes->GetTexture()->GetWidth(), m_pLifes->GetTexture()->GetHeight(), m_pLifes->GetTexture()->GetHeight());
-	m_pLifes->SetLeftDstRect(m_BottomLeft.x + m_LeftBorder);
-	m_pLifes->SetBottomDstRect(m_WindowSize.y - (m_pLifes->GetTexture()->GetHeight() * g_Scale) - m_TopBorder);
+	m_pPlayer->UpdateValues(1, 1, 1, 1.f, m_pPlayer->GetTexture()->GetWidth(), m_pPlayer->GetTexture()->GetHeight(), m_pPlayer->GetTexture()->GetHeight());
+	m_pPlayer->SetLeftDstRect(m_BottomLeft.x + m_LeftBorder);
+	m_pPlayer->SetBottomDstRect(m_WindowSize.y - (m_pPlayer->GetTexture()->GetHeight() * g_Scale) - m_TopBorder);
+
+	// Nr of Lifes
+	m_pNrLifes->UpdateValues(2, 1, 2, 1.f, 8.f, m_pNrLifes->GetTexture()->GetHeight(), m_pNrLifes->GetTexture()->GetHeight());
+	m_pNrLifes->SetLeftDstRect( ( m_BottomLeft.x + m_LeftBorder + ( m_pPlayer->GetFrameWidth() * g_Scale) ) - m_pNrLifes->GetFrameWidth() * 1.8f * g_Scale  );
+	m_pNrLifes->SetBottomDstRect( m_WindowSize.y - (m_pPlayer->GetTexture()->GetHeight() * g_Scale) - m_TopBorder + 2.f );
 
 	// Weapons HUD
 	m_pWeapons->UpdateValues(1, 1, 1, 1.f, m_pWeapons->GetTexture()->GetWidth(), m_pWeapons->GetTexture()->GetHeight(), m_pWeapons->GetTexture()->GetHeight());
-	m_pWeapons->SetLeftDstRect( m_pLifes->GetDstRect().left + m_pLifes->GetDstRect().width );
+	m_pWeapons->SetLeftDstRect( m_pPlayer->GetDstRect().left + m_pPlayer->GetDstRect().width );
 	m_pWeapons->SetBottomDstRect(m_WindowSize.y - ( m_pWeapons->GetTexture()->GetHeight()/1.5f * g_Scale ) - m_TopBorder);
 
 
@@ -74,7 +81,7 @@ void HUD::Initialize()
 void HUD::Draw() const
 {
 	m_pWeapons->Draw();
-	m_pLifes->Draw();
+	m_pPlayer->Draw();
 	m_pLevel->Draw();
 
 	if (m_GoAnimation)
@@ -85,6 +92,7 @@ void HUD::Draw() const
 
 	DrawPrisoners();
 	
+	m_pNrLifes->Draw();
 	
 }
 
@@ -96,13 +104,30 @@ void HUD::DrawPrisoners() const
 	}
 }
 
-void HUD::Update(float elapsedSec)
+void HUD::Update(float elapsedSec, const int nrLifes)
 {
 
-	if ( m_GoAnimation )  
+	UpdateGoText(elapsedSec);
+
+	m_pNrLifes->ChangeFrame(nrLifes);
+
+
+}
+
+
+void HUD::ActivateGoTextAnimation()
+{
+	m_GoAnimation = true;
+
+}
+
+// Do the animation for the Go Texture
+void HUD::UpdateGoText(float elapsedSec)
+{
+	if (m_GoAnimation)
 	{
 		m_pGo->Update(elapsedSec, true);
-		
+
 		if (m_TimeGoAnimat <= m_MaxTimeGoAnimat)
 		{
 			m_TimeGoAnimat += elapsedSec;
@@ -113,12 +138,4 @@ void HUD::Update(float elapsedSec)
 			m_GoAnimation = false;
 		}
 	}
-
-}
-
-
-void HUD::ActivateGoTextAnimation()
-{
-	m_GoAnimation = true;
-
 }

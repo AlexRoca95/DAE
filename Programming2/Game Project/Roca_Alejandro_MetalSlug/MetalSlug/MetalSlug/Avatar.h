@@ -73,6 +73,8 @@ public:
 	const Animations GetActiveAnimation() const;
 	BulletManager* GetBullets();
 	Rectf GetHitBox() const;
+	int GetNrLifes() const;
+	const bool GetAvatarAlive() const;
 
 	void SetVerticesLevel(std::vector<Point2f> vertices);
 
@@ -112,7 +114,8 @@ private:
 	
 
 	// Death
-
+	int m_NrLifes;
+	bool m_AreLifesLeft;
 	bool m_IsImmortal;								// To know if the avatar should avoid all damage
 	bool m_IsBlink;									// Drawing of the avatar needs to blink when Immortal
 	const float m_MaxTimeRespawn;

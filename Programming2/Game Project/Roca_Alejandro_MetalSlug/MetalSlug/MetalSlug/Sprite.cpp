@@ -354,6 +354,17 @@ void Sprite::SetActFrame(int frame)
 	m_ActFrame = frame;
 }
 
+void Sprite::ChangeFrame(int frame)
+{
+	if (frame < 0)
+	{
+		// Avoid putting a negative frame
+		frame = 0;
+	}
+	m_ActFrame = frame;
+	m_SrcRect.left = m_Width * frame;
+}
+
 
 // Set the correct left sprite pos of the spritesheet 
 void Sprite::UpdateLeftSrcRect( )

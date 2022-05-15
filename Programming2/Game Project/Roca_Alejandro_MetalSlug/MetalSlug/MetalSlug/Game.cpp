@@ -21,6 +21,11 @@ Game::Game( const Window& window )
 	, m_pSoundManager{ new SoundManager() }
 	, m_pMenu { }
 	, m_GameState { GameState::menu }
+	, m_pGameOverScreen { }
+	, m_pMenuSong { }
+	, m_pMissionStartSound { }
+	, m_pGameOverSong { }
+	, m_pPistolFire { }
 {
 	InitMenu();
 }
@@ -96,6 +101,21 @@ void Game::InitLevelSounds()
 	
 }
 
+void Game::InitGameOverState()
+{
+	// Avatar is dead. Game Over Screen
+	m_GameState = GameState::gameOver;
+
+	// Game Over screen
+	m_pGameOverScreen = new Sprite("Resources/sprites/HUD/GameOver.png");
+	m_pGameOverScreen->UpdateValues(1, 1, 1, 1.f, m_pGameOverScreen->GetTexture()->GetWidth(), m_pGameOverScreen->GetTexture()->GetHeight(), m_pGameOverScreen->GetTexture()->GetHeight());
+	m_pGameOverScreen->SetLeftDstRect(0.f);
+	m_pGameOverScreen->SetBottomDstRect(0.f);
+
+	m_pGameOverSong = m_pSoundManager->GetSound("Resources/Sounds/GameOver.mp3");
+	m_pGameOverSong->Play(false);
+}
+
 void  Game::AddGameObjects()
 {
 	m_pGameObjectManager = new GameObjectManager(m_pSoundManager);
@@ -157,6 +177,7 @@ void Game::Cleanup( )
 			delete m_pCamera;
 			delete m_pGameObjectManager;
 			delete m_pHUD;
+			delete m_pGameOverScreen;
 			break;
 	}
 
@@ -198,7 +219,12 @@ void Game::UpdatePlaying(float elapsedSec)
 
 	m_pCamera->SetLevelBoundaries(m_pLevel->GetBoundaries());
 
-	m_pHUD->Update(elapsedSec);
+	m_pHUD->Update(elapsedSec, m_pAvatar->GetNrLifes() );
+
+	if ( !m_pAvatar->GetAvatarAlive() )
+	{
+		InitGameOverState();
+	}
 
 }
 
@@ -215,6 +241,7 @@ void Game::Draw( ) const
 		DrawPlaying();
 		break;
 	case Game::GameState::gameOver:
+		m_pGameOverScreen->Draw();
 		break;
 	}
 }
@@ -271,6 +298,7 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 
 		break;
 	case Game::GameState::gameOver:
+		m_pGameOverScreen->Draw();
 		break;
 	}
 

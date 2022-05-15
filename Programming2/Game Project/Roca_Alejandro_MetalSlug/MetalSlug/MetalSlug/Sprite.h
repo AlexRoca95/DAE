@@ -25,6 +25,7 @@ public:
 	void RotateSprite(float angle) const;
 	void ResetActFrame();
 	void ResetSprite();
+	void ChangeFrame( int frame );
 
 	// Getters
 	float GetFrameWidth( ) const;

@@ -55,10 +55,13 @@ private:
 	Avatar* m_pAvatar;
 	Camera* m_pCamera;
 
+	Sprite* m_pGameOverScreen;
+
 	// Sounds && Effects
 	SoundManager* m_pSoundManager;
 	SoundStream* m_pMenuSong;
 	SoundStream* m_pLevelSong;
+	SoundStream* m_pGameOverSong;
 	SoundEffect* m_pPistolFire;				// Shoot pistol effect
 	SoundEffect* m_pMissionStartSound;
 
@@ -75,6 +78,7 @@ private:
 	void InitCamera();
 	void InitHUD();
 	void InitLevelSounds();
+	void InitGameOverState();
 	void AddGameObjects();
 
 	// PLAYING GAME STATE

@@ -18,7 +18,7 @@ public:
 
 
 	void Draw() const;
-	void Update(float elapsedSec);
+	void Update(float elapsedSec, const int nrLifes);
 
 	void ActivateGoTextAnimation();
 
@@ -43,10 +43,11 @@ private:
 
 	// SPRITES FOR THE HUD
 	Sprite* m_pWeapons;
-	Sprite* m_pLifes;
+	Sprite* m_pPlayer;
 	Sprite* m_pLevel;
 	Sprite* m_pPrisoners;
 	Sprite* m_pGo;
+	Sprite* m_pNrLifes;
 	
 	// Sounds
 	SoundManager* m_pSoundManager;
@@ -54,6 +55,8 @@ private:
 	// PRIVATE FUNCTIONS
 	void Initialize();
 	void DrawPrisoners() const;
+
+	void UpdateGoText(float elapsedSec);
 
 };
 
