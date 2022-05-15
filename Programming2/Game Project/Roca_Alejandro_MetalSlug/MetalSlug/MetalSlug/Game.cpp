@@ -41,6 +41,8 @@ void Game::Initialize( )
 
 	InitLevelSounds();
 
+	m_pHUD->ActivateGoTextAnimation();
+
 	
 }
 
@@ -60,7 +62,7 @@ void Game::InitCamera()
 void Game::InitHUD()
 {
 	// Bottom left and size of the window
-	m_pHUD = new HUD(Point2f{ }, Point2f{ m_Window.width, m_Window.height } ); 
+	m_pHUD = new HUD(Point2f{ }, Point2f{ m_Window.width, m_Window.height } , m_pSoundManager); 
 }
 
 void Game::InitMenu()
@@ -83,7 +85,7 @@ void Game::InitLevelSounds()
 	m_pMenuSong->Stop();
 	m_pLevelSong->Play(true); 
 
-	m_pMissionStartSound->Play(0);  
+	m_pSoundManager->PlaySoundEffect(m_pMissionStartSound, 0);
 
 	
 	if (!m_pSoundManager->GetSoundActivated())
@@ -195,6 +197,8 @@ void Game::UpdatePlaying(float elapsedSec)
 	m_pLevel->Update(elapsedSec, m_pAvatar->GetBotShape());
 
 	m_pCamera->SetLevelBoundaries(m_pLevel->GetBoundaries());
+
+	m_pHUD->Update(elapsedSec);
 
 }
 

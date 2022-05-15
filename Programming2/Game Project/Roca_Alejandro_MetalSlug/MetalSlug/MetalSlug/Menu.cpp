@@ -30,7 +30,7 @@ void Menu::Initialize()
 	m_pStartScreen->SetBottomDstRect(0.f);
 
 	// PUSH START letters
-	m_pPushStart = new Sprite("Resources/sprites/HUD/PushStart.png");
+	m_pPushStart = new Sprite("Resources/sprites/HUD/PushStart2.png");
 	m_pPushStart->UpdateValues(1, 1, 1, 1.f, m_pPushStart->GetTexture()->GetWidth(), m_pPushStart->GetTexture()->GetHeight(), m_pPushStart->GetTexture()->GetHeight(), 3.5f);
 	m_pPushStart->SetLeftDstRect(m_StartLettersPos.x);
 	m_pPushStart->SetBottomDstRect(m_StartLettersPos.y);

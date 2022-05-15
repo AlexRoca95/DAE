@@ -2,12 +2,14 @@
 
 
 class Sprite;
+class SoundManager;
+class SoundEffect;
 class HUD
 {
 public:
 
 
-	HUD(const Point2f& bottomLeft, const Point2f& windowSize);
+	HUD(const Point2f& bottomLeft, const Point2f& windowSize, SoundManager* sounds);
 	~HUD();
 	HUD(const HUD& hud) = delete;
 	HUD(HUD&& hud) = delete;
@@ -17,6 +19,8 @@ public:
 
 	void Draw() const;
 	void Update(float elapsedSec);
+
+	void ActivateGoTextAnimation();
 
 private:
 
@@ -30,13 +34,22 @@ private:
 
 	int m_PrisonersReleased;
 
+	// GO Text animation
+	bool m_GoAnimation;
+	float m_MaxTimeGoAnimat;
+	float m_TimeGoAnimat;
+	SoundEffect* m_pGoSound;
+
+
 	// SPRITES FOR THE HUD
 	Sprite* m_pWeapons;
 	Sprite* m_pLifes;
 	Sprite* m_pLevel;
 	Sprite* m_pPrisoners;
+	Sprite* m_pGo;
 	
-	
+	// Sounds
+	SoundManager* m_pSoundManager;
 
 	// PRIVATE FUNCTIONS
 	void Initialize();
