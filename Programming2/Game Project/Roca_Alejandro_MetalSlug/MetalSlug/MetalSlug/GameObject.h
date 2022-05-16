@@ -60,11 +60,14 @@ public:
 	Rectf GetBotShape() const;
 	GameStage& GetGameStage() const;
 	Type GetType() const;
-	
+	const unsigned int GetPointsGameObject() const;
 
 	// Setters
 	void SetIsActive(bool active);
 	void SetGameStageChanged(bool stageChanged);
+
+
+	
 
 
 
@@ -72,6 +75,7 @@ public:
 protected:
 	// Init data of the game object
 	virtual void Initialize() = 0;
+	void SetPointsGameObject(const GameObject::Type& id);
 
 	// Gravity
 	void Falling(float elapsedSec, const Level* level);
@@ -79,6 +83,7 @@ protected:
 	// General
 	const Type m_Id;
 	Point2f m_StartPosition;
+	unsigned int m_Points;					// Points that this GameObject give to the player
 				
 	bool m_IsActive;								// GameObject activated or not
 	bool m_IsDead;									// GameObject is dead or not (for death animation)

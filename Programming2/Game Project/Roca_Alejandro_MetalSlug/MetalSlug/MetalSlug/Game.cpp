@@ -219,7 +219,7 @@ void Game::UpdatePlaying(float elapsedSec)
 
 	m_pCamera->SetLevelBoundaries(m_pLevel->GetBoundaries());
 
-	m_pHUD->Update(elapsedSec, m_pAvatar->GetNrLifes() );
+	m_pHUD->Update( elapsedSec, m_pAvatar->GetNrLifes(), m_pAvatar->GetTotalPoints() );
 
 	if ( !m_pAvatar->GetAvatarAlive() )
 	{

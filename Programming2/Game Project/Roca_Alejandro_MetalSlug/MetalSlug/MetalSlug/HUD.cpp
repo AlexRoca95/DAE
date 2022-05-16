@@ -12,6 +12,7 @@ HUD::HUD(const Point2f& bottomLeft, const Point2f& windowSize, SoundManager* sou
 	, m_pPrisoners{ new Sprite("Resources/sprites/HUD/prisoner.png") }
 	, m_pGo( new Sprite("Resources/sprites/HUD/GO.png") )
 	, m_pNrLifes ( new Sprite("Resources/sprites/HUD/LifesCount.png") ) 
+	, m_SystemPoint { }
 	, m_BottomLeft { bottomLeft }
 	, m_WindowSize{ windowSize }
 	, m_TopBorder { 35.f }
@@ -23,6 +24,7 @@ HUD::HUD(const Point2f& bottomLeft, const Point2f& windowSize, SoundManager* sou
 	, m_TimeGoAnimat{ }
 	, m_pSoundManager { sounds }
 	, m_pGoSound{ sounds->GetEffect("Resources/sounds/GoSound.mp3") }
+
 {
 
 	Initialize();
@@ -38,16 +40,24 @@ HUD::~HUD()
 	delete m_pPrisoners;
 	delete m_pGo;
 	delete m_pNrLifes;
+	
+	for (Sprite* spr : m_SystemPoint)
+	{
+		delete spr;
+	}
 }
 
 
 void HUD::Initialize()
 {
-	// LIFES
+	// Player Status
 	m_pPlayer->UpdateValues(1, 1, 1, 1.f, m_pPlayer->GetTexture()->GetWidth(), m_pPlayer->GetTexture()->GetHeight(), m_pPlayer->GetTexture()->GetHeight());
 	m_pPlayer->SetLeftDstRect(m_BottomLeft.x + m_LeftBorder);
 	m_pPlayer->SetBottomDstRect(m_WindowSize.y - (m_pPlayer->GetTexture()->GetHeight() * g_Scale) - m_TopBorder);
 
+	// POINT SYSTEM
+	InitSystemPoint();
+		
 	// Nr of Lifes
 	m_pNrLifes->UpdateValues(2, 1, 2, 1.f, 8.f, m_pNrLifes->GetTexture()->GetHeight(), m_pNrLifes->GetTexture()->GetHeight());
 	m_pNrLifes->SetLeftDstRect( ( m_BottomLeft.x + m_LeftBorder + ( m_pPlayer->GetFrameWidth() * g_Scale) ) - m_pNrLifes->GetFrameWidth() * 1.8f * g_Scale  );
@@ -75,7 +85,29 @@ void HUD::Initialize()
 	m_pGo->SetLeftDstRect(m_BottomLeft.x + m_WindowSize.x - ( m_pGo->GetFrameWidth() * 2) * g_Scale );
 	m_pGo->SetBottomDstRect(m_BottomLeft.y + m_WindowSize.y - m_TopBorder * 6);
 
+}
 
+// Set up the Point system
+void HUD::InitSystemPoint()
+{
+	m_SystemPoint.push_back( new Sprite("Resources/sprites/HUD/Points.png") );  // Units
+	m_SystemPoint.push_back( new Sprite("Resources/sprites/HUD/Points.png") );  // Tens
+	m_SystemPoint.push_back( new Sprite("Resources/sprites/HUD/Points.png") );  // Hundreds
+	m_SystemPoint.push_back( new Sprite("Resources/sprites/HUD/Points.png") ); // Thousands
+	m_SystemPoint.push_back(new Sprite("Resources/sprites/HUD/Points.png")); // Ten Thousands
+
+	float separation{ ( m_SystemPoint[0]->GetTexture()->GetWidth() / 10) * 2.3f};
+	float xPos{ m_BottomLeft.x + (m_pPlayer->GetTexture()->GetWidth() * g_Scale) + separation };
+
+	for (Sprite* spr : m_SystemPoint)
+	{
+		spr->UpdateValues(1, 1, 1, 9.f, 9.4f, spr->GetTexture()->GetHeight(), spr->GetTexture()->GetHeight());
+		spr->SetLeftDstRect( xPos );
+		spr->SetBottomDstRect(m_pPlayer->GetDstRect().bottom + (m_pPlayer->GetTexture()->GetHeight() * g_Scale) - spr->GetTexture()->GetHeight());
+	
+		xPos -= separation;
+	}
+	
 }
 
 void HUD::Draw() const
@@ -89,11 +121,20 @@ void HUD::Draw() const
 		m_pGo->Draw();
 	}
 	
-
 	DrawPrisoners();
 	
 	m_pNrLifes->Draw();
+
+	DrawSystemPoint();
 	
+}
+
+void HUD::DrawSystemPoint() const
+{
+	for (const Sprite* spr : m_SystemPoint)
+	{
+		spr->Draw();
+	}
 }
 
 void HUD::DrawPrisoners() const
@@ -102,16 +143,20 @@ void HUD::DrawPrisoners() const
 	{
 		m_pPrisoners->Draw();
 	}
+
 }
 
-void HUD::Update(float elapsedSec, const int nrLifes)
+void HUD::Update(float elapsedSec, const int nrLifes, unsigned int totalPoints)
 {
 
 	UpdateGoText(elapsedSec);
 
 	m_pNrLifes->ChangeFrame(nrLifes);
 
+	UpdateSystemPoints(elapsedSec, totalPoints);
 
+	
+	
 }
 
 
@@ -138,4 +183,18 @@ void HUD::UpdateGoText(float elapsedSec)
 			m_GoAnimation = false;
 		}
 	}
+}
+
+void HUD::UpdateSystemPoints(float elapsedSec, unsigned int totalPoints)
+{
+	
+	m_SystemPoint[0]->ChangeFrame(totalPoints % 10);
+	totalPoints /= 10;
+	m_SystemPoint[1]->ChangeFrame(totalPoints % 10);
+	totalPoints /= 10;
+	m_SystemPoint[2]->ChangeFrame(totalPoints % 10);
+	totalPoints /= 10;
+	m_SystemPoint[3]->ChangeFrame(totalPoints % 10);
+	m_SystemPoint[4]->ChangeFrame(totalPoints / 10);
+	
 }

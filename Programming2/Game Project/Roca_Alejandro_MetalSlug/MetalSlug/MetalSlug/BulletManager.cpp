@@ -9,6 +9,7 @@
 BulletManager::BulletManager()
 	: m_pBullets{ }
 	, m_VerticesLevel{ }
+	, m_TotalPoints{ }
 {
 
 }
@@ -128,6 +129,7 @@ void BulletManager::CheckHitGameObjects(std::vector<GameObject*> gameObjects)
 						{
 							bulletPtr->Hit();
 							pGameObject->Hit();
+							AddHitPoints(pGameObject->GetPointsGameObject());
 							break;
 						}
 					}
@@ -137,11 +139,18 @@ void BulletManager::CheckHitGameObjects(std::vector<GameObject*> gameObjects)
 			}
 		}
 	}
-	
-
 
 }
 
+void BulletManager::AddHitPoints(const unsigned int points)
+{
+	m_TotalPoints += points;
+}
+
+void BulletManager::AddPoints(const unsigned int points)
+{
+	m_TotalPoints += points;
+}
 
 // Calculate a random value for the hit collision of the bullet
 void BulletManager::RandomCollision(int& random)
@@ -153,4 +162,10 @@ void BulletManager::RandomCollision(int& random)
 void BulletManager::SetVerticesLevel(std::vector<Point2f> vertices)
 {
 	m_VerticesLevel = vertices;
+}
+
+
+int BulletManager::GetTotalPoints() const
+{
+	return m_TotalPoints;
 }

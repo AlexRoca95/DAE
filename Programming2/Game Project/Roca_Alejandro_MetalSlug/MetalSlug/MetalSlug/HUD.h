@@ -1,5 +1,5 @@
 #pragma once
-
+#include <vector>
 
 class Sprite;
 class SoundManager;
@@ -18,7 +18,7 @@ public:
 
 
 	void Draw() const;
-	void Update(float elapsedSec, const int nrLifes);
+	void Update(float elapsedSec, const int nrLifes, unsigned int totalPoints);
 
 	void ActivateGoTextAnimation();
 
@@ -48,15 +48,26 @@ private:
 	Sprite* m_pPrisoners;
 	Sprite* m_pGo;
 	Sprite* m_pNrLifes;
-	
+
+	// Points system
+	std::vector<Sprite*> m_SystemPoint;
+
+	int m_UnitValue;
+	int m_TenValue;
+	int m_HundredValue;
+	int m_ThousandValue;
+
 	// Sounds
 	SoundManager* m_pSoundManager;
 
 	// PRIVATE FUNCTIONS
 	void Initialize();
+	void InitSystemPoint();
 	void DrawPrisoners() const;
+	void DrawSystemPoint() const;
 
 	void UpdateGoText(float elapsedSec);
+	void UpdateSystemPoints(float elapsedSec, unsigned int totalPoints);
 
 };
 

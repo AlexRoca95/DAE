@@ -75,8 +75,10 @@ public:
 	Rectf GetHitBox() const;
 	int GetNrLifes() const;
 	const bool GetAvatarAlive() const;
+	unsigned int GetTotalPoints() const;
 
 	void SetVerticesLevel(std::vector<Point2f> vertices);
+	void AddItemPoints(const unsigned int points);
 
 private:
 

@@ -25,8 +25,9 @@ GameObject::GameObject( const GameObject::Type& id, const Point2f& startPos, con
 	, m_Speed { speed }
 	, m_IsComingFromRight { comingFromRight }
 	, m_pSoundManager { sounds }
+	, m_Points{ }
 {
-	
+	SetPointsGameObject(id);
 }
 
 
@@ -54,6 +55,22 @@ void GameObject::SetGameStageChanged(bool stageChanged)
 	m_IsStageChanged = stageChanged;
 }
 
+// Set how many points this GameObject gives
+void GameObject::SetPointsGameObject(const GameObject::Type& id)
+{
+	switch (id)
+	{
+	case GameObject::Type::helicopter:
+	case GameObject::Type::soldier:
+	case GameObject::Type::soldierShield:
+	case GameObject::Type::boss:
+		m_Points = 100;
+		break;
+	case GameObject::Type::item:
+		m_Points = 5000;
+		break;
+	};
+}
 
 
 Rectf GameObject::GetTopShape() const
@@ -99,4 +116,9 @@ bool GameObject::GetIsActive() const
 bool GameObject::GetIsDead() const
 {
 	return m_IsDead;
+}
+
+const unsigned int GameObject::GetPointsGameObject() const
+{
+	return m_Points;
 }

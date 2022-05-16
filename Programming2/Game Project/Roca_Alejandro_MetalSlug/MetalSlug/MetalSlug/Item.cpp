@@ -4,6 +4,7 @@
 #include "Level.h"
 #include "SoundEffect.h"
 #include "SoundManager.h"
+#include <iostream>
 
 
 Item::Item(const Point2f& startPos, SoundManager* soundManager)
@@ -99,7 +100,7 @@ void Item::GrabItem(Avatar* avatar)
 		if (m_ItemType == Item::ItemType::card)
 		{
 			m_IsActive = false;
-			
+			avatar->AddItemPoints(m_Points);
 		}
 		else
 		{

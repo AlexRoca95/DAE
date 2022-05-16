@@ -986,7 +986,17 @@ const bool Avatar::GetAvatarAlive() const
 	return m_AreLifesLeft;
 }
 
+unsigned int Avatar::GetTotalPoints() const
+{
+	return m_pBulletManager->GetTotalPoints();
+}
+
 void Avatar::SetVerticesLevel(std::vector<Point2f> vertices)
 {
 	m_pBulletManager->SetVerticesLevel(vertices);
+}
+
+void Avatar::AddItemPoints(const unsigned int points)
+{
+	m_pBulletManager->AddPoints(points);
 }
