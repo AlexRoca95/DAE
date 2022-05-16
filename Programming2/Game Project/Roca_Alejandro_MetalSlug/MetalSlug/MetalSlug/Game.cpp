@@ -88,17 +88,9 @@ void Game::InitLevelSounds()
 	 
 	// Stop the menu song and start the level song
 	m_pMenuSong->Stop();
-	m_pLevelSong->Play(true); 
-
+	m_pSoundManager->PlaySong(m_pLevelSong, true);
 	m_pSoundManager->PlaySoundEffect(m_pMissionStartSound, 0);
 
-	
-	if (!m_pSoundManager->GetSoundActivated())
-	{
-		// If the sound was disabled dont play it yet
-		m_pLevelSong->Pause();
-	}
-	
 }
 
 void Game::InitGameOverState()
@@ -113,7 +105,7 @@ void Game::InitGameOverState()
 	m_pGameOverScreen->SetBottomDstRect(0.f);
 
 	m_pGameOverSong = m_pSoundManager->GetSound("Resources/Sounds/GameOver.mp3");
-	m_pGameOverSong->Play(false);
+	m_pSoundManager->PlaySong(m_pGameOverSong, false);
 }
 
 void  Game::AddGameObjects()
@@ -309,6 +301,15 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		m_pSoundManager->turnOnOffSound();
 	}
 	
+	if (e.keysym.sym == SDLK_t)
+	{
+		m_pSoundManager->ChangeSoundtrackVolume(10);
+	}
+
+	if (e.keysym.sym == SDLK_y)
+	{
+		m_pSoundManager->ChangeSoundtrackVolume(-10);
+	}
 	
 }
 

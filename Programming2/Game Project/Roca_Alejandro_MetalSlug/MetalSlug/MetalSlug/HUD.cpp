@@ -24,11 +24,10 @@ HUD::HUD(const Point2f& bottomLeft, const Point2f& windowSize, SoundManager* sou
 	, m_TimeGoAnimat{ }
 	, m_pSoundManager { sounds }
 	, m_pGoSound{ sounds->GetEffect("Resources/sounds/GoSound.mp3") }
-
 {
 
 	Initialize();
-
+	
 }
 
 
@@ -45,6 +44,8 @@ HUD::~HUD()
 	{
 		delete spr;
 	}
+
+	delete m_ContinueFont;
 }
 
 
@@ -156,7 +157,6 @@ void HUD::Update(float elapsedSec, const int nrLifes, unsigned int totalPoints)
 	UpdateSystemPoints(elapsedSec, totalPoints);
 
 	
-	
 }
 
 
@@ -187,14 +187,22 @@ void HUD::UpdateGoText(float elapsedSec)
 
 void HUD::UpdateSystemPoints(float elapsedSec, unsigned int totalPoints)
 {
-	
-	m_SystemPoint[0]->ChangeFrame(totalPoints % 10);
-	totalPoints /= 10;
-	m_SystemPoint[1]->ChangeFrame(totalPoints % 10);
-	totalPoints /= 10;
-	m_SystemPoint[2]->ChangeFrame(totalPoints % 10);
-	totalPoints /= 10;
-	m_SystemPoint[3]->ChangeFrame(totalPoints % 10);
-	m_SystemPoint[4]->ChangeFrame(totalPoints / 10);
+	for (int i{}; i < m_SystemPoint.size(); i++)
+	{
+		if (i == m_SystemPoint.size() - 1)
+		{
+			// Last element
+			m_SystemPoint[i]->ChangeFrame(totalPoints / 10);
+		}
+		else
+		{
+			if (i != 0)
+			{
+				// Not first element
+				totalPoints /= 10;
+			}
+			m_SystemPoint[i]->ChangeFrame(totalPoints % 10);
+		}
+	}
 	
 }

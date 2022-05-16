@@ -73,6 +73,32 @@ void SoundManager::PlaySoundEffect(const SoundEffect* soundEffect, const int tim
 	}
 }
 
+void SoundManager::PlaySong(const SoundStream* song, const bool repeat)
+{
+	if (m_IsSoundOn)
+	{
+		song->Play(repeat);
+	}
+}
+
+
+// Decrement / Increment soundtrack volume according with the value
+void SoundManager::ChangeSoundtrackVolume(const int value)
+{
+	for (std::pair<std::string, SoundStream*> sound : m_Sounds)
+	{
+		sound.second->SetVolume(sound.second->GetVolume() + value);
+	}
+}
+
+void SoundManager::ChangeEffectVolume(const int value)
+{
+	for (std::pair<std::string, SoundEffect*> effect : m_Effects)
+	{
+		effect.second->SetVolume(effect.second->GetVolume() - value);
+	}
+}
+
 
 void SoundManager::turnOnOffSound()
 {

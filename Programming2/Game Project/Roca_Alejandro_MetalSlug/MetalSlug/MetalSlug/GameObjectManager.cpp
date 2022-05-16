@@ -303,7 +303,7 @@ void GameObjectManager::ActivateHelicopter()
 
 					// Helix sound for the helicopter
 					m_pHelixEffect = m_pSoundManager->GetEffect("Resources/Sounds/Helicopter.wav");
-					m_pHelixEffect->Play(100);  // Repeat for a while
+					m_pSoundManager->PlaySoundEffect(m_pHelixEffect, 100);
 					break;
 				}
 			}

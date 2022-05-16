@@ -4,6 +4,7 @@
 class Sprite;
 class SoundManager;
 class SoundEffect;
+class Texture;
 class HUD
 {
 public:
@@ -40,7 +41,6 @@ private:
 	float m_TimeGoAnimat;
 	SoundEffect* m_pGoSound;
 
-
 	// SPRITES FOR THE HUD
 	Sprite* m_pWeapons;
 	Sprite* m_pPlayer;
@@ -48,6 +48,8 @@ private:
 	Sprite* m_pPrisoners;
 	Sprite* m_pGo;
 	Sprite* m_pNrLifes;
+
+	Texture* m_ContinueFont;
 
 	// Points system
 	std::vector<Sprite*> m_SystemPoint;
