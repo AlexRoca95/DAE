@@ -1,23 +1,6 @@
-
-
-- Movement of the character changed: Before the movement of the player was calculated with the 
-Delta Time Seconds which sometimes made the movement different according with the speed of the computer.
-Now is working with the character movement given in the framework. Still not the final movement.
-
-- Lighting has been changed. Now is a little bit darker and enemies are wearing a flashlight. This also
-represents the area of vision of them. This was due to some feedback received about not knowing that
-the first part was supposed to be play in a stealth way and also because this way is easier to see the
-enemies come outside the window of the game (before you could be spotted by the enemies without you even
-had seen them)
-
-- Now the player can press the M key to show the robery list. This will show the remaining items that
-have to still and the amount of money he earned with the the items he already has stolen. ( This is 
-in order to explain the purpose of the game. So players know what do they have to do)
  
-- Added some accesibility information in the HUD for grabbing an item, opening the robery list, no space
-left when trying to grab an object.
 
-- Now the energy drink fill the energy bar entirely instead of increment the speed of the bar.
+- Now when the player managed to drop an object in the truck the price of the item / items stolen
+will be show in the HUD for a second.
 
-- I have put an item in front of the player at the beggining of the level. So player can receive some 
-info about the keys and the what he has to do.
+- Changed the HUD when the player manages to escape. Now it shows the total price he managed to steal
