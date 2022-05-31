@@ -147,19 +147,24 @@ Color4f Game::ToColor(const std::string& colorStr) const
 	// This function converts this color into a Color4f type and returns it
 	Color4f color;
 
-	std::string findVar { ',' };
+	std::stringstream valueStream;
+	std::string value{};
+	char delim{ ',' };
+	
+	valueStream.str(colorStr);
 
+	std::getline(valueStream, value, delim);
+	color.r = stof(value);
 
-	size_t found{ colorStr.find(findVar) };
-	color.r = stof(colorStr.substr(found - 3, found));  // Convert to float  substr (init pos, length)
+	std::getline(valueStream, value, delim);
+	color.g = stof(value);
+	
+	std::getline(valueStream, value, delim);
+	color.b = stof(value);
 
-	found = colorStr.find(findVar, found+1);
-	color.g = stof(colorStr.substr(found - 3, found));
+	std::getline(valueStream, value, delim);
+	color.a = stof(value);
 
-	found = colorStr.find(findVar, found+1);
-	color.b = stof(colorStr.substr(found - 3, found));
-
-	color.a = stof(colorStr.substr(found + 1, found - 1));
 	
 	return color;
 }
@@ -170,7 +175,7 @@ bool Game::ToBool(const std::string& boolStr) const
 	// The parameter contains a bool in text form: "true" or "false"
 	// This function converts this information into a bool type and returns it
 	
-	std::string value{ boolStr.substr(0, boolStr.length()) };
+	std::string value{ boolStr.substr(0) };  // Get from first pos to the end of the string
 	bool boolean;
 
 	if (value == "false")
@@ -190,9 +195,23 @@ Point2f Game::ToPoint2f(const std::string& point2fStr) const
 	// TODO: 3a. Complete the ToPoint2f function definition
 	// The parameter contains a point in the format: "x,y"
 	// This function converts this information into a Point2f type and returns it
+
+	std::stringstream point2fStream;
+
+
+	point2fStream.str(point2fStr);  // Copy content of the string into the stringstream
+
+	std::string pointValue{ };
+	char delim{ ',' };
 	Point2f point;
 
+	std::getline(point2fStream, pointValue, delim);   // Get a line from the stream object (stops when find delim char)
+													  // and store it into pointValue string
+	point.x = std::stof(pointValue);
 
+	std::getline(point2fStream, pointValue);		// Continues from where it was
+
+	point.y = std::stof(pointValue);
 
 	return point;
 }
@@ -205,6 +224,15 @@ std::string Game::GetAttributeValue(const std::string& attrName, const std::stri
 
 	std::string attribute;
 
+	std::string findAttr{ attrName };
+	std::stringstream valuesStream;
+	char delim{ '"' };
+
+	size_t found{ element.find(findAttr) };			// Find the attribute name in the string
+	valuesStream.str ( element.substr(found + attrName.length() + 2) ); // Get a string starting with the pos with the value(s)
+
+	std::getline(valuesStream, attribute, delim);  // Get all characters from the beggining until the delim
+	
 	return attribute;
 }
 
@@ -212,6 +240,19 @@ void Game::CreateShapesFromFile(const std::string& fileName)
 {
 	// TODO: 5. Read the XML shape elements from the given file
 	// Call for each read DAE shape element the function CreateShape 
+
+	std::ifstream is(fileName);
+	std::string line{};
+	char delim{ '>' };
+	if (!is)
+	{
+		std::cerr << "Error opening the file " << fileName << std::endl;
+	}
+
+	while (std::getline(is, line, delim))  // Get characters until delim
+	{
+		CreateShape(line);
+	}
 
 }
 
@@ -284,10 +325,10 @@ void Game::BasicTesting() const
 	TestToBool();
 
 	// TODO: 3b. Uncomment this call of TestToPoint2f
-	//TestToPoint2f();
+	TestToPoint2f();
 
 	// TODO: 4b. Uncomment this call of TestGetAttributeValue
-	//TestGetAttributeValue();
+	TestGetAttributeValue();
 }
 
 void Game::TestToColor() const
