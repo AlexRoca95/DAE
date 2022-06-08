@@ -141,6 +141,9 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files\Sound</Filter>
     </ClCompile>
+    <ClCompile Include="Pause.cpp">
+      <Filter>Source Files\Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>Source Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Pause.h">
+      <Filter>Source Files\Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

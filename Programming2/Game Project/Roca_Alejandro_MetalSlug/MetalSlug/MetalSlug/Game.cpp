@@ -9,6 +9,7 @@
 #include "Boss.h"
 #include "HUD.h"
 #include "Menu.h"
+#include "Pause.h"
 #include <iostream>
 
 
@@ -26,6 +27,8 @@ Game::Game( const Window& window )
 	, m_pMissionStartSound { }
 	, m_pGameOverSong { }
 	, m_pPistolFire { }
+	, m_pPause{ }
+	, m_MousePos { }
 {
 	InitMenu();
 }
@@ -42,12 +45,13 @@ void Game::Initialize( )
 	InitAvatar();
 	InitCamera();
 	InitHUD();
+	InitPause();			// Already load everything for the pause Menu
 	AddGameObjects();
 
 	InitLevelSounds();
 
 	m_pHUD->ActivateGoTextAnimation();
-
+	
 	
 }
 
@@ -106,6 +110,12 @@ void Game::InitGameOverState()
 
 	m_pGameOverSong = m_pSoundManager->GetSound("Resources/Sounds/GameOver.mp3");
 	m_pSoundManager->PlaySong(m_pGameOverSong, false);
+	
+}
+
+void Game::InitPause()
+{
+	m_pPause = new Pause ( Point2f{ m_Window.width, m_Window.height }, m_pSoundManager);
 }
 
 void  Game::AddGameObjects()
@@ -162,6 +172,17 @@ void Game::Cleanup( )
 			delete m_pCamera;
 			delete m_pGameObjectManager;
 			delete m_pHUD;
+			delete m_pPause;
+		
+			break;
+		case  Game::GameState::pause:
+			delete m_pAvatar;
+			delete m_pLevel;
+			delete m_pCamera;
+			delete m_pGameObjectManager;
+			delete m_pHUD;
+			delete m_pPause;
+
 			break;
 		case Game::GameState::gameOver:
 			delete m_pAvatar;
@@ -170,6 +191,8 @@ void Game::Cleanup( )
 			delete m_pGameObjectManager;
 			delete m_pHUD;
 			delete m_pGameOverScreen;
+			delete m_pPause;
+
 			break;
 	}
 
@@ -193,7 +216,11 @@ void Game::Update( float elapsedSec )
 	case Game::GameState::playing:
 		UpdatePlaying(elapsedSec);
 		break;
+	case Game::GameState::pause:
+		m_pPause->Update(elapsedSec, m_MousePos);
+		break;
 	case Game::GameState::gameOver:
+		// Nothing to do here
 		break;
 	}
 }
@@ -231,6 +258,10 @@ void Game::Draw( ) const
 		break;
 	case Game::GameState::playing:
 		DrawPlaying();
+		break;
+	case Game::GameState::pause:
+		DrawPlaying();
+		m_pPause->Draw();  // Draw pause menu in front of everything
 		break;
 	case Game::GameState::gameOver:
 		m_pGameOverScreen->Draw();
@@ -282,12 +313,24 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 			m_pSoundManager->PlaySoundEffect(m_pPistolFire, 0);
 		}
 
-		// I key --> Show controls game info at the console
-		if (e.keysym.sym == SDLK_i)
+		// Pause game and show menu
+		if (e.keysym.sym == SDLK_ESCAPE)
 		{
-			DisplayControlsInfo();
-		}
+			if (m_pPause == nullptr) // Check if pause menu was already loaded before
+			{
+				InitPause();
+			}
+			m_GameState = GameState::pause;
+			m_pSoundManager->turnOnOffSound();  // Turn off sound while pause state
 
+		}
+		break;
+	case Game::GameState::pause:
+		if (e.keysym.sym == SDLK_ESCAPE)
+		{
+			m_GameState = GameState::playing;
+			m_pSoundManager->turnOnOffSound();  // Turn on the sounds again
+		}
 		break;
 	case Game::GameState::gameOver:
 		m_pGameOverScreen->Draw();
@@ -301,16 +344,21 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		m_pSoundManager->turnOnOffSound();
 	}
 	
-	if (e.keysym.sym == SDLK_t)
+	if (e.keysym.sym == SDLK_y)
 	{
 		m_pSoundManager->ChangeSoundtrackVolume(10);
 	}
 
-	if (e.keysym.sym == SDLK_y)
+	if (e.keysym.sym == SDLK_t)
 	{
 		m_pSoundManager->ChangeSoundtrackVolume(-10);
 	}
 	
+	// I key --> Show controls game info at the console
+	if (e.keysym.sym == SDLK_i)
+	{
+		DisplayControlsInfo();
+	}
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
@@ -333,7 +381,13 @@ void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
 {
-	//std::cout << "MOUSEMOTION event: " << e.x << ", " << e.y << std::endl;
+	
+	if (m_GameState == GameState::pause)
+	{
+		m_MousePos.x = float(e.x);
+		m_MousePos.y = float(e.y);
+	}
+	
 }
 
 void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )

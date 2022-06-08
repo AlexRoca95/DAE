@@ -32,6 +32,7 @@ SoundManager::~SoundManager()
 
 SoundStream* SoundManager::GetSound(const std::string& filename)
 {
+
 	if (m_Sounds.find(filename) == m_Sounds.end())
 	{
 		// It didn't find the sound
@@ -65,7 +66,7 @@ SoundEffect* SoundManager::GetEffect(const std::string& filename)
 }
 
 // Play the sound effect as many times as indicated and only if the sound is on
-void SoundManager::PlaySoundEffect(const SoundEffect* soundEffect, const int times)
+void SoundManager::PlaySoundEffect(const SoundEffect* soundEffect, int times)
 {
 	if (m_IsSoundOn)
 	{
@@ -73,7 +74,7 @@ void SoundManager::PlaySoundEffect(const SoundEffect* soundEffect, const int tim
 	}
 }
 
-void SoundManager::PlaySong(const SoundStream* song, const bool repeat)
+void SoundManager::PlaySong(const SoundStream* song, bool repeat)
 {
 	if (m_IsSoundOn)
 	{
@@ -83,7 +84,7 @@ void SoundManager::PlaySong(const SoundStream* song, const bool repeat)
 
 
 // Decrement / Increment soundtrack volume according with the value
-void SoundManager::ChangeSoundtrackVolume(const int value)
+void SoundManager::ChangeSoundtrackVolume(int value)
 {
 	for (std::pair<std::string, SoundStream*> sound : m_Sounds)
 	{
@@ -91,7 +92,7 @@ void SoundManager::ChangeSoundtrackVolume(const int value)
 	}
 }
 
-void SoundManager::ChangeEffectVolume(const int value)
+void SoundManager::ChangeEffectVolume(int value)
 {
 	for (std::pair<std::string, SoundEffect*> effect : m_Effects)
 	{
@@ -140,30 +141,4 @@ void SoundManager::turnOnOffSound()
 bool SoundManager::GetSoundActivated()
 {
 	return m_IsSoundOn;
-}
-
-// Randomly chooses the death sound for the enemies
-std::string SoundManager::GetDeathSound()
-{
-	int deathEffect = rand() % 3;
-
-	std::string filename{};
-
-
-	switch (deathEffect)
-	{
-	case 0:
-		filename = "Resources/Sounds/Soldierdies1.wav";
-		break;
-
-	case 1:
-		filename = "Resources/Sounds/Soldierdies2.wav";
-		break;
-
-	case 2:
-		filename = "Resources/Sounds/Soldierdies3.mp3";
-		break;
-	}
-
-	return filename;
 }

@@ -49,8 +49,6 @@ private:
 	Sprite* m_pGo;
 	Sprite* m_pNrLifes;
 
-	Texture* m_ContinueFont;
-
 	// Points system
 	std::vector<Sprite*> m_SystemPoint;
 

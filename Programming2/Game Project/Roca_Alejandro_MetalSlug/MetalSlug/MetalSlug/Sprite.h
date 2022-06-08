@@ -13,13 +13,13 @@ public:
 	Sprite& operator=(const Sprite& spr1);
 	Sprite& operator= (Sprite&& spr1);
 
-	void Update( float elapsedSec, const bool repeat );
+	void Update( float elapsedSec, bool repeat );
 	void Draw( ) const;
 
 	void UpdateLeftSrcRect( );
 	void UpdateBottomSrcRect( );
-	void UpdateValues(const int cols, const int rows, const int frames, const float frameSec,
-		const float width, const float height, const float spriteSheetTop, const float scale = 2.7f);
+	void UpdateValues(int cols, int rows, int frames, float frameSec,
+		float width, float height, float spriteSheetTop, float scale = 2.7f);
 
 	void FlipSprite() const;
 	void RotateSprite(float angle) const;
@@ -40,13 +40,14 @@ public:
 
 
 	// Setters
-	void SetDstRect(const float x, const float y, const float width, const float height);
-	void SetDstRect(const float width, const float height);
-	void SetLeftDstRect(const float left);
-	void SetBottomDstRect(const float bottom);
-	void SetSrcRect(const float y, const float width, const float height);
-	void SetSrcRect(const float y);
-	void ResetAnimationFinish(const bool reset);
+	void SetDstRect(float x, float y, float width, float height);
+	void SetDstRect(float width, float height);
+	void SetLeftDstRect(float left);
+	void SetBottomDstRect(float bottom);
+	void SetSrcRect(float y, float width, float height);
+	void SetSrcRect(float y);
+	void ResetAnimationFinish(bool reset);
+	void SetActive(bool active);
 	void SetActFrame(int frame);
 
 
@@ -67,6 +68,7 @@ private:
 	float m_Height;
 	float m_Scale;
 	bool m_IsFinish;		// Animation finished or not
+	bool m_IsActive;		// To know if the sprite should draw and update
 	
 };
 

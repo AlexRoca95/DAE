@@ -59,5 +59,8 @@ protected:
 	
 	void KillSoldier(float elapsedSec);
 
+
+	std::string GetDeathSound();
+
 };
 

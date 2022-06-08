@@ -14,13 +14,16 @@ class SoundManager;
 class Boss;
 class HUD;
 class Menu;
+class Pause;
 class Game final
 {
 public:
 
 	enum class GameState {
+
 		menu,
 		playing,
+		pause,
 		gameOver
 	};
 
@@ -54,6 +57,7 @@ private:
 	HUD* m_pHUD;
 	Avatar* m_pAvatar;
 	Camera* m_pCamera;
+	Pause* m_pPause;
 
 	Sprite* m_pGameOverScreen;
 
@@ -68,7 +72,8 @@ private:
 	// GameObjects
 	GameObjectManager* m_pGameObjectManager;
 
-	
+	Point2f m_MousePos;
+
 	// FUNCTIONS
 
 	// Init Data 
@@ -79,6 +84,7 @@ private:
 	void InitHUD();
 	void InitLevelSounds();
 	void InitGameOverState();
+	void InitPause();
 	void AddGameObjects();
 
 	// PLAYING GAME STATE

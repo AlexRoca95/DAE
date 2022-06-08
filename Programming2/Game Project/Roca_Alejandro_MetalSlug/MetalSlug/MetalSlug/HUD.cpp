@@ -45,12 +45,12 @@ HUD::~HUD()
 		delete spr;
 	}
 
-	delete m_ContinueFont;
 }
 
 
 void HUD::Initialize()
 {
+	
 	// Player Status
 	m_pPlayer->UpdateValues(1, 1, 1, 1.f, m_pPlayer->GetTexture()->GetWidth(), m_pPlayer->GetTexture()->GetHeight(), m_pPlayer->GetTexture()->GetHeight());
 	m_pPlayer->SetLeftDstRect(m_BottomLeft.x + m_LeftBorder);
@@ -116,6 +116,7 @@ void HUD::Draw() const
 	m_pWeapons->Draw();
 	m_pPlayer->Draw();
 	m_pLevel->Draw();
+	m_pNrLifes->Draw();
 
 	if (m_GoAnimation)
 	{
@@ -123,9 +124,6 @@ void HUD::Draw() const
 	}
 	
 	DrawPrisoners();
-	
-	m_pNrLifes->Draw();
-
 	DrawSystemPoint();
 	
 }

@@ -8,9 +8,9 @@
 
 
 
-Soldier::Soldier(const Point2f& startPos, bool comingFromRight, SoundManager* sounds)
+Soldier::Soldier(const Point2f& startPos, bool comingFromRight, SoundManager* soundManager)
 	:Enemy(GameObject::Type::soldier, startPos, 1, Point2f{ 150.f, 0.f }, 
-		comingFromRight, Point2f{0.f, g_Gravity}, sounds)   // Type, starting position, health, speed and accelerat
+		comingFromRight, Point2f{0.f, g_Gravity}, soundManager)   // Type, starting position, health, speed and accelerat
 	, m_RunSpeed { 200.f }
 	, m_RunAwayDist { 200.f }
 	, m_ThrowGrenadeDist { 300.f }
@@ -19,7 +19,7 @@ Soldier::Soldier(const Point2f& startPos, bool comingFromRight, SoundManager* so
 	, m_Seconds { -1.f }
 	, m_IsReset { false }
 	, m_pGrenade { }
-	, m_pDeathSound{ sounds->GetEffect(sounds->GetDeathSound()) } // Choose randomly a death effect for the soldier
+	, m_pDeathSound{ soundManager->GetEffect(GetDeathSound())} // Choose randomly a death effect for the soldier
 
 {
 	Initialize();

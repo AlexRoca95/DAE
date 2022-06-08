@@ -19,14 +19,13 @@ public:
 	SoundEffect* GetEffect(const std::string& filename);
 
 	void turnOnOffSound();
-	void PlaySoundEffect(const SoundEffect* soundEffect, const int times);
-	void PlaySong(const SoundStream* song, const bool repeat);
+	void PlaySoundEffect(const SoundEffect* soundEffect, int times);
+	void PlaySong(const SoundStream* song, bool repeat);
 
-	void ChangeSoundtrackVolume(const int value);
-	void ChangeEffectVolume(const int value);
+	void ChangeSoundtrackVolume(int value);
+	void ChangeEffectVolume(int value);
 
 	bool GetSoundActivated();
-	std::string GetDeathSound();
 	
 
 private:

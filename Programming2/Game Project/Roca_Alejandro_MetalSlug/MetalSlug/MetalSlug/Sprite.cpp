@@ -17,6 +17,7 @@ Sprite::Sprite( const std::string& path, int cols, int rows, float frameSec, flo
 	, m_Height{ } 
 	, m_Scale{ scale }
 	, m_IsFinish{ false }
+	, m_IsActive { true }			// All sprites are activated by default
 	, m_Frames{ }
 	, m_SpriteSheetTop{ }
 {
@@ -38,6 +39,7 @@ Sprite::Sprite(const Sprite& spr1)
 	, m_Height{ spr1.m_Height }
 	, m_Scale{ spr1.m_Scale }
 	, m_IsFinish{ spr1.m_IsFinish }
+	, m_IsActive{ spr1.m_IsActive }
 	, m_Frames{ spr1.m_Frames }
 	, m_SpriteSheetTop{ spr1.m_SpriteSheetTop }
 {
@@ -60,6 +62,7 @@ Sprite& Sprite::operator=(const Sprite& spr1)
 		m_Height = spr1.m_Height;
 		m_Scale = spr1.m_Scale;
 		m_IsFinish = spr1.m_IsFinish;
+		m_IsActive = spr1.m_IsActive;
 		m_Frames = spr1.m_Frames;
 		m_SpriteSheetTop = spr1.m_SpriteSheetTop;
 
@@ -87,6 +90,7 @@ Sprite::Sprite(Sprite&& spr1)
 	, m_Height{ spr1.m_Height }
 	, m_Scale{ spr1.m_Scale }
 	, m_IsFinish{ spr1.m_IsFinish }
+	, m_IsActive{ spr1.m_IsActive }
 	, m_Frames{ spr1.m_Frames }
 	, m_SpriteSheetTop{ spr1.m_SpriteSheetTop }
 
@@ -102,6 +106,7 @@ Sprite::Sprite(Sprite&& spr1)
 	spr1.m_Height = 0.f;
 	spr1.m_Scale = 0.f;
 	spr1.m_IsFinish = false;
+	spr1.m_IsActive = false;
 	spr1.m_Frames = 0;
 	spr1.m_SpriteSheetTop = 0.f;
 
@@ -128,6 +133,7 @@ Sprite& Sprite::operator= (Sprite&& spr1)
 		m_Height = spr1.m_Height;
 		m_Scale = spr1.m_Scale;
 		m_IsFinish = spr1.m_IsFinish;
+		m_IsActive = spr1.m_IsActive;
 		m_Frames = spr1.m_Frames;
 		m_SpriteSheetTop = spr1.m_SpriteSheetTop;
 
@@ -145,6 +151,7 @@ Sprite& Sprite::operator= (Sprite&& spr1)
 		spr1.m_Height = 0.f;
 		spr1.m_Scale = 0.f;
 		spr1.m_IsFinish = false;
+		spr1.m_IsActive = false;
 		spr1.m_Frames = 0;
 		spr1.m_SpriteSheetTop = 0.f;
 
@@ -162,35 +169,38 @@ Sprite::~Sprite( )
 
 void Sprite::Update( float elapsedSec, const bool repeat )
 {
-	m_AccuSec += elapsedSec;
-	
-	if ( m_AccuSec > m_FrameSec )
+	if (m_IsActive)
 	{
-		++m_ActFrame;
+		m_AccuSec += elapsedSec;
 
-		// Loop Animations
-		if ( m_ActFrame >= ( m_Cols * m_Rows ) && repeat )
+		if (m_AccuSec > m_FrameSec)
 		{
-			m_ActFrame = 0;
-			
-		}
-		else
-		{
-			// No Loop Animations
-			if (m_ActFrame >= (m_Cols * m_Rows ) && !repeat)
+			++m_ActFrame;
+
+			// Loop Animations
+			if (m_ActFrame >= (m_Cols * m_Rows) && repeat)
 			{
-				m_ActFrame = m_Cols - 1;
-				m_IsFinish = true;	// Animation finished
+				m_ActFrame = 0;
 
 			}
+			else
+			{
+				// No Loop Animations
+				if (m_ActFrame >= (m_Cols * m_Rows) && !repeat)
+				{
+					m_ActFrame = m_Cols - 1;
+					m_IsFinish = true;	// Animation finished
+
+				}
+			}
+
+			// Change the left and bottom pos of spritesheet according with active frame
+			UpdateLeftSrcRect();
+			UpdateBottomSrcRect();
+
+			// Only keep the remaining time
+			m_AccuSec -= m_FrameSec;
 		}
-
-		// Change the left and bottom pos of spritesheet according with active frame
-		UpdateLeftSrcRect();  
-		UpdateBottomSrcRect();
-
-		// Only keep the remaining time
-		m_AccuSec -= m_FrameSec;
 	}
 }
 
@@ -215,7 +225,10 @@ void Sprite::UpdateValues(const int cols, const int rows, const int frames, cons
 
 void Sprite::Draw( ) const
 {
-	m_pTexture->Draw(m_DstRect, m_SrcRect);
+	if (m_IsActive)
+	{
+		m_pTexture->Draw(m_DstRect, m_SrcRect);
+	}
 }
 
 // Flip the sprite to the oposite side using OpenGL
@@ -382,4 +395,9 @@ void Sprite::UpdateBottomSrcRect( )
 void Sprite::ResetAnimationFinish( bool reset )
 {
 	m_IsFinish = reset;
+}
+
+void Sprite::SetActive(bool active)
+{
+	m_IsActive = active;
 }

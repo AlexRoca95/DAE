@@ -72,3 +72,27 @@ void  Enemy::KillSoldier(float elapsedSec)
 
 }
 
+// Randomly chooses the death sound for the soldiers
+std::string Enemy::GetDeathSound()
+{
+	int deathEffect = rand() % 3;
+
+	std::string filename{};
+
+	switch (deathEffect)
+	{
+	case 0:
+		filename = "Resources/Sounds/Soldierdies1.wav";
+		break;
+
+	case 1:
+		filename = "Resources/Sounds/Soldierdies2.wav";
+		break;
+
+	case 2:
+		filename = "Resources/Sounds/Soldierdies3.mp3";
+		break;
+	}
+
+	return filename;
+}
