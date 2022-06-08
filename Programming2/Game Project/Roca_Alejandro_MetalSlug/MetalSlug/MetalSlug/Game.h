@@ -44,10 +44,15 @@ public:
 	void ProcessMouseDownEvent( const SDL_MouseButtonEvent& e );
 	void ProcessMouseUpEvent( const SDL_MouseButtonEvent& e );
 
+
+	bool GetCloseGame() const;
+
 private:
 
 	// DATA MEMBERS
 	const Window m_Window;
+	bool m_CloseGame;				// To know if player wants to close the game or not with the mouse
+	bool m_ClosePauseMenu;
 
 	GameState m_GameState;			// State of the Game
 
@@ -95,4 +100,8 @@ private:
 
 	void Cleanup( );
 	void ClearBackground( ) const;
+
+
+	void ClosePauseMenu();
+
 };

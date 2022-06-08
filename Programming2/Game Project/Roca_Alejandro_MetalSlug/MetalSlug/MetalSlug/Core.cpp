@@ -171,6 +171,12 @@ void Core::Run( )
 			}
 		}
 
+		// Player close the game in the Pause Menu
+		if (pGame->GetCloseGame())
+		{
+			quit = true;
+		}
+
 		if (!quit)
 		{
 			// Get current time

@@ -20,6 +20,8 @@ public:
 	void Draw() const;
 	void Update(float elapsedSec, Point2f& mousePos);
 
+	void SelectOption(Point2f& mousePos, bool& closeGame, bool& closePauseMenu);
+
 
 
 private:
@@ -34,7 +36,7 @@ private:
 
 	// Sprites
 	Sprite* m_pBackgroundMenu;
-
+	bool m_ClosePauseMenu;
 	
 	std::vector< std::pair<Sprite*, Sprite*> > m_pMainPauseTexts;	// It will contain the text with and without color		
 	
