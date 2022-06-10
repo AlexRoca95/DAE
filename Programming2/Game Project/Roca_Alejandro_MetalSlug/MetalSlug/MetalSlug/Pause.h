@@ -18,9 +18,9 @@ public:
 
 
 	void Draw() const;
-	void Update(float elapsedSec, Point2f& mousePos);
+	void Update(float elapsedSec, const Point2f& mousePos);
 
-	void SelectOption(Point2f& mousePos, bool& closeGame, bool& closePauseMenu);
+	void SelectOption(const Point2f& mousePos, bool& closeGame, bool& closePauseMenu);
 
 
 
@@ -31,16 +31,21 @@ private:
 		mainPause,
 		settings,
 		controls
+
 	};
 
+	PauseState m_PauseState;
+	Sprite* m_pMainPauseBackground;
+	Sprite* m_pControlsBackground;
+	Sprite* m_pSettingsBackground;
+	std::pair <Sprite*, Sprite*> m_pBackTexts;
+	std::vector< std::pair<Sprite*, Sprite*> > m_pMainPauseTexts;	// It will contain the text with and without color		
 
-	// Sprites
-	Sprite* m_pBackgroundMenu;
 	bool m_ClosePauseMenu;
 	
-	std::vector< std::pair<Sprite*, Sprite*> > m_pMainPauseTexts;	// It will contain the text with and without color		
 	
-
 	void Initialize(const Point2f& windowSize);
+	void HighlightText(const Point2f& mousePos, std::pair<Sprite*, Sprite*>& texts);
+
 };
 

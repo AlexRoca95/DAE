@@ -231,7 +231,7 @@ void Sprite::Draw( ) const
 	}
 }
 
-// Flip the sprite to the oposite side using OpenGL
+// Flip the sprite to the opposite side using OpenGL
 void Sprite::FlipSprite() const
 {
 	glTranslatef( m_DstRect.left + m_Width, m_DstRect.bottom + m_Height, 0.f );
@@ -260,6 +260,7 @@ void Sprite::ResetActFrame( )
 	m_ActFrame = 0;
 }
 
+// Reset the active frame from the animation to 0
 void Sprite::ResetSprite()
 {
 	m_ActFrame = 0;
