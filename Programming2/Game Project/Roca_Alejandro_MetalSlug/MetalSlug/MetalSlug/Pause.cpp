@@ -2,14 +2,22 @@
 #include "Pause.h"
 #include "Sprite.h"
 #include "utils.h"
+#include <iostream>
 
 
 Pause::Pause(const Point2f& windowSize, SoundManager* soundManager)
 	: m_pMainPauseBackground { }
 	, m_pControlsBackground{ }
 	, m_pSettingsBackground{ }
+	, m_pMusicNr{ }
+	, m_pEffectsNr{ }
 	, m_pBackTexts{ }
 	, m_pMainPauseTexts { }
+	, m_pVolumeArrows{ }
+	, m_pMusicArrows{ }
+	, m_pMusicArrowsR{ }
+	, m_pEffectsArrows{ }
+	, m_pEffectsArrowsR{ }
 	, m_ClosePauseMenu { false }
 	, m_PauseState { PauseState::mainPause }
 	
@@ -28,23 +36,43 @@ Pause::~Pause()
 	delete m_pBackTexts.first;
 	delete m_pBackTexts.second;
 
+	delete m_pMusicNr;
+	delete m_pEffectsNr;
+
 	for (std::pair<Sprite*, Sprite*> spr : m_pMainPauseTexts)
 	{
 		delete spr.first;
 		delete spr.second;
 	}
 
+	for (std::pair<Sprite*, Sprite*> spr : m_pVolumeArrows)
+	{
+		delete spr.first;
+		delete spr.second;
+	}
+
+
 }
 
 
 void Pause::Initialize(const Point2f& windowSize)
 {
-	// BACKGROUNDS SPRITES
-	// Background for the Pause Menu
+	
+	InitBackgrounds(windowSize);
+	InitTexts(windowSize);
+	InitArrows();
+	InitVolumeValues();
+	
+}
+
+void Pause::InitBackgrounds(const Point2f& windowSize)
+{
+	// BACKGROUNDS SPRITES FOR THE PAUSE MENU
+	
 	m_pMainPauseBackground = new Sprite("Resources/sprites/HUD/Pause/pauseMenu.png");
 	m_pMainPauseBackground->UpdateValues(1, 1, 1, 1.f, m_pMainPauseBackground->GetTexture()->GetWidth(), m_pMainPauseBackground->GetTexture()->GetHeight(), m_pMainPauseBackground->GetTexture()->GetHeight());
-	m_pMainPauseBackground->SetLeftDstRect(( windowSize.x / 2.f ) - (m_pMainPauseBackground->GetFrameWidth() * g_Scale) / 2.f  );
-	m_pMainPauseBackground->SetBottomDstRect(( windowSize.y / 2.f ) - ( m_pMainPauseBackground->GetFrameHeight() * g_Scale ) / 2.f  );
+	m_pMainPauseBackground->SetLeftDstRect((windowSize.x / 2.f) - (m_pMainPauseBackground->GetFrameWidth() * g_Scale) / 2.f);
+	m_pMainPauseBackground->SetBottomDstRect((windowSize.y / 2.f) - (m_pMainPauseBackground->GetFrameHeight() * g_Scale) / 2.f);
 
 	m_pControlsBackground = new Sprite("Resources/sprites/HUD/Pause/keyInfo.png");
 	m_pControlsBackground->UpdateValues(1, 1, 1, 1.f, m_pControlsBackground->GetTexture()->GetWidth(), m_pControlsBackground->GetTexture()->GetHeight(), m_pControlsBackground->GetTexture()->GetHeight());
@@ -56,7 +84,10 @@ void Pause::Initialize(const Point2f& windowSize)
 	m_pSettingsBackground->SetLeftDstRect((windowSize.x / 2.f) - (m_pSettingsBackground->GetFrameWidth() * g_Scale) / 2.f);
 	m_pSettingsBackground->SetBottomDstRect((windowSize.y / 2.f) - (m_pSettingsBackground->GetFrameHeight() * g_Scale) / 2.f);
 
+}
 
+void Pause::InitTexts(const Point2f& windowSize)
+{
 	// TEXTS
 	// CONTINUE TEXT 
 	Sprite* pContinue{ new Sprite("Resources/sprites/HUD/Pause/continue.png") };
@@ -71,8 +102,7 @@ void Pause::Initialize(const Point2f& windowSize)
 	pContinueColored->SetBottomDstRect(pContinue->GetDstRect().bottom);
 
 	// First sprite will be without color and second one with color
-	m_pMainPauseTexts.push_back( std::make_pair(pContinue, pContinueColored ) );
-
+	m_pMainPauseTexts.push_back(std::make_pair(pContinue, pContinueColored));
 	const float textSpacing{ 10.f };
 
 	// SETTINGS TEXT
@@ -87,7 +117,7 @@ void Pause::Initialize(const Point2f& windowSize)
 	pSettingsColored->SetLeftDstRect(pContinue->GetDstRect().left);
 	pSettingsColored->SetBottomDstRect(pSettings->GetDstRect().bottom);
 
-	m_pMainPauseTexts.push_back( std::make_pair(pSettings, pSettingsColored) );
+	m_pMainPauseTexts.push_back(std::make_pair(pSettings, pSettingsColored));
 
 	// CONTROLS TEXT
 	Sprite* pControls{ new Sprite("Resources/sprites/HUD/Pause/controls.png") };
@@ -121,15 +151,87 @@ void Pause::Initialize(const Point2f& windowSize)
 	m_pBackTexts.first = new Sprite("Resources/sprites/HUD/pause/back.png");
 	m_pBackTexts.first->UpdateValues(1, 1, 1, 1.f, m_pBackTexts.first->GetTexture()->GetWidth(), m_pBackTexts.first->GetTexture()->GetHeight(), m_pBackTexts.first->GetTexture()->GetHeight());
 	m_pBackTexts.first->SetLeftDstRect((windowSize.x / 2.f) - (m_pBackTexts.first->GetFrameWidth() * g_Scale) / 2.f);
-	m_pBackTexts.first->SetBottomDstRect(m_pControlsBackground->GetDstRect().bottom + ( m_pBackTexts.first->GetFrameHeight() ) );
-	
+	m_pBackTexts.first->SetBottomDstRect(m_pControlsBackground->GetDstRect().bottom + (m_pBackTexts.first->GetFrameHeight()));
+
 	// BACK TEXT (Colored)
 	m_pBackTexts.second = new Sprite("Resources/sprites/HUD/pause/backColor.png");
 	m_pBackTexts.second->UpdateValues(1, 1, 1, 1.f, m_pBackTexts.second->GetTexture()->GetWidth(), m_pBackTexts.second->GetTexture()->GetHeight(), m_pBackTexts.second->GetTexture()->GetHeight());
 	m_pBackTexts.second->SetLeftDstRect(m_pBackTexts.first->GetDstRect().left);
 	m_pBackTexts.second->SetBottomDstRect(m_pBackTexts.first->GetDstRect().bottom);
 
+}
 
+void Pause::InitArrows()
+{
+	// MUSIC ARROWS
+	m_pMusicArrows.first = new Sprite("Resources/sprites/HUD/Pause/arrow.png");
+	m_pMusicArrows.first->UpdateValues(1, 1, 1, 1.f, m_pMusicArrows.first->GetTexture()->GetWidth(), m_pMusicArrows.first->GetTexture()->GetHeight(), m_pMusicArrows.first->GetTexture()->GetHeight());
+	m_pMusicArrows.first->SetLeftDstRect((m_pSettingsBackground->GetDstRect().left + m_pSettingsBackground->GetFrameWidth()) + (m_pMusicArrows.first->GetFrameWidth()) * 10.f);
+	m_pMusicArrows.first->SetBottomDstRect((m_pSettingsBackground->GetDstRect().bottom + m_pSettingsBackground->GetFrameHeight()) + m_pMusicArrows.first->GetFrameHeight() * 3.2f);
+
+	// (Colored)
+	m_pMusicArrows.second = new Sprite("Resources/sprites/HUD/Pause/arrowColor.png");
+	m_pMusicArrows.second->UpdateValues(1, 1, 1, 1.f, m_pMusicArrows.second->GetTexture()->GetWidth(), m_pMusicArrows.second->GetTexture()->GetHeight(), m_pMusicArrows.second->GetTexture()->GetHeight());
+	m_pMusicArrows.second->SetLeftDstRect(m_pMusicArrows.first->GetDstRect().left);
+	m_pMusicArrows.second->SetBottomDstRect(m_pMusicArrows.first->GetDstRect().bottom);
+
+	m_pVolumeArrows.push_back(m_pMusicArrows);
+
+	// RIGHT ARROW
+	m_pMusicArrowsR.first = new Sprite("Resources/sprites/HUD/Pause/arrowR.png");
+	m_pMusicArrowsR.first->UpdateValues(1, 1, 1, 1.f, m_pMusicArrowsR.first->GetTexture()->GetWidth(), m_pMusicArrowsR.first->GetTexture()->GetHeight(), m_pMusicArrowsR.first->GetTexture()->GetHeight());
+	m_pMusicArrowsR.first->SetLeftDstRect((m_pSettingsBackground->GetDstRect().left + m_pSettingsBackground->GetFrameWidth()) + (m_pMusicArrowsR.first->GetFrameWidth()) * 18.f);
+	m_pMusicArrowsR.first->SetBottomDstRect((m_pSettingsBackground->GetDstRect().bottom + m_pSettingsBackground->GetFrameHeight()) + m_pMusicArrowsR.first->GetFrameHeight() * 3.2f);
+
+	m_pMusicArrowsR.second = new Sprite("Resources/sprites/HUD/Pause/arrowColorR.png");
+	m_pMusicArrowsR.second->UpdateValues(1, 1, 1, 1.f, m_pMusicArrowsR.second->GetTexture()->GetWidth(), m_pMusicArrowsR.second->GetTexture()->GetHeight(), m_pMusicArrowsR.second->GetTexture()->GetHeight());
+	m_pMusicArrowsR.second->SetLeftDstRect(m_pMusicArrowsR.first->GetDstRect().left);
+	m_pMusicArrowsR.second->SetBottomDstRect(m_pMusicArrowsR.first->GetDstRect().bottom);
+
+	m_pVolumeArrows.push_back(m_pMusicArrowsR);
+
+	// EFFECTS ARROWS
+	m_pEffectsArrows.first = new Sprite("Resources/sprites/HUD/Pause/arrow.png");
+	m_pEffectsArrows.first->UpdateValues(1, 1, 1, 1.f, m_pEffectsArrows.first->GetTexture()->GetWidth(), m_pEffectsArrows.first->GetTexture()->GetHeight(), m_pEffectsArrows.first->GetTexture()->GetHeight());
+	m_pEffectsArrows.first->SetLeftDstRect(m_pMusicArrows.first->GetDstRect().left);
+	m_pEffectsArrows.first->SetBottomDstRect((m_pSettingsBackground->GetDstRect().bottom + m_pSettingsBackground->GetFrameHeight()) - m_pEffectsArrows.first->GetFrameHeight() * 1.f);
+
+	// (Colored)
+	m_pEffectsArrows.second = new Sprite("Resources/sprites/HUD/Pause/arrowColor.png");
+	m_pEffectsArrows.second->UpdateValues(1, 1, 1, 1.f, m_pEffectsArrows.second->GetTexture()->GetWidth(), m_pEffectsArrows.second->GetTexture()->GetHeight(), m_pEffectsArrows.second->GetTexture()->GetHeight());
+	m_pEffectsArrows.second->SetLeftDstRect(m_pEffectsArrows.first->GetDstRect().left);
+	m_pEffectsArrows.second->SetBottomDstRect(m_pEffectsArrows.first->GetDstRect().bottom);
+
+	m_pVolumeArrows.push_back(m_pEffectsArrows);
+
+	// RIGHT ARROW
+	m_pEffectsArrowsR.first = new Sprite("Resources/sprites/HUD/Pause/arrowR.png");
+	m_pEffectsArrowsR.first->UpdateValues(1, 1, 1, 1.f, m_pEffectsArrowsR.first->GetTexture()->GetWidth(), m_pEffectsArrowsR.first->GetTexture()->GetHeight(), m_pEffectsArrowsR.first->GetTexture()->GetHeight());
+	m_pEffectsArrowsR.first->SetLeftDstRect(m_pMusicArrowsR.first->GetDstRect().left);
+	m_pEffectsArrowsR.first->SetBottomDstRect((m_pSettingsBackground->GetDstRect().bottom + m_pSettingsBackground->GetFrameHeight()) - m_pEffectsArrowsR.first->GetFrameHeight() * 1.f);
+
+	// (Colored)
+	m_pEffectsArrowsR.second = new Sprite("Resources/sprites/HUD/Pause/arrowColorR.png");
+	m_pEffectsArrowsR.second->UpdateValues(1, 1, 1, 1.f, m_pEffectsArrowsR.second->GetTexture()->GetWidth(), m_pEffectsArrowsR.second->GetTexture()->GetHeight(), m_pEffectsArrowsR.second->GetTexture()->GetHeight());
+	m_pEffectsArrowsR.second->SetLeftDstRect(m_pEffectsArrowsR.first->GetDstRect().left);
+	m_pEffectsArrowsR.second->SetBottomDstRect(m_pEffectsArrowsR.first->GetDstRect().bottom);
+
+	m_pVolumeArrows.push_back(m_pEffectsArrowsR);
+}
+
+void Pause::InitVolumeValues()
+{
+	// MUSIC Values
+	m_pMusicNr = new Sprite("Resources/sprites/HUD/Pause/volumeNrs.png");
+	m_pMusicNr->UpdateValues(10, 1, 10, 1.f, m_pMusicNr->GetTexture()->GetWidth() / 10.f, m_pMusicNr->GetTexture()->GetHeight(), m_pMusicNr->GetTexture()->GetHeight());
+	m_pMusicNr->SetLeftDstRect(m_pMusicArrows.first->GetDstRect().left + (m_pMusicNr->GetFrameWidth() * 4.5f));
+	m_pMusicNr->SetBottomDstRect(m_pMusicArrows.first->GetDstRect().bottom);
+
+	// Effect Values
+	m_pEffectsNr = new Sprite("Resources/sprites/HUD/Pause/volumeNrs.png");
+	m_pEffectsNr->UpdateValues(10, 1, 10, 1.f, m_pEffectsNr->GetTexture()->GetWidth() / 10.f, m_pEffectsNr->GetTexture()->GetHeight(), m_pEffectsNr->GetTexture()->GetHeight());
+	m_pEffectsNr->SetLeftDstRect(m_pEffectsArrows.first->GetDstRect().left + (m_pEffectsNr->GetFrameWidth() * 4.5f));
+	m_pEffectsNr->SetBottomDstRect(m_pEffectsArrows.first->GetDstRect().bottom);
 }
 
 void Pause::Draw() const
@@ -137,52 +239,110 @@ void Pause::Draw() const
 	switch (m_PauseState)
 	{
 	case Pause::PauseState::mainPause:
-		m_pMainPauseBackground->Draw();
 
-		for (int i{ 0 }; i < m_pMainPauseTexts.size(); i++)
-		{
-			// Only those that are activated will be drawn
-			m_pMainPauseTexts.at(i).first->Draw();				// Better at than [] to access elements
-			m_pMainPauseTexts.at(i).second->Draw();
-		}
+		DrawMainPause();
 		break;
+
 	case Pause::PauseState::settings:
-		m_pSettingsBackground->Draw();
-		m_pBackTexts.first->Draw();
-		m_pBackTexts.second->Draw();
+
+		DrawSettings();
 		break;
+
 	case Pause::PauseState::controls:
-		m_pControlsBackground->Draw();
-		m_pBackTexts.first->Draw();
-		m_pBackTexts.second->Draw();
+
+		DrawControls();
 		break;
+
 	}
 	
 }
 
-void Pause::Update(float elapsedSec, const Point2f& mousePos)
+void Pause::DrawMainPause() const
+{
+	m_pMainPauseBackground->Draw();
+
+	for (int i{ 0 }; i < m_pMainPauseTexts.size(); i++)
+	{
+		// Only those that are activated will be drawn
+		m_pMainPauseTexts.at(i).first->Draw();				// Better at than [] to access elements
+		m_pMainPauseTexts.at(i).second->Draw();
+	}
+}
+
+void Pause::DrawSettings() const
+{
+	m_pSettingsBackground->Draw();
+
+	m_pBackTexts.first->Draw();
+	m_pBackTexts.second->Draw();
+
+	for (int i{ 0 }; i < m_pVolumeArrows.size(); i++)
+	{
+		m_pVolumeArrows.at(i).first->Draw();
+		m_pVolumeArrows.at(i).second->Draw();
+	}
+
+	m_pMusicNr->Draw();
+	m_pEffectsNr->Draw();
+}
+
+void Pause::DrawControls() const
+{
+	m_pControlsBackground->Draw();
+	m_pBackTexts.first->Draw();
+	m_pBackTexts.second->Draw();
+}
+
+
+void Pause::Update(const Point2f& mousePos)
 {
 	switch (m_PauseState)
 	{
 	case Pause::PauseState::mainPause:
-		for (int i{ 0 }; i < m_pMainPauseTexts.size(); i++)
-		{
-			HighlightText(mousePos, m_pMainPauseTexts.at(i));
-		}
+
+		UpdateMainPause(mousePos);
 		break;
+
 	case Pause::PauseState::settings:
-		m_pBackTexts.first->SetBottomDstRect(m_pSettingsBackground->GetDstRect().bottom + (m_pBackTexts.first->GetFrameHeight()));
-		m_pBackTexts.second->SetBottomDstRect(m_pBackTexts.first->GetDstRect().bottom);
-		HighlightText(mousePos, m_pBackTexts);
+
+		UpdateSettings(mousePos);
 		break;
+
 	case Pause::PauseState::controls:
-		m_pBackTexts.first->SetBottomDstRect(m_pControlsBackground->GetDstRect().bottom + (m_pBackTexts.first->GetFrameHeight()));
-		m_pBackTexts.second->SetBottomDstRect(m_pBackTexts.first->GetDstRect().bottom);
-		HighlightText(mousePos, m_pBackTexts);
+
+		UpdateControls(mousePos);
 		break;
 
 	}
 	
+}
+
+void Pause::UpdateMainPause(const Point2f& mousePos)
+{
+	for (int i{ 0 }; i < m_pMainPauseTexts.size(); i++)
+	{
+		HighlightSprite(mousePos, m_pMainPauseTexts.at(i));
+	}
+}
+
+void Pause::UpdateSettings(const Point2f& mousePos)
+{
+	m_pBackTexts.first->SetBottomDstRect(m_pSettingsBackground->GetDstRect().bottom + (m_pBackTexts.first->GetFrameHeight()));
+	m_pBackTexts.second->SetBottomDstRect(m_pBackTexts.first->GetDstRect().bottom);
+	HighlightSprite(mousePos, m_pBackTexts);
+
+	for (int i{ 0 }; i < m_pVolumeArrows.size(); i++)
+	{
+		HighlightSprite(mousePos, m_pVolumeArrows.at(i) );
+	}
+}
+
+void Pause::UpdateControls(const Point2f& mousePos)
+{
+	m_pBackTexts.first->SetBottomDstRect(m_pControlsBackground->GetDstRect().bottom + (m_pBackTexts.first->GetFrameHeight()));
+	m_pBackTexts.second->SetBottomDstRect(m_pBackTexts.first->GetDstRect().bottom);
+	HighlightSprite(mousePos, m_pBackTexts);
+
 }
 
 // Check wich selection the player chooses. It returns true if the player wants to close the game
@@ -235,19 +395,19 @@ void Pause::SelectOption(const Point2f& mousePos, bool& closeGame, bool& closePa
 	
 }
 
-// Highlight the text when mouse over
-void Pause::HighlightText(const Point2f& mousePos, std::pair<Sprite*, Sprite*>& texts)
+// Highlight the sprite when mouse over
+void Pause::HighlightSprite(const Point2f& mousePos, std::pair<Sprite*, Sprite*>& sprites)
 {
-	if (utils::IsPointInRect(mousePos, texts.first->GetDstRect()))
+	if (utils::IsPointInRect(mousePos, sprites.first->GetDstRect()))
 	{
 		// Draw colored text when mouse on it
-		texts.first->SetActive(false);
-		texts.second->SetActive(true);
+		sprites.first->SetActive(false);
+		sprites.second->SetActive(true);
 	}
 	else
 	{
 		// Draw text without color
-		texts.first->SetActive(true);
-		texts.second->SetActive(false);
+		sprites.first->SetActive(true);
+		sprites.second->SetActive(false);
 	}
 }

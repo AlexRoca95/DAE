@@ -18,7 +18,7 @@ public:
 
 
 	void Draw() const;
-	void Update(float elapsedSec, const Point2f& mousePos);
+	void Update(const Point2f& mousePos);
 
 	void SelectOption(const Point2f& mousePos, bool& closeGame, bool& closePauseMenu);
 
@@ -38,14 +38,37 @@ private:
 	Sprite* m_pMainPauseBackground;
 	Sprite* m_pControlsBackground;
 	Sprite* m_pSettingsBackground;
+	Sprite* m_pMusicNr;
+	Sprite* m_pEffectsNr;
+	std::pair <Sprite*, Sprite*> m_pMusicArrows;	// It will contain the sprite with and without color	
+	std::pair <Sprite*, Sprite*> m_pMusicArrowsR;
+	std::pair <Sprite*, Sprite*> m_pEffectsArrows;
+	std::pair <Sprite*, Sprite*> m_pEffectsArrowsR;
 	std::pair <Sprite*, Sprite*> m_pBackTexts;
-	std::vector< std::pair<Sprite*, Sprite*> > m_pMainPauseTexts;	// It will contain the text with and without color		
+	std::vector< std::pair<Sprite*, Sprite*> > m_pMainPauseTexts;	
+	std::vector< std::pair<Sprite*, Sprite*> > m_pVolumeArrows;
 
 	bool m_ClosePauseMenu;
 	
 	
+	// INIT SPRITES
 	void Initialize(const Point2f& windowSize);
-	void HighlightText(const Point2f& mousePos, std::pair<Sprite*, Sprite*>& texts);
+	void InitBackgrounds(const Point2f& windowSize);
+	void InitTexts(const Point2f& windowSize);
+	void InitArrows();
+	void InitVolumeValues();
+
+	// DRAWINGS
+	void DrawMainPause() const;
+	void DrawSettings() const;
+	void DrawControls() const;
+
+	// UPDATES
+	void UpdateMainPause(const Point2f& mousePos);
+	void UpdateSettings(const Point2f& mousePos);
+	void UpdateControls(const Point2f& mousePos);
+
+	void HighlightSprite(const Point2f& mousePos, std::pair<Sprite*, Sprite*>& texts);
 
 };
 

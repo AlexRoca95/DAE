@@ -206,6 +206,7 @@ void Game::Update( float elapsedSec )
 	switch (m_GameState)
 	{
 	case Game::GameState::menu:
+
 		m_pMenu->Update(elapsedSec, m_GameState);
 
 		if ( m_pMenu->GetStartPlaying() )
@@ -215,13 +216,19 @@ void Game::Update( float elapsedSec )
 			delete m_pMenu;
 		}
 		break;
+
 	case Game::GameState::playing:
+
 		UpdatePlaying(elapsedSec);
 		break;
+
 	case Game::GameState::pause:
-		m_pPause->Update(elapsedSec, m_MousePos);
+
+		m_pPause->Update(m_MousePos);
 		break;
+
 	case Game::GameState::gameOver:
+
 		// Nothing to do here
 		break;
 	}
