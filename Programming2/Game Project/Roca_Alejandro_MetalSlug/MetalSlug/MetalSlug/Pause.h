@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "SoundManager.h"
 
 class SoundManager;
 class Sprite;
@@ -48,7 +49,9 @@ private:
 	std::vector< std::pair<Sprite*, Sprite*> > m_pMainPauseTexts;	
 	std::vector< std::pair<Sprite*, Sprite*> > m_pVolumeArrows;
 
+	SoundManager* m_pSoundManager;
 	bool m_ClosePauseMenu;
+	const int m_VolumeChangeValue;
 	
 	
 	// INIT SPRITES
@@ -69,6 +72,7 @@ private:
 	void UpdateControls(const Point2f& mousePos);
 
 	void HighlightSprite(const Point2f& mousePos, std::pair<Sprite*, Sprite*>& texts);
+	void CalculateVolumeValue();
 
 };
 

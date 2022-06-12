@@ -19,8 +19,9 @@ Pause::Pause(const Point2f& windowSize, SoundManager* soundManager)
 	, m_pEffectsArrows{ }
 	, m_pEffectsArrowsR{ }
 	, m_ClosePauseMenu { false }
+	, m_VolumeChangeValue { 10 }
+	, m_pSoundManager { soundManager }   // Works because we are copying pointers not the object itself
 	, m_PauseState { PauseState::mainPause }
-	
 	
 {
 	Initialize(windowSize);
@@ -226,12 +227,14 @@ void Pause::InitVolumeValues()
 	m_pMusicNr->UpdateValues(10, 1, 10, 1.f, m_pMusicNr->GetTexture()->GetWidth() / 10.f, m_pMusicNr->GetTexture()->GetHeight(), m_pMusicNr->GetTexture()->GetHeight());
 	m_pMusicNr->SetLeftDstRect(m_pMusicArrows.first->GetDstRect().left + (m_pMusicNr->GetFrameWidth() * 4.5f));
 	m_pMusicNr->SetBottomDstRect(m_pMusicArrows.first->GetDstRect().bottom);
+	m_pMusicNr->SetActFrame(9);
 
 	// Effect Values
 	m_pEffectsNr = new Sprite("Resources/sprites/HUD/Pause/volumeNrs.png");
 	m_pEffectsNr->UpdateValues(10, 1, 10, 1.f, m_pEffectsNr->GetTexture()->GetWidth() / 10.f, m_pEffectsNr->GetTexture()->GetHeight(), m_pEffectsNr->GetTexture()->GetHeight());
 	m_pEffectsNr->SetLeftDstRect(m_pEffectsArrows.first->GetDstRect().left + (m_pEffectsNr->GetFrameWidth() * 4.5f));
 	m_pEffectsNr->SetBottomDstRect(m_pEffectsArrows.first->GetDstRect().bottom);
+	m_pEffectsNr->SetActFrame(9);
 }
 
 void Pause::Draw() const
@@ -335,6 +338,21 @@ void Pause::UpdateSettings(const Point2f& mousePos)
 	{
 		HighlightSprite(mousePos, m_pVolumeArrows.at(i) );
 	}
+
+	
+	CalculateVolumeValue();
+}
+
+void Pause::CalculateVolumeValue()
+{
+	int musicVolume{ m_pSoundManager->GetMusicVolume() };
+	m_pMusicNr->SetActFrame(musicVolume / m_VolumeChangeValue);
+	m_pMusicNr->UpdateLeftSrcRect();
+
+	int effectsVolume{ m_pSoundManager->GetEffectsVolume() };
+	m_pEffectsNr->SetActFrame(effectsVolume / m_VolumeChangeValue);
+	m_pEffectsNr->UpdateLeftSrcRect();
+
 }
 
 void Pause::UpdateControls(const Point2f& mousePos)
@@ -383,6 +401,34 @@ void Pause::SelectOption(const Point2f& mousePos, bool& closeGame, bool& closePa
 			// Go back
 			m_PauseState = PauseState::mainPause;
 		}
+
+		for (int i{}; i < m_pVolumeArrows.size(); i++)
+		{
+			if (utils::IsPointInRect(mousePos, m_pVolumeArrows.at(i).first->GetDstRect()))
+			{
+				switch (i)
+				{
+				case 0:
+					m_pSoundManager->ChangeSoundtrackVolume(-m_VolumeChangeValue);
+					break;
+
+				case 1:
+					m_pSoundManager->ChangeSoundtrackVolume(m_VolumeChangeValue);
+					break;
+
+				case 2:
+					m_pSoundManager->ChangeEffectVolume(-m_VolumeChangeValue);
+					break;
+
+				case 3:
+					m_pSoundManager->ChangeEffectVolume(m_VolumeChangeValue);
+					break;
+
+				}
+			}
+		}
+		
+
 		break;
 	case Pause::PauseState::controls:
 		if ( utils::IsPointInRect(mousePos, m_pBackTexts.first->GetDstRect()) )

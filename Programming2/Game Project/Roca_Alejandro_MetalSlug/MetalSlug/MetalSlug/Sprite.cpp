@@ -365,7 +365,11 @@ void Sprite::SetSrcRect(const float y)
 
 void Sprite::SetActFrame(int frame)
 {
-	m_ActFrame = frame;
+	if (frame >= 0)  // No negative frame values
+	{
+		m_ActFrame = frame;
+	}
+	
 }
 
 void Sprite::ChangeFrame(int frame)

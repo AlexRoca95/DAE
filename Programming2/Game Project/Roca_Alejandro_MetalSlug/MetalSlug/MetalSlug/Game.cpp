@@ -83,6 +83,7 @@ void Game::InitMenu()
 	m_pMenuSong = m_pSoundManager->GetSound("Resources/Sounds/MenuSoundtrack.mp3");
 
 	m_pMenuSong->Play(true);
+
 }
 
 void Game::InitLevelSounds()
@@ -330,7 +331,7 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 				InitPause();
 			}
 			m_GameState = GameState::pause;
-			m_pSoundManager->turnOnOffSound();  // Turn off sound while pause state
+			m_pSoundManager->turnOffSound();  // Turn off the sound while in pause
 
 		}
 		break;
