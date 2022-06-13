@@ -23,7 +23,6 @@ Game::Game( const Window& window )
 	, m_pMenu { }
 	, m_GameState { GameState::menu }
 	, m_pGameOverScreen { }
-	, m_pMenuSong { }
 	, m_pMissionStartSound { }
 	, m_pGameOverSong { }
 	, m_pPistolFire { }
@@ -78,11 +77,9 @@ void Game::InitHUD()
 
 void Game::InitMenu()
 {
-	m_pMenu = new Menu( Point2f{m_Window.width, m_Window.height} );
+	m_pMenu = new Menu( Point2f{m_Window.width, m_Window.height}, m_pSoundManager );
 
-	m_pMenuSong = m_pSoundManager->GetSound("Resources/Sounds/MenuSoundtrack.mp3");
-
-	m_pMenuSong->Play(true);
+	
 
 }
 
@@ -93,8 +90,7 @@ void Game::InitLevelSounds()
 	m_pPistolFire = m_pSoundManager->GetEffect("Resources/Sounds/PistolFire.wav");
 	m_pMissionStartSound = m_pSoundManager->GetEffect("Resources/Sounds/MissionStart.mp3");
 	 
-	// Stop the menu song and start the level song
-	m_pMenuSong->Stop();
+
 	m_pSoundManager->PlaySong(m_pLevelSong, true);
 	m_pSoundManager->PlaySoundEffect(m_pMissionStartSound, 0);
 

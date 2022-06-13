@@ -241,6 +241,16 @@ void Sprite::FlipSprite() const
 	glTranslatef(-(m_DstRect.left + m_Width ), -( m_DstRect.bottom + m_Height ), 0.f );
 }
 
+// Scale the sprite with a certain value
+void Sprite::ScaleSprite(float value) const
+{
+	glTranslatef(m_DstRect.left + m_Width, m_DstRect.bottom + m_Height, 0.f);
+
+	glScalef(value, value, 1.f);
+
+	glTranslatef(-(m_DstRect.left + m_Width), -(m_DstRect.bottom + m_Height), 0.f);
+}
+
 // Rotate the sprite around his own center
 //  1º : Translate to the center of the sprite
 //  2º : Rotate certain angle

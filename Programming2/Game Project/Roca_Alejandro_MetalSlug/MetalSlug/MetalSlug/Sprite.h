@@ -22,6 +22,7 @@ public:
 		float width, float height, float spriteSheetTop, float scale = 2.7f);
 
 	void FlipSprite() const;
+	void ScaleSprite(float value) const;
 	void RotateSprite(float angle) const;
 	void ResetActFrame();
 	void ResetSprite();
