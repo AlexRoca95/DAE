@@ -24,6 +24,7 @@ public:
 
 
 	std::vector <GameObject*> GetGameObjects() const;
+	int GetTotalPrisoners() const;
 
 
 private:

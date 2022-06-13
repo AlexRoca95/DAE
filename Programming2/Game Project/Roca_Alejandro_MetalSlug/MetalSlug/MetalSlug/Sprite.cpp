@@ -205,8 +205,8 @@ void Sprite::Update( float elapsedSec, const bool repeat )
 }
 
 // Update all the values for the sprite. 
-void Sprite::UpdateValues(const int cols, const int rows, const int frames, const float frameSec, const float width,
-	const float height, const float spriteSheetTop, const float scale)
+void Sprite::UpdateValues(int cols, int rows, int frames, float frameSec, float width,
+	float height, float spriteSheetTop, float scale)
 {
 
 	m_Frames = frames;
@@ -323,7 +323,7 @@ bool Sprite::GetAnimationFinish( ) const
 	return m_IsFinish;
 }
 
-void Sprite::SetDstRect( const float x, const float y, const float width, const float height )
+void Sprite::SetDstRect( float x, float y, float width, float height )
 {
 
 	m_DstRect.left = x;
@@ -333,23 +333,23 @@ void Sprite::SetDstRect( const float x, const float y, const float width, const 
 
 }
 
-void Sprite::SetDstRect( const float width, const float height )
+void Sprite::SetDstRect( float width, float height )
 {
 	m_DstRect.width = width * m_Scale;  
 	m_DstRect.height = height * m_Scale;
 }
 
-void Sprite::SetLeftDstRect( const float left )
+void Sprite::SetLeftDstRect( float left )
 {
 	m_DstRect.left = left;
 }
 
-void Sprite::SetBottomDstRect( const float bottom )
+void Sprite::SetBottomDstRect( float bottom )
 {
 	m_DstRect.bottom = bottom;
 }
 
-void Sprite::SetSrcRect( const float y, const float width, const float height )
+void Sprite::SetSrcRect( float y, float width, float height )
 {
 	m_SrcRect.width = width;
 	m_SrcRect.height = height;
@@ -357,7 +357,7 @@ void Sprite::SetSrcRect( const float y, const float width, const float height )
 	
 }
 
-void Sprite::SetSrcRect(const float y)
+void Sprite::SetSrcRect(float y)
 {
 	m_SrcRect.bottom = y * (m_ActFrame / m_Cols + 1);
 

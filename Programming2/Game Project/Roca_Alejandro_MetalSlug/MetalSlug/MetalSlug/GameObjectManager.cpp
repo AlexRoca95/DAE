@@ -119,7 +119,7 @@ void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* le
 
 		if (m_TotalNrPrisoners > 0)   // Still prisoners left
 		{
-			AvatarReleasePrisoner(avatar->GetHitBox());
+			AvatarReleasePrisoner( avatar->GetHitBox() );
 		}
 
 		if (m_TotalNrItems > 0)
@@ -380,4 +380,8 @@ std::vector <GameObject*> GameObjectManager::GetGameObjects() const
 	return m_pGameObjects;
 }
 
+int GameObjectManager::GetTotalPrisoners() const
+{
+	return m_TotalNrPrisoners;
+}
 

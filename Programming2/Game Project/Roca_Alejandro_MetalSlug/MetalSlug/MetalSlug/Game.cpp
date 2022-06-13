@@ -46,9 +46,9 @@ void Game::Initialize( )
 
 	InitAvatar();
 	InitCamera();
-	InitHUD();
 	InitPause();			// Already load everything for the pause Menu
 	AddGameObjects();
+	InitHUD();
 
 	InitLevelSounds();
 
@@ -73,7 +73,7 @@ void Game::InitCamera()
 void Game::InitHUD()
 {
 	// Bottom left and size of the window
-	m_pHUD = new HUD(Point2f{ }, Point2f{ m_Window.width, m_Window.height } , m_pSoundManager); 
+	m_pHUD = new HUD(Point2f{ }, Point2f{ m_Window.width, m_Window.height } , m_pSoundManager, m_pGameObjectManager->GetTotalPrisoners()); 
 }
 
 void Game::InitMenu()
@@ -248,9 +248,9 @@ void Game::UpdatePlaying(float elapsedSec)
 
 	m_pCamera->SetLevelBoundaries(m_pLevel->GetBoundaries());
 
-	m_pHUD->Update( elapsedSec, m_pAvatar->GetNrLifes(), m_pAvatar->GetTotalPoints() );
+	m_pHUD->Update( elapsedSec, m_pAvatar->GetNrLifes(), m_pAvatar->GetTotalPoints(), m_pGameObjectManager->GetTotalPrisoners() );
 
-	if ( !m_pAvatar->GetAvatarAlive() )
+	if ( !m_pAvatar->GetAvatarAlive() || m_pHUD->GetTimeOver() )
 	{
 		InitGameOverState();
 	}

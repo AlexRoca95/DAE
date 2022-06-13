@@ -10,7 +10,7 @@ class HUD
 public:
 
 
-	HUD(const Point2f& bottomLeft, const Point2f& windowSize, SoundManager* sounds);
+	HUD(const Point2f& bottomLeft, const Point2f& windowSize, SoundManager* sounds, int totalPrisoners);
 	~HUD();
 	HUD(const HUD& hud) = delete;
 	HUD(HUD&& hud) = delete;
@@ -19,9 +19,11 @@ public:
 
 
 	void Draw() const;
-	void Update(float elapsedSec, const int nrLifes, unsigned int totalPoints);
+	void Update(float elapsedSec, const int nrLifes, unsigned int totalPoints, unsigned int totalPrisoners);
 
 	void ActivateGoTextAnimation();
+
+	bool GetTimeOver() const;
 
 private:
 
@@ -32,8 +34,8 @@ private:
 	const float m_LeftBorder;
 	const float m_BottomBorder;
 
-
-	int m_PrisonersReleased;
+	int m_TotalPrisoners;		
+	float m_Xpos;
 
 	// GO Text animation
 	bool m_GoAnimation;
@@ -45,17 +47,23 @@ private:
 	Sprite* m_pWeapons;
 	Sprite* m_pPlayer;
 	Sprite* m_pLevel;
-	Sprite* m_pPrisoners;
 	Sprite* m_pGo;
 	Sprite* m_pNrLifes;
+	std::vector<Sprite*> m_pPrisoners;
+	std::vector<Sprite*> m_pSystemPoint;   // Points system
+	std::vector<Sprite*> m_pTimer;
 
-	// Points system
-	std::vector<Sprite*> m_SystemPoint;
-
+	// Points System
 	int m_UnitValue;
 	int m_TenValue;
 	int m_HundredValue;
 	int m_ThousandValue;
+
+	// Timer
+	const int m_StartTime;
+	int m_TimeLeft;
+	float m_TimerSeconds;
+	bool m_TimeOver;
 
 	// Sounds
 	SoundManager* m_pSoundManager;
@@ -68,6 +76,8 @@ private:
 
 	void UpdateGoText(float elapsedSec);
 	void UpdateSystemPoints(float elapsedSec, unsigned int totalPoints);
+	void UpdatePrisoners(unsigned int totalPrisoners);
+	void UpdateTimer(float elapsedSec);
 
 };
 
