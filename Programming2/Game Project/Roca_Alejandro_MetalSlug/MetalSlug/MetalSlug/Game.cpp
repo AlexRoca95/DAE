@@ -152,7 +152,7 @@ void  Game::AddGameObjects()
 	m_pGameObjectManager->AddGameObject(Point2f{ 3970.f * g_Scale, 690.f }, GameObject::Type::prisoner, true);
 	
 	// Boss 
-	m_pGameObjectManager->AddGameObject(Point2f{ 4022.f * g_Scale, 390.f }, GameObject::Type::boss, true);
+	m_pGameObjectManager->AddGameObject(Point2f{ 3990.f * g_Scale, 390.f }, GameObject::Type::boss, true);
 }
 
 

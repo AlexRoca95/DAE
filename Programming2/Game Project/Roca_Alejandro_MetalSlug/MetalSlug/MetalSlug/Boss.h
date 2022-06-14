@@ -5,6 +5,18 @@ class Boss final : public Enemy
 {
 public:
 
+	enum class State {
+
+		sleeping,
+		starting,
+		firingUp,
+		waiting,
+		chargingShot,
+		firingBot
+
+	};
+
+
 	Boss(const Point2f& startPos, bool comingFromRight, SoundManager* sounds);
 	~Boss();
 	Boss(const Boss& soldier) = delete;
@@ -23,8 +35,21 @@ public:
 
 private:
 
+	State m_FightState;
+	State m_PreviousState;
+
+	float m_Seconds;
+	int m_NrOfShots;
+	int m_NrOfChargings;
+
 	virtual void Initialize() override;
 
+	
+	void StartFight(float elapsedSec);
+	void FiringUp(float elapsedSec);
+	void FiringBot(float elapsedSec);
+	void ChargingShot(float elapsedSec);
+	void Waiting(float elapsedSec);
 
 };
 

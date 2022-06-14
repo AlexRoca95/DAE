@@ -98,7 +98,6 @@ void Menu::Draw() const
 			m_pBulletCircle->Draw();
 
 		glPopMatrix();
-		
 		break;
 
 	case Menu::State::startAnimation:
@@ -109,9 +108,11 @@ void Menu::Draw() const
 		break;
 
 	case Menu::State::waitingToPlay:
+
 		m_pBulletHole->Draw();
 		m_pTitleTopPart->Draw();
 		m_pTitleBotPart->Draw();
+
 		if (m_DrawLetters)
 		{
 			m_pPushStart->Draw();
@@ -206,10 +207,14 @@ void Menu::UpdateFlicker(float elapsedSec)
 
 void Menu::SetPlaying(bool start)
 {
-	// Stop the menu song
-	m_pMenuSong->Stop();
+	if (m_MenuState == State::waitingToPlay)
+	{
+		// Stop the menu song
+		m_pMenuSong->Stop();
 
-	m_StartPlaying = start;
+		m_StartPlaying = start;
+	}
+	
 }
 
 bool Menu::GetStartPlaying() const
