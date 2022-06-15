@@ -34,7 +34,8 @@ public:
 		boss,
 		prisoner,
 		item,
-		shield
+		shield,
+		bossBullet
 	};
 
 
@@ -67,12 +68,9 @@ public:
 	void SetGameStageChanged(bool stageChanged);
 
 
-	
-
-
-
 
 protected:
+
 	// Init data of the game object
 	virtual void Initialize() = 0;
 	void SetPointsGameObject(const GameObject::Type& id);

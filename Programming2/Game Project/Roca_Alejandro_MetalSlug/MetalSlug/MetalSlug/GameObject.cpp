@@ -55,7 +55,7 @@ void GameObject::SetGameStageChanged(bool stageChanged)
 	m_IsStageChanged = stageChanged;
 }
 
-// Set how many points this GameObject gives
+// How many points each Game Object gives 
 void GameObject::SetPointsGameObject(const GameObject::Type& id)
 {
 	switch (id)

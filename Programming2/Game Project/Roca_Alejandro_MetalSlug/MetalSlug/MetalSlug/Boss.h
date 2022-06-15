@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemy.h"
 
+class BossBullet;
 class Boss final : public Enemy
 {
 public:
@@ -35,12 +36,27 @@ public:
 
 private:
 
+	BossBullet* m_pWaterBullet2;
+	std::vector <BossBullet*> m_pAirBullets2;
+
+	Sprite* m_pWaterBullet;
+	std::vector <std::pair<Sprite*, bool>> m_pAirBullets;  // Sprite and boolean to know if fired or not
+	std::vector <float> m_AirSeconds;
+
 	State m_FightState;
 	State m_PreviousState;
 
 	float m_Seconds;
 	int m_NrOfShots;
 	int m_NrOfChargings;
+
+	const Point2f m_BulletBotPos;
+	const Point2f m_BulletAirPos;
+	const Point2f m_BulletAirSpeed;
+	const float m_WaterBulletSpeed;
+	const float m_CloathSpeed;
+
+	bool m_FireBottom;
 
 	virtual void Initialize() override;
 
