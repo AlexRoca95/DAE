@@ -47,6 +47,7 @@ private:
 	void GrabItem(Avatar* avatar);
 	Point2f SetStartPosItem(const Rectf& prisonerShape);
 	void CheckPosCamera(const Rectf& cameraPos);
+	void CheckBulletsBoss(Avatar* avatar);
 	
 
 

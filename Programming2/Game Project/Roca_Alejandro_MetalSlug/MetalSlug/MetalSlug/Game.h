@@ -23,8 +23,10 @@ public:
 
 		menu,
 		playing,
+		bossFight,
 		pause,
-		gameOver
+		gameOver,
+		missionComplete
 	};
 
 	explicit Game( const Window& window );
@@ -69,6 +71,7 @@ private:
 	// Sounds && Effects
 	SoundManager* m_pSoundManager;
 	SoundStream* m_pLevelSong;
+	SoundStream* m_pBossSong;
 	SoundStream* m_pGameOverSong;
 	SoundEffect* m_pPistolFire;				// Shoot pistol effect
 	SoundEffect* m_pMissionStartSound;

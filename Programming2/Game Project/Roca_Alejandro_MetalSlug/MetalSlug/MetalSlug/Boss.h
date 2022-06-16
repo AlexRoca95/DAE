@@ -13,7 +13,8 @@ public:
 		firingUp,
 		waiting,
 		chargingShot,
-		firingBot
+		firingBot,
+		dying
 
 	};
 
@@ -32,16 +33,15 @@ public:
 
 	virtual void Update(float elapsedSec, Avatar* avatar, const Level* level) override;
 
+	void CheckHitBullet(Avatar* avatar);
+
 	Point2f GetStartPos() const;
 
 private:
 
-	BossBullet* m_pWaterBullet2;
-	std::vector <BossBullet*> m_pAirBullets2;
-
-	Sprite* m_pWaterBullet;
-	std::vector <std::pair<Sprite*, bool>> m_pAirBullets;  // Sprite and boolean to know if fired or not
-	std::vector <float> m_AirSeconds;
+	BossBullet* m_pWaterBullet;
+	BossBullet* m_pAirBullets;
+	std::vector <BossBullet*> m_pBullets;
 
 	State m_FightState;
 	State m_PreviousState;
@@ -49,14 +49,10 @@ private:
 	float m_Seconds;
 	int m_NrOfShots;
 	int m_NrOfChargings;
+	int m_NextFrame;
 
-	const Point2f m_BulletBotPos;
-	const Point2f m_BulletAirPos;
 	const Point2f m_BulletAirSpeed;
-	const float m_WaterBulletSpeed;
 	const float m_CloathSpeed;
-
-	bool m_FireBottom;
 
 	virtual void Initialize() override;
 
@@ -66,6 +62,7 @@ private:
 	void FiringBot(float elapsedSec);
 	void ChargingShot(float elapsedSec);
 	void Waiting(float elapsedSec);
-
+	void Dying(float elapsedSec);
+	void SelectNextShotFrame();
 };
 

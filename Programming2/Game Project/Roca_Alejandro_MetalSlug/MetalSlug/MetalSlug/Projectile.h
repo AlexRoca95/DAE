@@ -30,7 +30,7 @@ protected:
 	bool m_IsInitialized;
 	bool m_IsHit;
 
-	const float m_MaxSeconds;     // Time the bullet is active if it doesn't collide 
+	const float m_MaxSeconds;     // Time the projectile is active if it doesn't collide 
 	float m_Seconds;			  // Current Seconds
 
 

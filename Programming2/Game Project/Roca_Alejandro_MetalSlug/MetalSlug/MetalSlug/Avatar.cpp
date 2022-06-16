@@ -912,9 +912,9 @@ void Avatar::CheckGameState()
 		}
 	}
 
-
-	
 	*/
+	
+
 
 
 }

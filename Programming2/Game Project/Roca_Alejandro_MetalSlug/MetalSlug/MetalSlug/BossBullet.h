@@ -24,12 +24,18 @@ public:
 
 	virtual void CheckGameState() override;
 	virtual void Draw() const override;
+
 	void Update(float elapsedSec);
+
+	const BulletType& GetBulletType() const;
 
 private:
 
 	BulletType m_BulletType;
 
+	const float m_InitialVelY;
+	Point2f m_Velocity;
+	
 
 	virtual void Initialize() override;
 	virtual void Move(float elapsedSec) override;

@@ -119,7 +119,7 @@ void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* le
 
 		if (m_TotalNrPrisoners > 0)   // Still prisoners left
 		{
-			AvatarReleasePrisoner( avatar->GetHitBox() );
+			AvatarReleasePrisoner(avatar->GetHitBox());
 		}
 
 		if (m_TotalNrItems > 0)
@@ -127,13 +127,32 @@ void GameObjectManager::Update(float elapsedSec, Avatar* avatar, const Level* le
 			GrabItem(avatar);
 		}
 
+		CheckBulletsBoss(avatar);
+
 		// Erase GameObject from the vector if it is Dead
 		RemoveGameObject();
 	}
 
 }
 
-
+// Check if any of the bullets from the Boss hit the avatar
+void GameObjectManager::CheckBulletsBoss(Avatar* avatar)
+{
+	for (GameObject* pGameObject : m_pGameObjects)
+	{
+		if (pGameObject->GetType() == GameObject::Type::boss)
+		{
+			if (pGameObject->GetIsActive())
+			{
+				Boss* pBoss{ dynamic_cast<Boss*>(pGameObject) };
+				if (pBoss != nullptr)
+				{
+					pBoss->CheckHitBullet(avatar);
+				}
+			}
+		}
+	}
+}
 // Activate the gameObject depending on the distance of the camera
 void GameObjectManager::CheckPosCamera(const Rectf& cameraPos)
 {

@@ -22,7 +22,10 @@ void Projectile::Draw() const
 	if (m_IsHit)
 	{
 		// Draw explosion
-		m_pBottomSprite->Draw();
+		if (m_pBottomSprite != nullptr)
+		{
+			m_pBottomSprite->Draw();
+		}
 	}
 	else
 	{
@@ -38,9 +41,14 @@ void Projectile::Hit()
 {
 	m_IsHit = true;
 
-	// Save position of the collision
-	m_pBottomSprite->SetLeftDstRect(m_Position.x);
-	m_pBottomSprite->SetBottomDstRect(m_Position.y);
+	if (m_pBottomSprite != nullptr)
+	{
+		// Save position of the collision
+		m_pBottomSprite->SetLeftDstRect(m_Position.x);
+		m_pBottomSprite->SetBottomDstRect(m_Position.y);
+
+	}
+
 	
 }
 
