@@ -3,6 +3,7 @@
 #include "Sprite.h"
 #include "SoundManager.h"
 #include "SoundEffect.h"
+#include "utils.h"
 #include <iostream>
 
 HUD::HUD(const Point2f& bottomLeft, const Point2f& windowSize, SoundManager* sounds, int totalPrisoners)
@@ -11,6 +12,9 @@ HUD::HUD(const Point2f& bottomLeft, const Point2f& windowSize, SoundManager* sou
 	, m_pLevel{ new Sprite("Resources/sprites/HUD/level.png") }
 	, m_pGo( new Sprite("Resources/sprites/HUD/GO.png") )
 	, m_pNrLifes ( new Sprite("Resources/sprites/HUD/LifesCount.png") ) 
+	, m_pMissionComplete(new Sprite("Resources/sprites/HUD/MissionComplete.png"))
+	, m_IsEndLevel { false }
+	, m_IsBlackScreen { false }
 	, m_pPrisoners{ }
 	, m_pSystemPoint { }
 	, m_BottomLeft { bottomLeft }
@@ -30,6 +34,9 @@ HUD::HUD(const Point2f& bottomLeft, const Point2f& windowSize, SoundManager* sou
 	, m_StartTime { 60 }
 	, m_TimeLeft { m_StartTime }
 	, m_TimeOver { false }
+	, m_LettersVel { 600.f }
+	, m_Seconds { 0.f }
+	, m_AlphaValue { 0.f }
 {
 
 	Initialize();
@@ -44,7 +51,8 @@ HUD::~HUD()
 	delete m_pLevel;
 	delete m_pGo;
 	delete m_pNrLifes;
-	
+	delete m_pMissionComplete;
+
 	for (Sprite* spr : m_pSystemPoint)
 	{
 		delete spr;
@@ -115,6 +123,12 @@ void HUD::Initialize()
 	m_pTimer.at(0)->ChangeFrame(tens);
 	m_pTimer.at(1)->ChangeFrame(units);
 
+
+	// Init Mission Complete letters
+	m_pMissionComplete->UpdateValues(1, 1, 1, 1.f, m_pMissionComplete->GetTexture()->GetWidth(), m_pMissionComplete->GetTexture()->GetHeight(), m_pMissionComplete->GetTexture()->GetHeight());
+	m_pMissionComplete->SetLeftDstRect(m_BottomLeft.x - (m_pMissionComplete->GetTexture()->GetWidth() * g_Scale));
+	m_pMissionComplete->SetBottomDstRect((m_WindowSize.y / 2.f));
+
 }
 
 // Set up the Point system
@@ -160,6 +174,10 @@ void HUD::Draw() const
 		spr->Draw();
 	}
 	
+	if (m_IsEndLevel)
+	{
+		DrawEndLevel();
+	}
 }
 
 void HUD::DrawSystemPoint() const
@@ -179,16 +197,34 @@ void HUD::DrawPrisoners() const
 
 }
 
+void HUD::DrawEndLevel() const
+{
+	m_pMissionComplete->Draw();
+
+	if (m_IsBlackScreen)
+	{
+		// Slowly draw a black rectangle on top of the HUD
+		utils::SetColor(Color4f{ 0.f, 0.f, 0.f, m_AlphaValue });
+		utils::FillRect(Rectf{ m_BottomLeft.x, m_BottomLeft.y, m_WindowSize.x, m_WindowSize.y });
+	}
+}
+
 void HUD::Update(float elapsedSec, const int nrLifes, unsigned int totalPoints, unsigned int totalPrisoners)
 {
 
-	UpdatePrisoners(totalPrisoners);
-	UpdateGoText(elapsedSec);
-	m_pNrLifes->ChangeFrame(nrLifes);
-	UpdateSystemPoints(elapsedSec, totalPoints);
+	if (!m_IsEndLevel)
+	{
+		UpdatePrisoners(totalPrisoners);
+		UpdateGoText(elapsedSec);
+		m_pNrLifes->ChangeFrame(nrLifes);
+		UpdateSystemPoints(elapsedSec, totalPoints);
 
-	UpdateTimer(elapsedSec);
-
+		UpdateTimer(elapsedSec);
+	}
+	else
+	{
+		UpdateEndLevelHUD(elapsedSec);
+	}
 	
 }
 
@@ -280,7 +316,36 @@ void HUD::UpdateTimer(float elapsedSec)
 	}
 }
 
+
+void HUD::UpdateEndLevelHUD(float elapsedSec)
+{
+	// Move letters into correct pos in the HUD
+	if (m_pMissionComplete->GetDstRect().left + (m_pMissionComplete->GetFrameWidth() * g_Scale / 2.f) < m_WindowSize.x / 2.f)
+	{
+		m_pMissionComplete->SetLeftDstRect(m_pMissionComplete->GetDstRect().left + (m_LettersVel * elapsedSec));
+	}
+	else
+	{
+		m_Seconds += elapsedSec;
+
+		if (m_Seconds > 2.f)
+		{
+			m_IsBlackScreen = true;
+
+			// Slowly increment the alpha value for the black screen
+			m_AlphaValue +=  0.3f * elapsedSec;
+		}
+	}
+	
+}
+
 bool HUD::GetTimeOver() const
 {
 	return m_TimeOver;
+}
+
+
+void HUD::SetEndLevel()
+{
+	m_IsEndLevel = true;
 }

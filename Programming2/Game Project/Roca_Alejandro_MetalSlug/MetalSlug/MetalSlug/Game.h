@@ -24,9 +24,9 @@ public:
 		menu,
 		playing,
 		bossFight,
-		pause,
-		gameOver,
-		missionComplete
+		pause,						
+		gameOver,					// Player has no more lifes left
+		missionComplete				// Player finishes the level
 	};
 
 	explicit Game( const Window& window );
@@ -75,6 +75,7 @@ private:
 	SoundStream* m_pGameOverSong;
 	SoundEffect* m_pPistolFire;				// Shoot pistol effect
 	SoundEffect* m_pMissionStartSound;
+	SoundEffect* m_pMissionComplete;
 
 	// GameObjects
 	GameObjectManager* m_pGameObjectManager;
@@ -94,9 +95,10 @@ private:
 	void InitPause();
 	void AddGameObjects();
 
-	// PLAYING GAME STATE
+	// STATES OF THE GAME
 	void DrawPlaying() const;
 	void UpdatePlaying(float elapsedSec);
+	void UpdateFinishLevel(float elapsedSec);
 
 	void DisplayControlsInfo();				// Display info about the controls of the game
 

@@ -8,7 +8,7 @@
 
 
 Boss::Boss(const Point2f& startPos, bool comingFromRight, SoundManager* soundManager)
-	:Enemy(GameObject::Type::boss, startPos, 5, Point2f{ },
+	:Enemy(GameObject::Type::boss, startPos, 80, Point2f{ },
 		comingFromRight, Point2f{ 0.f, g_Gravity }, soundManager)
 	, m_FightState { State::sleeping }
 	, m_PreviousState { State::sleeping }
@@ -94,7 +94,7 @@ void Boss::Hit()
 	if (m_Health <= 0)
 	{
 		// Boss is dead
-		m_IsDying = false;
+		m_IsDying = true;
 		m_FightState = State::dying;
 		m_pBottomSprite->UpdateValues(1, 1, 1, 20.f, 90.f, 70.f, 420.f);
 		m_pBottomSprite->ResetSprite();
@@ -340,7 +340,12 @@ void Boss::FiringBot(float elapsedSec)
 
 void Boss::Dying(float elapsedSec)
 {
+	m_Seconds += elapsedSec;
 
+	if (m_Seconds > 2.f)
+	{
+		m_GameState = GameStage::end;
+	}
 }
 
 // Check if bullet hit avatar

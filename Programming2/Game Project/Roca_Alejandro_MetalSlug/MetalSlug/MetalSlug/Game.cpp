@@ -24,6 +24,7 @@ Game::Game( const Window& window )
 	, m_GameState { GameState::menu }
 	, m_pGameOverScreen { }
 	, m_pMissionStartSound { }
+	, m_pMissionComplete{ }
 	, m_pGameOverSong { }
 	, m_pPistolFire { }
 	, m_pPause{ }
@@ -79,9 +80,6 @@ void Game::InitHUD()
 void Game::InitMenu()
 {
 	m_pMenu = new Menu( Point2f{m_Window.width, m_Window.height}, m_pSoundManager );
-
-	
-
 }
 
 void Game::InitLevelSounds()
@@ -91,7 +89,7 @@ void Game::InitLevelSounds()
 	m_pBossSong = m_pSoundManager->GetSound("Resources/Sounds/BossFight.mp3");
 	m_pPistolFire = m_pSoundManager->GetEffect("Resources/Sounds/PistolFire.wav");
 	m_pMissionStartSound = m_pSoundManager->GetEffect("Resources/Sounds/MissionStart.mp3");
-	 
+	m_pMissionComplete = m_pSoundManager->GetEffect("Resources/Sounds/MissionCompleteVoice.mp3");
 
 	m_pSoundManager->PlaySong(m_pLevelSong, true);
 	m_pSoundManager->PlaySoundEffect(m_pMissionStartSound, 0);
@@ -165,28 +163,34 @@ void Game::Cleanup( )
 	switch (m_GameState)
 	{
 		case Game::GameState::menu:
+
 			delete m_pMenu;
 			break;
+
 		case Game::GameState::playing:
 		case Game::GameState::bossFight:
-			delete m_pAvatar;
-			delete m_pLevel;
-			delete m_pCamera;
-			delete m_pGameObjectManager;
-			delete m_pHUD;
-			delete m_pPause;
-		
-			break;
-		case  Game::GameState::pause:
-			delete m_pAvatar;
-			delete m_pLevel;
-			delete m_pCamera;
-			delete m_pGameObjectManager;
-			delete m_pHUD;
-			delete m_pPause;
+		case Game::GameState::missionComplete:
 
+			delete m_pAvatar;
+			delete m_pLevel;
+			delete m_pCamera;
+			delete m_pGameObjectManager;
+			delete m_pHUD;
+			delete m_pPause;
 			break;
+
+		case  Game::GameState::pause:
+
+			delete m_pAvatar;
+			delete m_pLevel;
+			delete m_pCamera;
+			delete m_pGameObjectManager;
+			delete m_pHUD;
+			delete m_pPause;
+			break;
+
 		case Game::GameState::gameOver:
+
 			delete m_pAvatar;
 			delete m_pLevel;
 			delete m_pCamera;
@@ -194,7 +198,6 @@ void Game::Cleanup( )
 			delete m_pHUD;
 			delete m_pGameOverScreen;
 			delete m_pPause;
-
 			break;
 	}
 
@@ -234,12 +237,16 @@ void Game::Update( float elapsedSec )
 
 		// Nothing to do here
 		break;
+	
+	case Game::GameState::missionComplete:
+
+		UpdateFinishLevel(elapsedSec);
+		break;
 	}
 }
 
 void Game::UpdatePlaying(float elapsedSec)
 {
-	
 	m_pAvatar->Update(elapsedSec, m_pLevel, m_pCamera->GetCameraPos());
 
 	m_pGameObjectManager->Update(elapsedSec, m_pAvatar, m_pLevel, m_pCamera->GetCameraPos());
@@ -256,15 +263,35 @@ void Game::UpdatePlaying(float elapsedSec)
 	{
 		InitGameOverState();
 	}
-	else
+	
+	if ( m_GameState == GameState::playing && m_pAvatar->GetGameStage() == GameObject::GameStage::boss)
 	{
-		if ( m_GameState == GameState::playing && m_pAvatar->GetGameStage() == GameObject::GameStage::boss)
-		{
-			m_pLevelSong->Stop();
-			m_pBossSong->Play(true);
-			m_GameState = GameState::bossFight;
-		}
+		m_pLevelSong->Stop();
+		m_pBossSong->Play(true);
+		m_GameState = GameState::bossFight;
 	}
+	
+	if (m_GameState == GameState::bossFight &&  m_pAvatar->GetGameStage() == GameObject::GameStage::end)
+	{
+		m_pBossSong->Stop();
+		m_pMissionComplete->Play(0);
+		m_pHUD->SetEndLevel();
+		m_GameState = GameState::missionComplete;
+	}
+
+}
+
+void Game::UpdateFinishLevel(float elapsedSec)
+{
+	m_pGameObjectManager->Update(elapsedSec, m_pAvatar, m_pLevel, m_pCamera->GetCameraPos());
+
+	m_pLevel->Update(elapsedSec, m_pAvatar->GetBotShape());
+
+	m_pCamera->SetLevelBoundaries(m_pLevel->GetBoundaries());
+
+	m_pHUD->Update(elapsedSec, m_pAvatar->GetNrLifes(), m_pAvatar->GetTotalPoints(), m_pGameObjectManager->GetTotalPrisoners());
+
+
 
 }
 
@@ -279,6 +306,7 @@ void Game::Draw( ) const
 		break;
 	case Game::GameState::playing:
 	case Game::GameState::bossFight:
+	case Game::GameState::missionComplete:
 		DrawPlaying();
 		break;
 	case Game::GameState::pause:
@@ -288,6 +316,7 @@ void Game::Draw( ) const
 	case Game::GameState::gameOver:
 		m_pGameOverScreen->Draw();
 		break;
+
 	}
 }
 
@@ -353,9 +382,6 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		{
 			ClosePauseMenu();
 		}
-		break;
-	case Game::GameState::gameOver:
-		m_pGameOverScreen->Draw();
 		break;
 	}
 

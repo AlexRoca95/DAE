@@ -25,6 +25,8 @@ public:
 
 	bool GetTimeOver() const;
 
+	void SetEndLevel();
+
 private:
 
 	const Point2f m_BottomLeft;    // Position of the bottom Left of the window
@@ -34,8 +36,17 @@ private:
 	const float m_LeftBorder;
 	const float m_BottomBorder;
 
+	
+
 	int m_TotalPrisoners;		
 	float m_Xpos;
+
+	// Ending HUD
+	const float m_LettersVel;
+	float m_Seconds;
+	bool m_IsEndLevel;
+	bool m_IsBlackScreen;
+	float m_AlphaValue;
 
 	// GO Text animation
 	bool m_GoAnimation;
@@ -49,6 +60,7 @@ private:
 	Sprite* m_pLevel;
 	Sprite* m_pGo;
 	Sprite* m_pNrLifes;
+	Sprite* m_pMissionComplete;
 	std::vector<Sprite*> m_pPrisoners;
 	std::vector<Sprite*> m_pSystemPoint;   // Points system
 	std::vector<Sprite*> m_pTimer;
@@ -73,11 +85,13 @@ private:
 	void InitSystemPoint();
 	void DrawPrisoners() const;
 	void DrawSystemPoint() const;
+	void DrawEndLevel() const;
 
 	void UpdateGoText(float elapsedSec);
 	void UpdateSystemPoints(float elapsedSec, unsigned int totalPoints);
 	void UpdatePrisoners(unsigned int totalPrisoners);
 	void UpdateTimer(float elapsedSec);
+	void UpdateEndLevelHUD(float elapsedSec);
 
 };
 

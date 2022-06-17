@@ -897,7 +897,7 @@ void Avatar::CheckGameState()
 			}
 		}
 		else
-		{
+		{ */
 			if (!m_IsBossFightStart)
 			{
 				if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > g_Stage4Pos * g_Scale )
@@ -909,6 +909,7 @@ void Avatar::CheckGameState()
 
 				}
 			}
+		/*
 		}
 	}
 
