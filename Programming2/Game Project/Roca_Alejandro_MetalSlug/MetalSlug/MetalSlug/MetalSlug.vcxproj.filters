@@ -147,6 +147,9 @@
     <ClCompile Include="BossBullet.cpp">
       <Filter>Source Files\Projectiles</Filter>
     </ClCompile>
+    <ClCompile Include="FileReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="BossBullet.h">
       <Filter>Source Files\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="FileReader.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
