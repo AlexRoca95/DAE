@@ -93,7 +93,13 @@ private:
 	void InitLevelSounds();
 	void InitGameOverState();
 	void InitPause();
-	void AddGameObjects();
+
+	// GameObjects
+	void CreateGameObjectsFromFile();
+	void CreateGameObject(std::string& gameObject);
+	std::string GetAttributeValue(const std::string& name, const std::string& shape) const;
+	Point2f ToPoint2f(const std::string& point) const;
+	bool ToBool(const std::string& boolString) const;
 
 	// STATES OF THE GAME
 	void DrawPlaying() const;
