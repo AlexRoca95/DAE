@@ -46,6 +46,8 @@ private:
 	State m_FightState;
 	State m_PreviousState;
 
+	SoundEffect* m_pExplosion;
+
 	float m_Seconds;
 	int m_NrOfShots;
 	int m_NrOfChargings;
@@ -63,6 +65,7 @@ private:
 	void ChargingShot(float elapsedSec);
 	void Waiting(float elapsedSec);
 	void Dying(float elapsedSec);
+	void DyingAnimation(float elapsedSec);
 	void SelectNextShotFrame();
 };
 

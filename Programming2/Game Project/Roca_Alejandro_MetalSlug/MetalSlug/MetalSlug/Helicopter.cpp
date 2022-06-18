@@ -8,9 +8,9 @@
 
 
 
-Helicopter::Helicopter(const Point2f& startPos, SoundManager* sounds)
+Helicopter::Helicopter(const Point2f& startPos, SoundManager* soundManager)
 	: Enemy( GameObject::Type::helicopter, startPos, 40, Point2f{ 220.f, 230.f }, 
-		false, Point2f{ }, sounds) // Type, startPos, health, speed and acceleration
+		false, Point2f{ }, soundManager) // Type, startPos, health, speed and acceleration
 	, m_MaxHeight{ 400.f }
 	, m_MaxTimerBombs { 0.5f }
 	, m_TimerBombs {  }
@@ -20,6 +20,7 @@ Helicopter::Helicopter(const Point2f& startPos, SoundManager* sounds)
 	, m_Seconds{ m_TimeThrowBomb }
 	, m_ExplosionCounter { 0 }
 	, m_NewBombs { false }
+	, m_pExplosion{ }
 {
 
 	Initialize();
@@ -51,7 +52,7 @@ void Helicopter::Initialize()
 	m_pBombs.push_back( new Bomb() );
 	m_pBombs.push_back( new Bomb() );
 
-	
+	m_pExplosion = m_pSoundManager->GetEffect("Resources/sounds/explosion2.wav");
 
 }
 
@@ -145,6 +146,8 @@ void Helicopter::Hit()
 		m_IsDying = true;
 		m_pBottomSprite->UpdateValues(7, 1, 7, 12.f, 100.f, 72.f, 232.f);  // Change death animation
 		m_pBottomSprite->ResetActFrame();
+
+		m_pExplosion->Play(0);
 	}
 
 }

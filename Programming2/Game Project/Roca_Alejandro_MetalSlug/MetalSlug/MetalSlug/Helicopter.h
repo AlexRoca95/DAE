@@ -39,7 +39,7 @@ private:
 
 
 	// Sounds && effects
-	SoundEffect* m_pHelixEffect;
+	SoundEffect* m_pExplosion;
 
 
 	// PRIVATE methods

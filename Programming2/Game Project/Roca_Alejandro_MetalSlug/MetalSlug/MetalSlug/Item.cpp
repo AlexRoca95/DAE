@@ -9,7 +9,7 @@
 
 Item::Item(const Point2f& startPos, SoundManager* soundManager)
 	:GameObject(GameObject::Type::item, startPos, Point2f{}, false, soundManager)
-	, m_pGrabItemSound { m_pSoundManager->GetEffect("Resources/sounds/Ammo.mp3") }
+	, m_pGrabItemSound { }
 {
 	Initialize();
 }
@@ -33,10 +33,12 @@ void Item::Initialize()
 	case Item::ItemType::ammo:
 		// Type Item --> Box ammo
 		m_pBottomSprite->UpdateValues(6, 1, 6, 8.f, 32.f, 32.f, 32);
+		m_pGrabItemSound = m_pSoundManager->GetEffect("Resources/sounds/Ammo.mp3");
 		break;
 	case Item::ItemType::card:
 		// Type Item --> Card
 		m_pBottomSprite->UpdateValues(11, 1, 11, 10.f, 24.f, 24.f, 80.f);
+		m_pGrabItemSound = m_pSoundManager->GetEffect("Resources/sounds/pickUp.mp3");
 		break;
 
 	}
@@ -101,6 +103,7 @@ void Item::GrabItem(Avatar* avatar)
 		{
 			m_IsActive = false;
 			avatar->AddItemPoints(m_Points);
+			m_pSoundManager->PlaySoundEffect(m_pGrabItemSound, 0);
 		}
 		else
 		{

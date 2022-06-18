@@ -3,12 +3,13 @@
 #include "BossBullet.h"
 #include "Avatar.h"
 #include "utils.h"
+#include "SoundEffect.h"
 #include <iostream>
 
 
 
 Boss::Boss(const Point2f& startPos, bool comingFromRight, SoundManager* soundManager)
-	:Enemy(GameObject::Type::boss, startPos, 80, Point2f{ },
+	:Enemy(GameObject::Type::boss, startPos, 30, Point2f{ },
 		comingFromRight, Point2f{ 0.f, g_Gravity }, soundManager)
 	, m_FightState { State::sleeping }
 	, m_PreviousState { State::sleeping }
@@ -20,6 +21,7 @@ Boss::Boss(const Point2f& startPos, bool comingFromRight, SoundManager* soundMan
 	, m_BulletAirSpeed{ 200.f, 500.f }
 	, m_CloathSpeed { 150.f }
 	, m_NextFrame{ 10 }
+	, m_pExplosion{ }
 {
 
 	Initialize();
@@ -51,6 +53,8 @@ void Boss::Initialize()
 	}
 
 	m_pBullets.push_back(m_pWaterBullet);
+
+	m_pExplosion = m_pSoundManager->GetEffect("Resources/sounds/explosion2.wav");
 }
 
 Boss::~Boss()
@@ -70,7 +74,7 @@ Boss::~Boss()
 {
 	 m_pBottomSprite->Draw();
 
-	 if (m_FightState == State::sleeping || m_FightState == State::starting)
+	 if (m_FightState == State::sleeping || m_FightState == State::starting || m_FightState == State::dying)
 	 {
 		 m_pTopSprite->Draw();
 	 }
@@ -91,24 +95,36 @@ void Boss::Hit()
 {
 	m_Health--;
 
-	if (m_Health <= 0)
+	if (m_Health == 0)
 	{
 		// Boss is dead
 		m_IsDying = true;
 		m_FightState = State::dying;
 		m_pBottomSprite->UpdateValues(1, 1, 1, 20.f, 90.f, 70.f, 420.f);
 		m_pBottomSprite->ResetSprite();
+
+		delete m_pTopSprite;    // Free memory 
+		// Reserve memory for the explosion animation
+		m_pTopSprite = new Sprite("Resources/sprites/enemies/Explosion.png");
+		m_pTopSprite->UpdateValues(5, 1, 5, 10.f, 35.2f, 64.f, 64.f, 2.7f);
+		m_pTopSprite->SetLeftDstRect(m_StartPosition.x + 120.f);
+		m_pTopSprite->SetBottomDstRect(m_StartPosition.y);
+		m_pTopSprite->UpdateLeftSrcRect();
 	}
-
-	m_pTopSprite->UpdateValues(15, 1, 15, 7.f, 120.f, 103.f, 230.f);  // Cloth flying away
-	m_pTopSprite->UpdateLeftSrcRect();
-
-	if (m_FightState == State::sleeping)
+	else
 	{
-		// Start fight if it hasn't started yet
-		m_FightState = State::starting;
-		m_PreviousState = State::sleeping;
+		if (m_FightState == State::sleeping)
+		{
+			m_pTopSprite->UpdateValues(15, 1, 15, 7.f, 120.f, 103.f, 230.f);  // Cloth flying away
+			m_pTopSprite->UpdateLeftSrcRect();
+
+			// Start fight if it hasn't started yet
+			m_FightState = State::starting;
+			m_PreviousState = State::sleeping;
+		}
 	}
+
+	
 }
 
 void Boss::CheckGameState()
@@ -342,9 +358,34 @@ void Boss::Dying(float elapsedSec)
 {
 	m_Seconds += elapsedSec;
 
-	if (m_Seconds > 2.f)
+	m_pTopSprite->Update(elapsedSec, false);
+
+	if (m_Seconds > 4.f)
 	{
 		m_GameState = GameStage::end;
+	}
+	else
+	{
+		DyingAnimation(elapsedSec);
+	}
+
+
+	
+
+}
+
+void  Boss::DyingAnimation(float elapsedSec)
+{
+	if (m_pTopSprite->GetAnimationFinish())
+	{
+		// Random explosions around the boss
+		m_pExplosion->Play(0);
+		m_pTopSprite->ResetSprite();
+		float xPos{ float((rand() % 100) + 100) };
+		float yPos{ float((rand() % 80)) };
+		m_pTopSprite->SetLeftDstRect(m_StartPosition.x + xPos);
+		m_pTopSprite->SetBottomDstRect(m_StartPosition.y + yPos);
+		m_pTopSprite->UpdateLeftSrcRect();
 	}
 }
 
