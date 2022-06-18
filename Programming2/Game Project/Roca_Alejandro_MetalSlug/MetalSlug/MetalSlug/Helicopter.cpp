@@ -147,7 +147,7 @@ void Helicopter::Hit()
 		m_pBottomSprite->UpdateValues(7, 1, 7, 12.f, 100.f, 72.f, 232.f);  // Change death animation
 		m_pBottomSprite->ResetActFrame();
 
-		m_pExplosion->Play(0);
+		m_pSoundManager->PlaySoundEffect(m_pExplosion, 0);
 	}
 
 }

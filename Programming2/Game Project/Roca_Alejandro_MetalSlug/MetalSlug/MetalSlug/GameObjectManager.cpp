@@ -18,7 +18,7 @@ GameObjectManager::GameObjectManager(SoundManager* sounds)
 	, m_TotalNrHelicopters{ }
 	, m_TotalNrPrisoners{ }
 	, m_TotalNrItems{ }
-	, m_ActivateGameObjectDist { 40.f }
+	, m_ActivateGameObjectDist { 45.f }
 	, m_pSoundManager { sounds }
 	, m_pHelixEffect { }
 {

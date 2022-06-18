@@ -5,10 +5,11 @@
 #include "BulletManager.h"
 #include "SoundManager.h"
 #include "SoundEffect.h"
+#include <iostream>
 
 
 Avatar::Avatar(SoundManager* sounds)
-	: GameObject(GameObject::Type::avatar, Point2f{ 3200 * g_Scale, 600.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
+	: GameObject(GameObject::Type::avatar, Point2f{ 200 * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
 		, false , sounds, Point2f{ 0.f, g_Gravity + g_Gravity/2 })  // Type, startPos, speed, soundManager and acceleration
 	, m_SlowSpeed{ 90.f }
 	, m_JumpSpeed{ 650.f }
@@ -35,6 +36,7 @@ Avatar::Avatar(SoundManager* sounds)
 	, m_CameraPos{ }
 	, m_CountNrFrames { }
 	, m_pDeathSound { m_pSoundManager->GetEffect("Resources/sounds/HeroDies.wav") }
+	, m_pPistolFire{ m_pSoundManager->GetEffect("Resources/Sounds/PistolFire.wav") }
 	, m_NrLifes { 2 }
 	, m_AreLifesLeft { true }
 {
@@ -756,8 +758,10 @@ void Avatar::CheckCameraBoundaries()
 
 void Avatar::Shoot()
 {
-	if (m_BotActionState != BotActionState::crawling)
+	if (m_BotActionState != BotActionState::crawling && !m_IsDead )
 	{
+		m_pSoundManager->PlaySoundEffect(m_pPistolFire, 0);
+
 		m_IsShooting = true;
 
 		m_pBulletManager->ActivateBullet();
@@ -872,7 +876,7 @@ void Avatar::AvoidDamage(float elapsedSec)
 // to one of the stages position
 void Avatar::CheckGameState()
 {
-	/*
+	
 	if (!m_IsFirstHeliFightStart)
 	{
 		if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > g_Stage2Pos * g_Scale)
@@ -897,7 +901,7 @@ void Avatar::CheckGameState()
 			}
 		}
 		else
-		{ */
+		{ 
 			if (!m_IsBossFightStart)
 			{
 				if ((m_pBottomSprite->GetDstRect().left + m_pBottomSprite->GetDstRect().width) > g_Stage4Pos * g_Scale )
@@ -909,15 +913,11 @@ void Avatar::CheckGameState()
 
 				}
 			}
-		/*
+		
 		}
 	}
-	*/
 	
 	
-
-
-
 }
 
 // Stop drawing the sprite every 15 frames

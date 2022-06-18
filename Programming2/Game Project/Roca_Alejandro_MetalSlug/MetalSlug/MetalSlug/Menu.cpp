@@ -139,7 +139,7 @@ void Menu::Update(float elapsedSec, Game::GameState& gameState)
 		}
 		else
 		{
-			m_pMenuSound->Play(0);
+			m_pSoundManager->PlaySoundEffect(m_pMenuSound, 0);
 			m_MenuState = State::startAnimation;
 		}
 		
@@ -175,8 +175,8 @@ void Menu::UpdateMenuAnimation(float elapsedSec)
 	else
 	{
 		// Title letters in position
-		m_pNarratorVoice->Play(0);
-		m_pMenuSong->Play(true);
+		m_pSoundManager->PlaySoundEffect(m_pNarratorVoice, 0);
+		m_pSoundManager->PlaySong(m_pMenuSong, true);
 		m_MenuState = State::waitingToPlay;
 	}
 	

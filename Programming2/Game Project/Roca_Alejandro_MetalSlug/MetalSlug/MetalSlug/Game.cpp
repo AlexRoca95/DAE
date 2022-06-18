@@ -28,7 +28,6 @@ Game::Game( const Window& window )
 	, m_pMissionStartSound { }
 	, m_pMissionComplete{ }
 	, m_pGameOverSong { }
-	, m_pPistolFire { }
 	, m_pPause{ }
 	, m_MousePos { }
 	, m_CloseGame{ false }
@@ -89,7 +88,6 @@ void Game::InitLevelSounds()
 {
 	m_pLevelSong = m_pSoundManager->GetSound("Resources/Sounds/Soundtrack.mp3");
 	m_pBossSong = m_pSoundManager->GetSound("Resources/Sounds/BossFight.mp3");
-	m_pPistolFire = m_pSoundManager->GetEffect("Resources/Sounds/PistolFire.wav");
 	m_pMissionStartSound = m_pSoundManager->GetEffect("Resources/Sounds/MissionStart.mp3");
 	m_pMissionComplete = m_pSoundManager->GetEffect("Resources/Sounds/MissionCompleteVoice.mp3");
 
@@ -243,14 +241,14 @@ void Game::UpdatePlaying(float elapsedSec)
 	if ( m_GameState == GameState::playing && m_pAvatar->GetGameStage() == GameObject::GameStage::boss)
 	{
 		m_pLevelSong->Stop();
-		m_pBossSong->Play(true);
+		m_pSoundManager->PlaySong(m_pBossSong, true);
 		m_GameState = GameState::bossFight;
 	}
 	
 	if (m_GameState == GameState::bossFight &&  m_pAvatar->GetGameStage() == GameObject::GameStage::end)
 	{
 		m_pBossSong->Stop();
-		m_pMissionComplete->Play(0);
+		m_pSoundManager->PlaySoundEffect(m_pMissionComplete, 0);
 		m_pHUD->SetEndLevel();
 		m_GameState = GameState::missionComplete;
 	}
@@ -338,7 +336,6 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 		if (e.keysym.sym == SDLK_x)
 		{
 			m_pAvatar->Shoot();
-			m_pSoundManager->PlaySoundEffect(m_pPistolFire, 0);
 		}
 
 		// Pause game and show menu

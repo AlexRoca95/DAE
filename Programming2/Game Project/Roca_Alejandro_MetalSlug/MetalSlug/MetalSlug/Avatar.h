@@ -129,7 +129,7 @@ private:
 	// Sounds
 
 	SoundEffect* m_pDeathSound;
-
+	SoundEffect* m_pPistolFire;				// Shoot pistol effect
 	
 
 	// PRIVATE functions

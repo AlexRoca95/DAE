@@ -9,7 +9,7 @@
 
 
 Boss::Boss(const Point2f& startPos, bool comingFromRight, SoundManager* soundManager)
-	:Enemy(GameObject::Type::boss, startPos, 30, Point2f{ },
+	:Enemy(GameObject::Type::boss, startPos, 80, Point2f{ },
 		comingFromRight, Point2f{ 0.f, g_Gravity }, soundManager)
 	, m_FightState { State::sleeping }
 	, m_PreviousState { State::sleeping }
@@ -379,7 +379,7 @@ void  Boss::DyingAnimation(float elapsedSec)
 	if (m_pTopSprite->GetAnimationFinish())
 	{
 		// Random explosions around the boss
-		m_pExplosion->Play(0);
+		m_pSoundManager->PlaySoundEffect(m_pExplosion, 0);
 		m_pTopSprite->ResetSprite();
 		float xPos{ float((rand() % 100) + 100) };
 		float yPos{ float((rand() % 80)) };
