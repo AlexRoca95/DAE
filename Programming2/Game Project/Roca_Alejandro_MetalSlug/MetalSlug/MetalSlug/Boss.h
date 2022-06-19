@@ -34,7 +34,6 @@ public:
 	virtual void Update(float elapsedSec, Avatar* avatar, const Level* level) override;
 
 	void CheckHitBullet(Avatar* avatar);
-
 	Point2f GetStartPos() const;
 
 private:
@@ -47,6 +46,9 @@ private:
 	State m_PreviousState;
 
 	SoundEffect* m_pExplosion;
+	SoundEffect* m_pWaterShoot;
+	SoundEffect* m_pAirShoot;
+	SoundEffect* m_pMoving;
 
 	float m_Seconds;
 	int m_NrOfShots;

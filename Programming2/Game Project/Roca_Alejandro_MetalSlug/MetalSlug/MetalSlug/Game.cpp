@@ -443,6 +443,10 @@ void Game::DisplayControlsInfo()
 	std::cout << " - C key --> Jump." << std::endl;
 	std::cout << " - X key --> Shoot." << std::endl;
 	std::cout << " - ENTER key --> Start the Game (Only for the Start Screen Menu)" << std::endl;
+	std::cout << " - ESC key --> Pause Game and show Pause Menu" << std::endl;
+	std::cout << " - P key --> Mute / Unmute sound" << std::endl;
+	std::cout << " - T key --> Decrement sound" << std::endl;
+	std::cout << " - Y key --> Increment sound" << std::endl;
 
 }
 

@@ -54,9 +54,7 @@ void Bomb::Update(float elapsedSec, const Rectf& actorShape)
 
 		if (m_pBottomSprite->GetAnimationFinish())
 		{
-			m_pBottomSprite->ResetAnimationFinish(false);
-			m_pBottomSprite->ResetActFrame();
-
+			m_pBottomSprite->ResetSprite();
 			DesactivateProjectile();
 
 			m_Velocity.y = m_Speed.y;

@@ -104,7 +104,7 @@ ComingFromRight="true"
 />
 
 <Prisoner
-Position="2720,390"
+Position="2705,390"
 ComingFromRight="true"
 />
 

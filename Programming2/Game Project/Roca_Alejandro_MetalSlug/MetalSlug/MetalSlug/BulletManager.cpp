@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "GameObject.h"
 #include "Enemy.h"
+#include <iostream>
 
 
 BulletManager::BulletManager()
@@ -102,44 +103,69 @@ void BulletManager::CheckHitLevel()
 	}
 }
 
-// Check collision of the bullet with the enemies
+// Check collision of the bullet with the enemies if they are activated
 void BulletManager::CheckHitGameObjects(std::vector<GameObject*> gameObjects)
 {
-
 	for (Bullet* bulletPtr : m_pBullets)
 	{
 		if (bulletPtr->GetIsActive() && !bulletPtr->GetIsHit())
 		{
 			for (GameObject* pGameObject : gameObjects)
 			{
-				if ( pGameObject->GetIsActive() && !pGameObject->GetIsDying() &&
-					pGameObject->GetType() != GameObject::Type::item)  // Object active, not dying and not an item
+				// Object active and not dying
+				if (pGameObject->GetIsActive() && !pGameObject->GetIsDying())  
 				{
-					// X axis
-					if ( ( bulletPtr->GetTopShape().left ) >
-						pGameObject->GetBotShape().left			&&  
-						bulletPtr->GetTopShape().left < ( pGameObject->GetBotShape().left +
-							pGameObject->GetBotShape().width ) )
+					if (pGameObject->GetType() == GameObject::Type::boss)
 					{
-						// Y axis
-						if (bulletPtr->GetTopShape().bottom  >
-							pGameObject->GetBotShape().bottom &&
-							bulletPtr->GetTopShape().bottom < (pGameObject->GetBotShape().bottom +
-								pGameObject->GetBotShape().height))
+						if (CheckHit(bulletPtr, pGameObject, true))
 						{
-							bulletPtr->Hit();
-							pGameObject->Hit();
-							AddHitPoints(pGameObject->GetPointsGameObject());
-							break;
+							break;  // Dont check for the rest of GameObjects
 						}
 					}
-
+					else if(pGameObject->GetType() != GameObject::Type::item)
+					{
+						if (CheckHit(bulletPtr, pGameObject, false))
+						{
+							break;  
+						}
+					}
 
 				}
 			}
 		}
 	}
 
+}
+
+bool BulletManager::CheckHit(Bullet* bullet, GameObject* gameObject, bool isBoss)
+{
+	float XFit{ };
+	if (isBoss)
+	{
+		XFit = 85.f;  // We adjust the bounding boxes of the Boss
+	}
+
+	// X axis
+	if ( (bullet->GetTopShape().left) > gameObject->GetBotShape().left + XFit 
+		&& bullet->GetTopShape().left < ( ( gameObject->GetBotShape().left + XFit ) +
+			gameObject->GetBotShape().width ) )
+	{
+		// Y axis
+		if (bullet->GetTopShape().bottom > gameObject->GetBotShape().bottom &&
+			bullet->GetTopShape().bottom < (gameObject->GetBotShape().bottom +
+				gameObject->GetBotShape().height))
+		{
+
+			bullet->Hit();
+			gameObject->Hit();
+			AddHitPoints(gameObject->GetPointsGameObject());
+
+			return true;  // Bullet hit a GameObject
+
+		}
+	}
+
+	return false;  // No hit
 }
 
 void BulletManager::AddHitPoints(const unsigned int points)

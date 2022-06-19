@@ -9,7 +9,7 @@
 
 
 Avatar::Avatar(SoundManager* sounds)
-	: GameObject(GameObject::Type::avatar, Point2f{ 200 * g_Scale, 300.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
+	: GameObject(GameObject::Type::avatar, Point2f{ 100 * g_Scale, 200.f }, Point2f{ m_NormalSpeed, m_JumpSpeed }
 		, false , sounds, Point2f{ 0.f, g_Gravity + g_Gravity/2 })  // Type, startPos, speed, soundManager and acceleration
 	, m_SlowSpeed{ 90.f }
 	, m_JumpSpeed{ 650.f }
@@ -950,10 +950,6 @@ void Avatar::GrabItem(Item::ItemType itemType)
 	case Item::ItemType::ammo:
 		// Give ammo to avatar
 		break;
-	case Item::ItemType::card:
-		// Give points 
-		break;
-
 	}
 }
 

@@ -40,6 +40,7 @@ private:
 
 	void RandomCollision(int& random);
 	void AddHitPoints(const unsigned int hitPoints);
+	bool CheckHit(Bullet* bullet, GameObject* gameObject, bool isBoss);
 	
 
 };

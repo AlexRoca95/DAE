@@ -59,6 +59,8 @@ public:
 	bool GetGameStageChanged() const;
 	Rectf GetTopShape() const;
 	Rectf GetBotShape() const;
+	Sprite* GetTopSprite() const;
+	Sprite* GetBottomSprite() const;
 	GameStage& GetGameStage() const;
 	Type GetType() const;
 	const unsigned int GetPointsGameObject() const;

@@ -83,6 +83,16 @@ Rectf GameObject::GetBotShape() const
 	return m_pBottomSprite->GetDstRect();
 }
 
+Sprite* GameObject::GetTopSprite() const
+{
+	return m_pTopSprite;
+}
+
+Sprite* GameObject::GetBottomSprite() const
+{
+	return m_pBottomSprite;
+}
+
 GameObject::GameStage& GameObject::GetGameStage() const
 {
 	return m_GameState;

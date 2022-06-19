@@ -266,6 +266,7 @@ void HUD::UpdateGoText(float elapsedSec)
 		{
 			m_TimeGoAnimat = 0;
 			m_GoAnimation = false;
+			m_pGo->ResetSprite();
 		}
 	}
 }

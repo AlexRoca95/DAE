@@ -9,7 +9,7 @@
 
 
 Boss::Boss(const Point2f& startPos, bool comingFromRight, SoundManager* soundManager)
-	:Enemy(GameObject::Type::boss, startPos, 80, Point2f{ },
+	:Enemy(GameObject::Type::boss, startPos, 100, Point2f{ },
 		comingFromRight, Point2f{ 0.f, g_Gravity }, soundManager)
 	, m_FightState { State::sleeping }
 	, m_PreviousState { State::sleeping }
@@ -22,6 +22,9 @@ Boss::Boss(const Point2f& startPos, bool comingFromRight, SoundManager* soundMan
 	, m_CloathSpeed { 150.f }
 	, m_NextFrame{ 10 }
 	, m_pExplosion{ }
+	, m_pWaterShoot{ }
+	, m_pAirShoot{ }
+	, m_pMoving{ }
 {
 
 	Initialize();
@@ -54,7 +57,11 @@ void Boss::Initialize()
 
 	m_pBullets.push_back(m_pWaterBullet);
 
+	// Sounds
 	m_pExplosion = m_pSoundManager->GetEffect("Resources/sounds/explosion2.wav");
+	m_pWaterShoot = m_pSoundManager->GetEffect("Resources/sounds/WaterShoot.wav");
+	m_pAirShoot = m_pSoundManager->GetEffect("Resources/sounds/AirShoot.wav");
+	m_pMoving = m_pSoundManager->GetEffect("Resources/sounds/BossMoving.wav");
 }
 
 Boss::~Boss()
@@ -195,6 +202,8 @@ void Boss::FiringUp(float elapsedSec)
 		m_pBottomSprite->ResetSprite();
 		m_pBottomSprite->UpdateValues(24, 1, 24, 11.f, 90.f, 70.f, 70.f);   // Firing up
 
+		m_pSoundManager->PlaySoundEffect(m_pMoving, 0);
+
 		m_PreviousState = State::firingUp;
 	}
 
@@ -213,8 +222,9 @@ void Boss::FiringUp(float elapsedSec)
 	{
 		if (m_pBottomSprite->GetActFrame() == m_NextFrame )
 		{
-			
 			SelectNextShotFrame();
+
+			m_pSoundManager->PlaySoundEffect(m_pAirShoot, 0);
 
 			for (BossBullet* spr : m_pBullets)
 			{
@@ -331,9 +341,11 @@ void Boss::FiringBot(float elapsedSec)
 	{
 		m_pBottomSprite->ResetSprite();
 		m_pBottomSprite->UpdateValues(11, 1, 11, 10.f, 90.f, 70.f, 280.f);  // Firing Bot
+		m_pSoundManager->PlaySoundEffect(m_pWaterShoot, 0);
 
 		m_PreviousState = State::firingBot;
 		
+
 		for (BossBullet* spr : m_pBullets)
 		{
 			if (spr->GetBulletType() == BossBullet::BulletType::groundBullet)

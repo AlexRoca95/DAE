@@ -89,8 +89,7 @@ void Grenade::Update(float elapsedSec, Avatar* avatar, const Soldier* soldier, c
 		{
 			// Reset everything
 
-			m_pBottomSprite->ResetAnimationFinish(false);
-			m_pBottomSprite->ResetActFrame();
+			m_pBottomSprite->ResetSprite();
 			DesactivateProjectile();
 			m_Velocity.x = m_Speed.x;
 			m_Velocity.y = m_Speed.y;
